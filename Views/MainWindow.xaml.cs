@@ -33,6 +33,11 @@ namespace CourseDesign.Views
                 else
                     this.WindowState = WindowState.Normal;
             };
+
+            navigationBars.SelectionChanged += (s, e) =>
+            {
+                meauBars.IsLeftDrawerOpen = false;
+            };
         }
     }
 }

@@ -7,6 +7,11 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="默认页面" FontSize="40"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MaxWidth="150"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Image/>
     </Grid>
 </UserControl>
