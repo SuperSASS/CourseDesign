@@ -8,10 +8,24 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MaxWidth="150"/>
+            <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        <!-- 秘书展示 -->
+        <Image Grid.Column="0" Source="/Assets/T-Dolls/Super-SASS.png" Stretch="UniformToFill"/>
+        
+        <!-- 右侧信息栏 -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
 
-        <Image/>
+            <TextBlock Grid.Row="0" Text="1"/>
+            <TextBlock Grid.Row="1" Text="2"/>
+            
+            <panel
+        </Grid>
     </Grid>
 </UserControl>
