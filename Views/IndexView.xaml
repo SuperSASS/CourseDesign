@@ -4,28 +4,75 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CourseDesign.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+
+    <Grid x:Name="indexView">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!-- 秘书展示 -->
-        <Image Grid.Column="0" Source="/Assets/T-Dolls/Super-SASS.png" Stretch="UniformToFill"/>
-        
+        <Image x:Name="adjutantImage" Grid.Column="0" Source="/Assets/T-Dolls/Super-SASS.png" Stretch="UniformToFill"/>
+
         <!-- 右侧信息栏 -->
-        <Grid Grid.Column="1">
+        <Grid x:Name="infoGird" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0" Text="1"/>
-            <TextBlock Grid.Row="1" Text="2"/>
-            
-            <panel
+            <!-- 个人信息 -->
+            <Grid Grid.Row="0" Margin="10" VerticalAlignment="Center">
+                <Button x:Name="SelfInfo_btn" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Height="auto"
+                        materialDesign:ButtonAssist.CornerRadius="25 25 0 0"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                    <StackPanel  Height="auto" Width="{Binding ActualWidth, ElementName=SelfInfo_btn, Mode=OneWay}" >
+                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="个人信息" Height="40"/>
+                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="等级"/>
+                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="货币"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- 远征信息 -->
+            <Grid Grid.Row="1" Margin="10" VerticalAlignment="Center">
+                <Button x:Name="Expedtion_btn" Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Height="auto"
+                        materialDesign:ButtonAssist.CornerRadius="0 0 25 25"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                    <StackPanel  Height="auto" Width="{Binding ActualWidth, ElementName=SelfInfo_btn, Mode=OneWay}" >
+                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="远征信息" Height="40"/>
+                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="队伍"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+            <!-- 招募和商店 -->
+            <WrapPanel Grid.Row="2" Margin="10" HorizontalAlignment="Center" Width="{Binding ActualWidth, ElementName=infoGird, Mode=OneWay}">
+                <!-- 招募 -->
+                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Height="auto"
+                        Margin="10"
+                        materialDesign:ButtonAssist.CornerRadius="10"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                    <DockPanel  Height="auto" Width="auto" >
+                        <TextBlock DockPanel.Dock="Left" Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="招募" Height="40"/>
+                    </DockPanel>
+                </Button>
+                <!-- 商店  -->
+                <Button Style="{StaticResource MaterialDesignRaisedAccentButton}"
+                        Margin="10"
+                        Height="auto"
+                        materialDesign:ButtonAssist.CornerRadius="10"
+                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
+                    <DockPanel  Height="auto" Width="auto" >
+                        <TextBlock DockPanel.Dock="Left" Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="商店" Height="40"/>
+                    </DockPanel>
+                </Button>
+            </WrapPanel>
         </Grid>
     </Grid>
 </UserControl>
