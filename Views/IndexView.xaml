@@ -7,14 +7,15 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
+   
+    
     <Grid x:Name="indexView">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <!-- 秘书展示 -->
-        <Image x:Name="adjutantImage" Grid.Column="0" Source="/Assets/T-Dolls/Super-SASS.png" Stretch="UniformToFill"/>
+        <Image x:Name="adjutantImage" Grid.Column="0" Source="/Assets/T-Dolls/Super-SASS1.png" Stretch="UniformToFill"/>
 
         <!-- 右侧信息栏 -->
         <Grid x:Name="infoGird" Grid.Column="1">
@@ -24,32 +25,83 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
 
-            <!-- 个人信息 -->
-            <Grid Grid.Row="0" Margin="10" VerticalAlignment="Center">
-                <Button x:Name="SelfInfo_btn" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Height="auto"
-                        materialDesign:ButtonAssist.CornerRadius="25 25 0 0"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-                    <StackPanel  Height="auto" Width="{Binding ActualWidth, ElementName=SelfInfo_btn, Mode=OneWay}" >
-                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="个人信息" Height="40"/>
-                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="等级"/>
-                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="货币"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
+            <!-- 信息块 -->
+            <ItemsControl Grid.Row="0" ItemsSource="{Binding InfoBlocks}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Rows="2" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-            <!-- 远征信息 -->
-            <Grid Grid.Row="1" Margin="10" VerticalAlignment="Center">
-                <Button x:Name="Expedtion_btn" Style="{StaticResource MaterialDesignRaisedAccentButton}"
-                        Height="auto"
-                        materialDesign:ButtonAssist.CornerRadius="0 0 25 25"
-                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}">
-                    <StackPanel  Height="auto" Width="{Binding ActualWidth, ElementName=SelfInfo_btn, Mode=OneWay}" >
-                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignHeadline5TextBlock}" Text="远征信息" Height="40"/>
-                        <TextBlock Margin="16 16 16 4" Style="{StaticResource MaterialDesignBody1TextBlock}" Text="队伍"/>
-                    </StackPanel>
-                </Button>
-            </Grid>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border
+                        Margin="10"
+                        Background="{Binding SecondaryHueMidBrush}" 
+                        CornerRadius="5">
+                            <!--TODO: 这里看看颜色-->
+                            <Border.InputBindings>
+                                <MouseBinding MouseAction="LeftClick"
+                                          Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
+                                          CommandParameter="{Binding}"/>
+                            </Border.InputBindings>
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Effect">
+                                                <Setter.Value>
+                                                    <DropShadowEffect
+                                                    BlurRadius="10"
+                                                    ShadowDepth="1"
+                                                    Color="#DDDDDD" />
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            
+                            <Grid>
+                                <StackPanel Margin="20,10">
+                                    <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="{Binding Icon}" />
+                                    <TextBlock
+                                    Margin="0,15"
+                                    FontSize="15"
+                                    Text="{Binding Title}" />
+                                    <TextBlock
+                                    FontSize="40"
+                                    FontWeight="Bold"
+                                    Text="{Binding Content}" />
+                                </StackPanel>
+
+                                <Canvas ClipToBounds="True">
+                                    <Border
+                                    Canvas.Top="10"
+                                    Canvas.Right="-50"
+                                    Width="120"
+                                    Height="120"
+                                    Background="#FFFFFF"
+                                    CornerRadius="100"
+                                    Opacity="0.1" />
+                                    <Border
+                                    Canvas.Top="80"
+                                    Canvas.Right="-30"
+                                    Width="120"
+                                    Height="120"
+                                    Background="#FFFFFF"
+                                    CornerRadius="100"
+                                    Opacity="0.1" />
+                                </Canvas>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
             <!-- 招募和商店 -->
             <WrapPanel Grid.Row="2" Margin="10" HorizontalAlignment="Center" Width="{Binding ActualWidth, ElementName=infoGird, Mode=OneWay}">
                 <!-- 招募 -->

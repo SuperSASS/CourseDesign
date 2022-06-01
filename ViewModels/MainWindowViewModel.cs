@@ -22,20 +22,20 @@ namespace CourseDesign.ViewModels
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
         public DelegateCommand GoHomeCommand { get; private set; } // 返回主页命令
 
-        private readonly IRegionManager reigionManager; // 区域控制器
+        private readonly IRegionManager regionManager; // 区域控制器
         private IRegionNavigationJournal journal; // 区域导航日志
 
         /// <summary>
         /// MainWindow VM 的构造函数：
         /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
         /// </summary>
-        /// <param name="reigionManager"></param>
+        /// <param name="reigionManager"> 区域管理器 </param>
         public MainWindowViewModel(IRegionManager reigionManager)
         {
             MeauBars = new ObservableCollection<MeauBar>();
-            CreateMeauBar();
+            CreateMeauBars();
             NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
-            this.reigionManager = reigionManager;
+            this.regionManager = reigionManager;
 
             GoBackCommand = new DelegateCommand(() =>
             {
@@ -59,7 +59,7 @@ namespace CourseDesign.ViewModels
         private void Navigate(MeauBar obj)
         {
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Title))
-                reigionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.NameSpace, back =>
+                regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.NameSpace, back =>
                 {
                     journal = back.Context.NavigationService.Journal;
                 });
@@ -69,7 +69,7 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 创建主菜单列表
         /// </summary>
-        void CreateMeauBar()
+        void CreateMeauBars()
         {
             MeauBars.Add(new MeauBar("Home", "首页", "IndexView"));
             MeauBars.Add(new MeauBar("Target", "远征", "CombatView"));
