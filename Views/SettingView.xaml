@@ -23,6 +23,7 @@
             FontSize="26"
             Text="设置" />
 
+        <!-- TODO: 这个线没改颜色 -->
         <Border BorderBrush="#DDDDDD" BorderThickness="0,0,0,0.3" />
 
         <Grid Grid.Row="1" Margin="50">
@@ -32,17 +33,19 @@
             </Grid.ColumnDefinitions>
 
             <ListBox
-                x:Name="settingBar"
+                x:Name="navigationBars"
                 ItemContainerStyle="{StaticResource meauBarStyle}"
                 ItemsSource="{Binding SettingBars}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged">
-                        <i:InvokeCommandAction Command="{Binding NavigateCommand}" CommandParameter="{Binding ElementName=settingBar, Path=SelectedItem}" />
+                        <i:InvokeCommandAction
+                            Command="{Binding NavigationCommand}"
+                            CommandParameter="{Binding ElementName=navigationBars, Path=SelectedItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Background="Transparent" Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal" Background="Transparent">
                             <materialDesign:PackIcon Margin="15,0" Kind="{Binding Icon}" />
                             <TextBlock Margin="10,0" Text="{Binding Title}" />
                         </StackPanel>

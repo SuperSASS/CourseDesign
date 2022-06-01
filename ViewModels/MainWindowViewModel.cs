@@ -11,14 +11,10 @@ namespace CourseDesign.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private ObservableCollection<MeauBar> meauBars; // 主菜单列表
-        public ObservableCollection<MeauBar> MeauBars
-        {
-            get { return meauBars; }
-            set { meauBars = value; }
-        }
+        public ObservableCollection<MeauBar> MeauBars { get { return meauBars; } set { meauBars = value; } }
 
         // 命令部分
-        public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递MeauBar到这个导航命令
+        public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递MeauBars到这个导航命令
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
         public DelegateCommand GoHomeCommand { get; private set; } // 返回主页命令
 
@@ -29,7 +25,7 @@ namespace CourseDesign.ViewModels
         /// MainWindow VM 的构造函数：
         /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
         /// </summary>
-        /// <param name="reigionManager"></param>
+        /// <param name="reigionManager"> 区域管理器 </param>
         public MainWindowViewModel(IRegionManager reigionManager)
         {
             MeauBars = new ObservableCollection<MeauBar>();

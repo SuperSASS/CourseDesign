@@ -45,11 +45,16 @@
                     </StackPanel>
                     
                     <!-- 菜单列表（导航选项） -->
-                    <ListBox x:Name="navigationBars" ItemContainerStyle="{StaticResource meauBarStyle}" ItemsSource="{Binding MeauBars}">
+                    <ListBox
+                        x:Name="navigationBars"
+                        ItemContainerStyle="{StaticResource meauBarStyle}"
+                        ItemsSource="{Binding MeauBars}">
                         <!-- 行为触发器：当导航被选中时触发，用于切换页面 -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding ElementName=navigationBars, Path=SelectedItem}"/>
+                                <i:InvokeCommandAction
+                                    Command="{Binding NavigationCommand}"
+                                    CommandParameter="{Binding ElementName=navigationBars, Path=SelectedItem}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>

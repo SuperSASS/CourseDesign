@@ -10,8 +10,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace CourseDesign.ViewModels.Settings
+namespace CourseDesign.ViewModels
 {
+    /// <summary>
+    /// 切换主题所用的实现逻辑（由Material Design中实现）
+    /// </summary>
     public class SkinSettingViewModel : BindableBase
     {
         private bool _isDarkTheme;
@@ -28,7 +31,6 @@ namespace CourseDesign.ViewModels.Settings
         }
 
         public IEnumerable<ISwatch> Swatches { get; } = SwatchHelper.Swatches;
-
         public DelegateCommand<object> ChangeHueCommand { get; private set; }
 
         private readonly PaletteHelper paletteHelper = new PaletteHelper();

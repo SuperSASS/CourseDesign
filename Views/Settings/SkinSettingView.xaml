@@ -6,8 +6,6 @@
              xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
              xmlns:local="clr-namespace:CourseDesign.Views.Settings"
              xmlns:converters="clr-namespace:CourseDesign.Common.Converters"
-             xmlns:settings="clr-namespace:CourseDesign.ViewModels.Settings"
-             d:DataContext="{d:DesignInstance Type=settings:SkinSettingViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
