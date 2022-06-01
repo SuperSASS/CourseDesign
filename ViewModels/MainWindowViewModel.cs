@@ -1,5 +1,5 @@
-﻿using CourseDesign.Command.Module;
-using CourseDesign.Extension;
+﻿using CourseDesign.Command.Modules;
+using CourseDesign.Extensions;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Command.Module
+namespace CourseDesign.Command.Modules
 {
     /// <summary>
     /// 菜单栏导航类：
