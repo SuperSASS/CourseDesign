@@ -7,7 +7,7 @@
         xmlns:ext="clr-namespace:CourseDesign.Extension"
         Title="课程设计"
         WindowStyle="None"
-        AllowsTransparency="True"
+        WindowChrome.WindowChrome="{DynamicResource WindowChromeKey}"
         WindowStartupLocation="CenterScreen"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         TextElement.FontWeight="Regular"
@@ -17,6 +17,14 @@
         Background="{DynamicResource MaterialDesignPaper}"
         FontFamily="{DynamicResource MaterialDesignFont}"
         Width="1200" Height="800" >
+
+    <Window.Resources>
+        <WindowChrome x:Key="WindowChromeKey">
+            <WindowChrome.ResizeBorderThickness>
+                <Thickness>1</Thickness>
+            </WindowChrome.ResizeBorderThickness>
+        </WindowChrome>
+    </Window.Resources>
 
     <materialDesign:DialogHost
         Identifier="RootDialog"
