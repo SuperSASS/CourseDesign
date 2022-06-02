@@ -34,156 +34,166 @@
                 Stretch="Uniform" />
         </Canvas>
 
-        <ScrollViewer x:Name="info_module" Style="{StaticResource for_scrollviewer}">
-            <!--  信息展示模块  -->
-            <Grid Margin="400,30,30,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto" />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
+        <!--  信息展示模块  -->
+        <Grid Margin="400,0,30,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
 
-                <!--  长条信息栏  -->
-                <ItemsControl
-                    x:Name="itemsControl"
-                    Grid.Row="0"
-                    VerticalAlignment="Top"
-                    ItemsSource="{Binding InfoBlocks}">
+            <!--  长条信息栏  -->
+            <ItemsControl
+                x:Name="itemsControl"
+                Grid.Row="0"
+                VerticalAlignment="Top"
+                ItemsSource="{Binding InfoBlocks}">
 
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <!--  TODO：按鈕綁定未實現  -->
-                            <!--  缺陷：按钮上的文字鼠标不是点击  -->
-                            <Grid Margin="0,10">
-                                <Button
-                                    x:Name="info_button"
-                                    Height="auto"
-                                    materialDesign:ButtonAssist.CornerRadius="10"
-                                    IsEnabled="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                    Opacity="0.8"
-                                    Style="{DynamicResource MaterialDesignRaisedSecondaryButton}"
-                                    ToolTip="{Binding ToolTip}" />
-
-                                <!--  信息栏  -->
-                                <Grid x:Name="info_content">
-                                    <Grid.InputBindings>
-                                        <MouseBinding
-                                            Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"
-                                            MouseAction="LeftClick" />
-                                    </Grid.InputBindings>
-
-                                    <StackPanel
-                                        Grid.Column="0"
-                                        Margin="20,10"
-                                        HorizontalAlignment="Left">
-                                        <materialDesign:PackIcon
-                                            Width="40"
-                                            Height="40"
-                                            VerticalAlignment="Top"
-                                            Kind="{Binding Icon}" />
-                                        <TextBlock
-                                            Margin="15"
-                                            VerticalAlignment="Bottom"
-                                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                                            Text="{Binding Title}" />
-                                    </StackPanel>
-
-                                    <TextBlock
-                                        Grid.Column="1"
-                                        Margin="30,0"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Center"
-                                        Style="{StaticResource MaterialDesignHeadline3TextBlock}"
-                                        Text="{Binding Content}" />
-
-                                    <!--  信息条装饰  -->
-                                    <Canvas Grid.Column="1" ClipToBounds="True">
-                                        <Border
-                                            Canvas.Top="10"
-                                            Canvas.Right="-50"
-                                            Width="120"
-                                            Height="120"
-                                            Background="{DynamicResource SecondaryHueDarkBrush}"
-                                            CornerRadius="100"
-                                            Opacity="0.2" />
-                                        <Border
-                                            Canvas.Top="80"
-                                            Canvas.Right="-30"
-                                            Width="120"
-                                            Height="120"
-                                            Background="{DynamicResource SecondaryHueMidBrush}"
-                                            CornerRadius="100"
-                                            Opacity="0.4" />
-                                    </Canvas>
-                                </Grid>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-
-                <!--  任务列表  -->
-                <Grid Grid.Row="1" Margin="0,10,0,0">
-                    <Border
-                        Background="{DynamicResource PrimaryHueMidForegroundBrush}"
-                        CornerRadius="10"
-                        Opacity="0.6" />
-
-                    <DockPanel Margin="10">
-                        <DockPanel
-                            Margin="10,5"
-                            DockPanel.Dock="Top"
-                            LastChildFill="False">
-                            <TextBlock
-                                VerticalAlignment="Center"
-                                Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                                Text="任务列表" />
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <!--  TODO：按鈕綁定未實現  -->
+                        <!--  缺陷：按钮上的文字鼠标不是点击  -->
+                        <Grid Margin="0,10">
                             <Button
-                                Width="50"
-                                Height="50"
-                                VerticalAlignment="Top"
-                                Command="{Binding ExecuteCommand}"
-                                CommandParameter="新增待办"
-                                DockPanel.Dock="Right"
-                                Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
-                                ToolTip="新增代办">
-                                <materialDesign:PackIcon Kind="Add" />
-                            </Button>
-                        </DockPanel>
+                                x:Name="info_button"
+                                Height="auto"
+                                materialDesign:ButtonAssist.CornerRadius="10"
+                                IsEnabled="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                Opacity="0.8"
+                                Style="{DynamicResource MaterialDesignRaisedSecondaryButton}"
+                                ToolTip="{Binding ToolTip}" />
 
-                        <!--  任务列表  -->
+                            <!--  信息栏  -->
+                            <Grid x:Name="info_content">
+                                <Grid.InputBindings>
+                                    <MouseBinding
+                                        Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                        CommandParameter="{Binding}"
+                                        MouseAction="LeftClick" />
+                                </Grid.InputBindings>
+
+                                <StackPanel
+                                    Grid.Column="0"
+                                    Margin="20,10"
+                                    HorizontalAlignment="Left">
+                                    <materialDesign:PackIcon
+                                        Width="40"
+                                        Height="40"
+                                        VerticalAlignment="Top"
+                                        Kind="{Binding Icon}" />
+                                    <TextBlock
+                                        Margin="15"
+                                        VerticalAlignment="Bottom"
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                        Text="{Binding Title}" />
+                                </StackPanel>
+
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Margin="30,0"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                                    Text="{Binding Content}" />
+
+                                <!--  信息条装饰  -->
+                                <Canvas Grid.Column="1" ClipToBounds="True">
+                                    <Border
+                                        Canvas.Top="10"
+                                        Canvas.Right="-50"
+                                        Width="120"
+                                        Height="120"
+                                        Background="{DynamicResource SecondaryHueDarkBrush}"
+                                        CornerRadius="100"
+                                        Opacity="0.2" />
+                                    <Border
+                                        Canvas.Top="80"
+                                        Canvas.Right="-30"
+                                        Width="120"
+                                        Height="120"
+                                        Background="{DynamicResource SecondaryHueMidBrush}"
+                                        CornerRadius="100"
+                                        Opacity="0.4" />
+                                </Canvas>
+                            </Grid>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--  任务列表  -->
+            <Grid Grid.Row="1" Margin="0,10,0,10">
+                <Border
+                    Background="{DynamicResource PrimaryHueMidForegroundBrush}"
+                    CornerRadius="10"
+                    Opacity="0.6" />
+
+                <DockPanel Margin="10">
+                    <DockPanel
+                        Margin="10,5"
+                        DockPanel.Dock="Top"
+                        LastChildFill="False">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                            Text="任务列表" />
+                        <Button
+                            Width="50"
+                            Height="50"
+                            VerticalAlignment="Top"
+                            Command="{Binding ExecuteCommand}"
+                            CommandParameter="新增待办"
+                            DockPanel.Dock="Right"
+                            Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
+                            ToolTip="新增代办">
+                            <materialDesign:PackIcon Kind="Add" />
+                        </Button>
+                    </DockPanel>
+
+                    <!--  任务列表内容  -->
+                    <ScrollViewer x:Name="task_list" Style="{StaticResource for_scrollviewer}">
                         <ListBox
-                            x:Name="todoList"
+                            x:Name="task_list_son"
                             HorizontalContentAlignment="Stretch"
-                            ItemsSource="{Binding Summary.ToDoList}"
-                            ScrollViewer.VerticalScrollBarVisibility="Hidden">
-
+                            ItemsSource="{Binding TaskLists}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel MaxHeight="80" LastChildFill="False">
+                                        <!--  任务状态滑块  -->
                                         <ToggleButton
+                                            Margin="10,0"
+                                            materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="{DynamicResource MaterialDesignBody}"
                                             Command="{Binding DataContext.ToDoCompltedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}"
                                             DockPanel.Dock="Right"
-                                            IsChecked="{Binding Status}" />
+                                            IsChecked="{Binding Status}"
+                                            Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
+                                            ToolTip="点击完成任务">
+                                            <materialDesign:PackIcon Kind="ChevronRight" RenderTransformOrigin=".5,.5" />
+                                            <materialDesign:ToggleButtonAssist.OnContent>
+                                                <materialDesign:PackIcon Kind="Check" />
+                                            </materialDesign:ToggleButtonAssist.OnContent>
+                                        </ToggleButton>
+                                        <!--  任务内容  -->
                                         <StackPanel>
                                             <TextBlock
-                                                FontSize="16"
+                                                Margin="10,5"
                                                 FontWeight="Bold"
+                                                Style="{StaticResource MaterialDesignBody2TextBlock}"
                                                 Text="{Binding Title}" />
                                             <TextBlock
-                                                Margin="0,5"
-                                                Opacity="0.5"
+                                                Margin="10,5"
+                                                Opacity="0.8"
+                                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
                                                 Text="{Binding Content}" />
                                         </StackPanel>
                                     </DockPanel>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
-                    </DockPanel>
-                </Grid>
-
+                    </ScrollViewer>
+                </DockPanel>
             </Grid>
-        </ScrollViewer>
+        </Grid>
 
 
     </Grid>

@@ -19,8 +19,6 @@ namespace CourseDesign.Command.Module
         private string toolTip; // 信息栏悬浮文本
         private string target; // 信息栏触发目标
 
-
-
         public string Icon { get { return icon; } set { icon = value; } }
         public string Title { get { return title; } set { title = value; } }
         public string Content { get { return content; } set { content = value; } }
