@@ -17,7 +17,7 @@ namespace CourseDesign.ViewModels
         public ObservableCollection<infoBlock> InfoBlocks
         {
             get { return infoBlocks; }
-            set { infoBlocks = value;  RaisePropertyChanged(); }
+            set { infoBlocks = value; RaisePropertyChanged(); }
         }
 
         /// <summary>
@@ -36,8 +36,8 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public void CreateInfoBlocks()
         {
-            InfoBlocks.Add(new infoBlock("Percent", "收集情况", "100%", ""));
-            InfoBlocks.Add(new infoBlock("Percent", "收集情况", "100%", ""));
+            InfoBlocks.Add(new infoBlock("PercentCircle", "收集情况", "100%", "跳转到图鉴页面", ""));
+            InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "任务完成情况", "50%", "跳转到任务列表页面", ""));
         }
     }
 }
