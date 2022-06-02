@@ -1,4 +1,5 @@
-﻿using CourseDesign.Command.Module;
+﻿using CourseDesign.Command.Class;
+using CourseDesign.Command.Module;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -17,8 +18,17 @@ namespace CourseDesign.ViewModels
         public ObservableCollection<infoBlock> InfoBlocks
         {
             get { return infoBlocks; }
-            set { infoBlocks = value;  RaisePropertyChanged(); }
+            set { infoBlocks = value; RaisePropertyChanged(); }
         }
+
+        private ObservableCollection<TasksClass> taskLists;
+
+        public ObservableCollection<TasksClass> TaskLists
+        {
+            get { return taskLists; }
+            set { taskLists = value; }
+        }
+
 
         /// <summary>
         /// IndexView VM 的构造函数：
@@ -27,17 +37,28 @@ namespace CourseDesign.ViewModels
         public IndexViewModel()
         {
             InfoBlocks = new ObservableCollection<infoBlock>();
-            CreateInfoBlocks();
+            TaskLists = new ObservableCollection<TasksClass>();
+            TEST_CreateInfoBlocks();
+            TEST_CreateTasksLists();
         }
 
 
         /// <summary>
-        /// 创建信息块列表
+        /// 生成测试用的信息块列表
         /// </summary>
-        public void CreateInfoBlocks()
+        public void TEST_CreateInfoBlocks()
         {
-            InfoBlocks.Add(new infoBlock("Percent", "收集情况", "100%", ""));
-            InfoBlocks.Add(new infoBlock("Percent", "收集情况", "100%", ""));
+            InfoBlocks.Add(new infoBlock("PercentCircle", "收集情况", "100%", "跳转到图鉴页面", ""));
+            InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "任务完成情况", "50%", "跳转到任务列表页面", ""));
+        }
+
+        /// <summary>
+        /// 生成测试用的任务列表
+        /// </summary>
+        public void TEST_CreateTasksLists()
+        {
+            for (int i = 1; i <= 10; i++)
+                TaskLists.Add(new TasksClass(i, "测试" + i, "任务内容……", false));
         }
     }
 }
