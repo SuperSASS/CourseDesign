@@ -68,9 +68,7 @@ namespace CourseDesign.ViewModels
         void CreateMeauBars()
         {
             MeauBars.Add(new MeauBar("Home", "首页", "IndexView"));
-            MeauBars.Add(new MeauBar("Target", "远征", "CombatView"));
-            MeauBars.Add(new MeauBar("AccountGroup", "抽卡", "GachaView"));
-            MeauBars.Add(new MeauBar("Codepen", "培养", "TrainView"));
+            MeauBars.Add(new MeauBar("CheckboxMultipleMarkedCircleOutline", "任务列表", "TaskView"));
             MeauBars.Add(new MeauBar("BadgeAccount", "图鉴", "ListView"));
             MeauBars.Add(new MeauBar("Cog", "设置", "SettingView"));
         }

@@ -23,7 +23,6 @@
             FontSize="26"
             Text="设置" />
 
-        <!-- TODO: 这个线没改颜色 -->
         <Border BorderBrush="#DDDDDD" BorderThickness="0,0,0,0.3" />
 
         <Grid Grid.Row="1" Margin="50">

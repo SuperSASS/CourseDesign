@@ -26,7 +26,6 @@
         </Border>
 
         <!--  副官展示  -->
-        <!--  TODO: 改为可切换的  -->
         <Canvas x:Name="adjutant_image" Margin="30">
             <Image
                 Height="1000"
@@ -50,7 +49,6 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <!--  TODO：按鈕綁定未實現  -->
                         <!--  缺陷：按钮上的文字鼠标不是点击  -->
                         <Grid Margin="0,10">
                             <Button

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseDesign.ViewModels
 {
-    internal class listViewModel
+    internal class ListViewModel
     {
     }
 }

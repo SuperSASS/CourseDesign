@@ -22,12 +22,10 @@ namespace CourseDesign
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // 注册依赖 - 导航：菜单栏
-            containerRegistry.RegisterForNavigation<CombatView>(); // 不带第二个类型，默认是<xxx, xxxModel>
-            containerRegistry.RegisterForNavigation<GachaView>();
             containerRegistry.RegisterForNavigation<IndexView>();
             containerRegistry.RegisterForNavigation<ListView>();
             containerRegistry.RegisterForNavigation<SettingView>();
-            containerRegistry.RegisterForNavigation<TrainView>();
+            containerRegistry.RegisterForNavigation<TaskView>();
             // 注册依赖 - 导航：设置页
             containerRegistry.RegisterForNavigation<SkinSettingView, SkinSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
             containerRegistry.RegisterForNavigation<OtherSettingView, OtherSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型

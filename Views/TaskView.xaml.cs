@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CourseDesign.Views
 {
     /// <summary>
-    /// GachaView.xaml 的交互逻辑
+    /// TaskView.xaml 的交互逻辑
     /// </summary>
-    public partial class GachaView : UserControl
+    public partial class TaskView : UserControl
     {
-        public GachaView()
+        public TaskView()
         {
             InitializeComponent();
         }

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+// TODO: 设置页还有需要完成的：个人简介、其他设置、个性化里的滚动条、横线没改颜色
 namespace CourseDesign.Views
 {
     /// <summary>
