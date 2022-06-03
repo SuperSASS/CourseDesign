@@ -1,4 +1,4 @@
-﻿using CourseDesign.Command.Class;
+﻿using CourseDesign.Command.Classes;
 using CourseDesign.Command.Module;
 using Prism.Mvvm;
 using System;
@@ -21,9 +21,11 @@ namespace CourseDesign.ViewModels
             set { infoBlocks = value; RaisePropertyChanged(); }
         }
 
-        private ObservableCollection<TasksClass> taskLists;
 
-        public ObservableCollection<TasksClass> TaskLists
+        // TODO: 这里没有处理多态情况，因为要等数据库api接口实现
+        private ObservableCollection<TasksBase> taskLists;
+
+        public ObservableCollection<TasksBase> TaskLists
         {
             get { return taskLists; }
             set { taskLists = value; }
@@ -37,7 +39,7 @@ namespace CourseDesign.ViewModels
         public IndexViewModel()
         {
             InfoBlocks = new ObservableCollection<infoBlock>();
-            TaskLists = new ObservableCollection<TasksClass>();
+            TaskLists = new ObservableCollection<TasksBase>();
             TEST_CreateInfoBlocks();
             TEST_CreateTasksLists();
         }
@@ -58,7 +60,7 @@ namespace CourseDesign.ViewModels
         public void TEST_CreateTasksLists()
         {
             for (int i = 1; i <= 10; i++)
-                TaskLists.Add(new TasksClass(i, "测试" + i, "任务内容……", false));
+                TaskLists.Add(new TextTasksClass(i, false, "测试" + i, "任务内容……"));
         }
     }
 }
