@@ -22,7 +22,7 @@ namespace CourseDesign
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             // 注册依赖 - 导航：菜单栏
-            containerRegistry.RegisterForNavigation<IndexView>();
+            containerRegistry.RegisterForNavigation<IndexView, IndexViewModel>();
             containerRegistry.RegisterForNavigation<ListView>();
             containerRegistry.RegisterForNavigation<SettingView>();
             containerRegistry.RegisterForNavigation<TaskView>();

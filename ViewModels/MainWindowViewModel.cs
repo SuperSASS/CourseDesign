@@ -52,7 +52,6 @@ namespace CourseDesign.ViewModels
         /// 用于驱动页面的切换的实现方法
         /// </summary>
         /// <param name="obj">当注册的导航MeauBar响应后，自动调用该方法，并作为参数obj</param>
-        /// 
         private void Navigate(MeauBar obj)
         {
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Title))
@@ -61,7 +60,6 @@ namespace CourseDesign.ViewModels
                     journal = back.Context.NavigationService.Journal;
                 });
         }
-        
 
         /// <summary>
         /// 创建主菜单列表
