@@ -4,11 +4,83 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CourseDesign.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <TextBlock FontSize="40" Text="图鉴页面" />
+
+    <Grid x:Name="main_content" Background="{Binding PrimaryHueMidForegroundBrush}">
+        <!--  背景图  -->
+        <Border>
+            <Border.Background>
+                <ImageBrush
+                    ImageSource="\Assets\Images\background_task.jpg"
+                    Opacity="0.6"
+                    Stretch="UniformToFill" />
+            </Border.Background>
+        </Border>
+
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <!--  上方操作栏  -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <!--  搜索栏  -->
+                <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
+                <TextBox
+                    MinWidth="200"
+                    MaxWidth="400"
+                    Margin="10,0"
+                    VerticalAlignment="Center"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    FontSize="16"
+                    Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                    <materialDesign:HintAssist.Hint>
+                        <StackPanel Margin="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon VerticalAlignment="Center" Kind="Magnify" />
+                            <TextBlock Margin="5,0" Text="搜索" />
+                        </StackPanel>
+                    </materialDesign:HintAssist.Hint>
+                </TextBox>
+
+                <!--  筛选栏  -->
+                <ComboBox
+                    MinWidth="128"
+                    Margin="10,0"
+                    materialDesign:TextFieldAssist.HasClearButton="True"
+                    materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                    FontSize="16"
+                    Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                    <ComboBoxItem Content="已完成" />
+                    <ComboBoxItem Content="未完成" />
+                    <materialDesign:HintAssist.Hint>
+                        <StackPanel Margin="0" Orientation="Horizontal">
+                            <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
+                            <TextBlock Margin="5,0" Text="筛选" />
+                        </StackPanel>
+                    </materialDesign:HintAssist.Hint>
+                </ComboBox>
+            </StackPanel>
+
+            <!--  添加任务按钮  -->
+            <materialDesign:Badged
+                Margin="10,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Badge="{materialDesign:PackIcon Plus}"
+                BadgeColorZoneMode="SecondaryMid">
+                <Button
+                    materialDesign:ButtonAssist.CornerRadius="5"
+                    Content="添加任务"
+                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                    ToolTip="添加任务到任务列表" />
+            </materialDesign:Badged>
+        </Grid>
+
+        <!--  任务展示区  -->
     </Grid>
 </UserControl>

@@ -10,16 +10,13 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <UserControl.Resources>
-        <materialDesign:MathConverter x:Key="MathConverter" />
-    </UserControl.Resources>
 
     <Grid x:Name="main_content" Background="{Binding PrimaryHueMidForegroundBrush}">
         <!--  背景图  -->
         <Border>
             <Border.Background>
                 <ImageBrush
-                    ImageSource="\Assets\Images\background.jpg"
+                    ImageSource="\Assets\Images\background_index.jpg"
                     Opacity="0.6"
                     Stretch="UniformToFill" />
             </Border.Background>
@@ -34,7 +31,7 @@
         </Canvas>
 
         <!--  信息展示模块  -->
-        <Grid Margin="400,0,30,0">
+        <Grid Margin="400,10,30,10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto" />
                 <RowDefinition />

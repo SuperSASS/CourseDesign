@@ -6,6 +6,7 @@ using Prism.Regions;
 using System;
 using System.Collections.ObjectModel;
 
+// TODO: 注意：在按按钮导航时，主菜单的导航栏不会被切换，需要fix
 namespace CourseDesign.ViewModels
 {
     public class MainWindowViewModel : BindableBase
