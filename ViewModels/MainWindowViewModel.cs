@@ -1,5 +1,6 @@
 ﻿using CourseDesign.Command.Modules;
 using CourseDesign.Extensions;
+using CourseDesign.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -12,7 +13,7 @@ namespace CourseDesign.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private ObservableCollection<MeauBar> meauBars; // 主菜单列表
-        public ObservableCollection<MeauBar> MeauBars { get { return meauBars; } set { meauBars = value; } }
+        public ObservableCollection<MeauBar> MeauBars { get { return meauBars; } set { meauBars = value; RaisePropertyChanged(); } }
 
         // 命令部分
         public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递MeauBars到这个导航命令
@@ -31,9 +32,8 @@ namespace CourseDesign.ViewModels
         {
             MeauBars = new ObservableCollection<MeauBar>();
             CreateMeauBars();
-            NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
             this.regionManager = reigionManager;
-
+            NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
             GoBackCommand = new DelegateCommand(() =>
             {
                 if (journal != null && journal.CanGoBack)
@@ -61,7 +61,6 @@ namespace CourseDesign.ViewModels
                 });
         }
         
-
         /// <summary>
         /// 创建主菜单列表
         /// </summary>

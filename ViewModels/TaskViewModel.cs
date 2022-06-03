@@ -1,4 +1,5 @@
 ﻿using CourseDesign.Command.Classes;
+using Prism.Commands;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
@@ -11,19 +12,37 @@ namespace CourseDesign.ViewModels
 {
     internal class TaskViewModel : BindableBase
     {
-
-        public TaskViewModel()
-        {
-            Tasks = new ObservableCollection<TasksBase>();
-            TEST_CreateTasks();
-        }
-
+        public DelegateCommand AddTaskCommand { get; private set; }
         private ObservableCollection<TasksBase> tasks;
+        private bool isRightDrawerOpen;
+
+        /// <summary>
+        /// 右侧编辑窗是否弹出
+        /// </summary>
+        public bool IsRightDrawerOpen
+        {
+            get { return isRightDrawerOpen; }
+            set { isRightDrawerOpen = value; RaisePropertyChanged(); }
+        }
 
         public ObservableCollection<TasksBase> Tasks
         {
             get { return tasks; }
             set { tasks = value; RaisePropertyChanged(); }
+        }
+        public TaskViewModel()
+        {
+            Tasks = new ObservableCollection<TasksBase>();
+            AddTaskCommand = new DelegateCommand(Add);
+            TEST_CreateTasks();
+        }
+
+        /// <summary>
+        /// 增加计划
+        /// </summary>
+        private void Add()
+        {
+            IsRightDrawerOpen = true;
         }
 
         void TEST_CreateTasks()

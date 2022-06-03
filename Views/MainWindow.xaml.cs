@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using CourseDesign.Command.Modules;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace CourseDesign.Views
 {
@@ -33,7 +35,6 @@ namespace CourseDesign.Views
                 else
                     this.WindowState = WindowState.Normal;
             };
-
             navigationBars.SelectionChanged += (s, e) => // 导航栏 - 更新左侧横条
             {
                 meauBars.IsLeftDrawerOpen = false;

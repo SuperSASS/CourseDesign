@@ -21,7 +21,6 @@ namespace CourseDesign.ViewModels
             set { infoBlocks = value; RaisePropertyChanged(); }
         }
 
-
         // TODO: 这里没有处理多态情况，因为要等数据库api接口实现
         private ObservableCollection<TasksBase> taskLists;
 
