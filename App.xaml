@@ -11,11 +11,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme
-                    BaseTheme="Inherit"
+                    BaseTheme="Light"
                     ColorAdjustment="{materialDesign:ColorAdjustment}"
                     PrimaryColor="Blue"
                     SecondaryColor="Teal" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml " />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.RadioButton.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Slider.xaml" />

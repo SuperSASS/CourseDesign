@@ -153,7 +153,7 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel MaxHeight="80" LastChildFill="False">
-                                        <!--  任务状态滑块  -->
+                                        <!--  任务状态切换滑块  -->
                                         <ToggleButton
                                             Margin="10,0"
                                             materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="{DynamicResource MaterialDesignBody}"
