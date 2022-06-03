@@ -44,7 +44,6 @@ namespace CourseDesign.ViewModels
             TEST_CreateTasksLists();
         }
 
-
         /// <summary>
         /// 生成测试用的信息块列表
         /// </summary>

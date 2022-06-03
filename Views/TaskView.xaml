@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:CourseDesign.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="taskView_page"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -56,7 +57,7 @@
                 Margin="30,10">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto" />
-                    <RowDefinition />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <!--  上方操作栏  -->
@@ -116,9 +117,17 @@
 
 
                 <!--  滚动条支持  -->
-                <ScrollViewer Grid.Row="1">
+                <ScrollViewer
+                    x:Name="task_list"
+                    Grid.Row="1"
+                    Margin="0,20,0,0"
+                    HorizontalScrollBarVisibility="Visible"
+                    Style="{StaticResource for_scrollviewer}">
                     <!--  任务卡片展示区  -->
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Tasks}">
+                    <ItemsControl
+                        x:Name="task_list_son"
+                        MaxHeight="{Binding ActualHeight, ElementName=task_list}"
+                        ItemsSource="{Binding Tasks}">
                         <!--  卡片资源（分为图片类和文字类）  -->
                         <!--  规定：每个卡片宽度统一为300（高度存在Bug）  -->
                         <ItemsControl.Resources>
@@ -306,7 +315,10 @@
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <WrapPanel Margin="0,10" Orientation="Vertical" />
+                                <WrapPanel
+                                    x:Name="task_list__content"
+                                    Margin="0,10"
+                                    Orientation="Vertical" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
