@@ -41,7 +41,7 @@ namespace CourseDesign.Command.Classes
         /// <param name="status">计划状态（0表示未完成，1表示已完成）（基类的属性）</param>
         /// <param name="title">计划标题</param>
         /// <param name="content">计划内容</param>
-        public TextTasksClass(int id, bool status, string title, string content) : base(id, typeEnum.text, status)
+        public TextTasksClass(int id, bool status, string title, string content) : base(id, TypeEnum.text, status)
         {
             Title = title;
             Content = content;

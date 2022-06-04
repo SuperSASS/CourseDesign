@@ -1,7 +1,10 @@
-﻿using CourseDesign.ViewModels;
+﻿using CourseDesign.Services;
+using CourseDesign.Services.Interfaces;
+using CourseDesign.ViewModels;
 using CourseDesign.ViewModels.Settings;
 using CourseDesign.Views;
 using CourseDesign.Views.Settings;
+using DryIoc;
 using Prism.DryIoc;
 using Prism.Ioc;
 using System.Windows;
@@ -30,6 +33,11 @@ namespace CourseDesign
             containerRegistry.RegisterForNavigation<SkinSettingView, SkinSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
             containerRegistry.RegisterForNavigation<OtherSettingView, OtherSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
             containerRegistry.RegisterForNavigation<AboutSettingView, AboutSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
+            // 注册依赖 - API相关【不是很理解，先写下来
+            containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl")); // 先给构造函数设置一个默认名称
+            containerRegistry.GetContainer().RegisterInstance(@"http://localhost:2333/", serviceKey: "webUrl"); // 注册服务地址
+            containerRegistry.Register<IImageTaskService, ImageTaskService>(); // 注册ImageTask的服务（接口，实现）
+
         }
     }
 }

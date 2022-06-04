@@ -8,6 +8,7 @@
     <None Remove="Assets\Images\avatar.jpg" />
     <None Remove="Assets\Images\background_index.jpg" />
     <None Remove="Assets\Images\background_list.jpg" />
+    <None Remove="Assets\Images\background_setting.jpg" />
     <None Remove="Assets\Images\background_task.jpg" />
     <None Remove="Assets\T-Dolls\T-Doll-1.png" />
     <None Remove="Assets\T-Dolls\T-Doll-1_16x9.png" />
@@ -16,12 +17,18 @@
     <Resource Include="Assets\Images\avatar.jpg" />
     <Resource Include="Assets\Images\background_index.jpg" />
     <Resource Include="Assets\Images\background_list.jpg" />
+    <Resource Include="Assets\Images\background_setting.jpg" />
     <Resource Include="Assets\Images\background_task.jpg" />
     <Resource Include="Assets\T-Dolls\T-Doll-1.png" />
     <Resource Include="Assets\T-Dolls\T-Doll-1_16x9.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+    <PackageReference Include="RestSharp" Version="106.15.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CourseDesign.Shared\CourseDesign.Shared.csproj" />
   </ItemGroup>
 </Project>

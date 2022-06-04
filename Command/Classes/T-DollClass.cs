@@ -18,14 +18,14 @@ namespace CourseDesign.Command.Classes
     /// <item><c>Type</c> - 人形种类</item>
     /// <item><c>Artwork</c> - 人形立绘</item>
     /// </list>
-    internal class T_DollClass
+    internal class TDollClass
     {
-        public enum typeEnum { hg, smg, rf, ar, mg, sg }; // 计划类型的枚举
+        public enum TypeEnum { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
 
         private int id;
         private string name;
         private int rarity;
-        private typeEnum type;
+        private TypeEnum type;
         private string artworkPath;
 
         public int ID
@@ -43,7 +43,7 @@ namespace CourseDesign.Command.Classes
             get { return rarity; }
             set { rarity = value; }
         }
-        public typeEnum Type
+        public TypeEnum Type
         {
             get { return type; }
             set { type = value; }
@@ -62,7 +62,7 @@ namespace CourseDesign.Command.Classes
         /// <param name="rarity">人形稀有度</param>
         /// <param name="type">人形种类</param>
         /// <param name="artwork">人形立绘</param>
-        public T_DollClass(int id, string name, int rarity, typeEnum type, string artworkPath)
+        public TDollClass(int id, string name, int rarity, TypeEnum type, string artworkPath)
         {
             ID = id;
             Name = name;

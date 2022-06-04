@@ -24,7 +24,7 @@ namespace CourseDesign.Views
         public ListView()
         {
             InitializeComponent();
-            AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(t_doll_list), true); // 使task_list可以横向滚动
+            AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(tdoll_list), true); // 使task_list可以横向滚动
         }
 
     }

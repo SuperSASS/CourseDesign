@@ -52,9 +52,9 @@ namespace CourseDesign.Views
 
             switch (t.Type)
             {
-                case TasksBase.typeEnum.text:
+                case TasksBase.TypeEnum.text:
                     return TextTemplate;
-                case TasksBase.typeEnum.image:
+                case TasksBase.TypeEnum.image:
                     return ImageTemplate;
                 default:
                     return null;

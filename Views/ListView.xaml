@@ -104,20 +104,20 @@
 
                 <!--  滚动条支持  -->
                 <ScrollViewer
-                    x:Name="t_doll_list"
+                    x:Name="tdoll_list"
                     Grid.Row="1"
                     Margin="0,20,0,0"
                     HorizontalScrollBarVisibility="Visible"
                     Style="{StaticResource for_scrollviewer}">
 
                     <!--  人形卡片展示区  -->
-                    <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=t_doll_list}" ItemsSource="{Binding T_Dolls}">
+                    <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=tdoll_list}" ItemsSource="{Binding TDolls}">
 
                         <!--  展示容器  -->
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel
-                                    x:Name="t_doll_list__content"
+                                    x:Name="tdoll_list__content"
                                     Margin="0,10"
                                     Orientation="Vertical" />
                             </ItemsPanelTemplate>
