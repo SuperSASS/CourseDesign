@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 namespace CourseDesign.API.Services.Interfaces
 {
     /// <summary>
-    /// 登录所需要的服务
+    /// 登录所需要的服务接口
     /// </summary>
     public interface ILoginService
     {
-        Task<APIResponse> LoginAsync(string account, string password);
-        Task<APIResponse> Register(UserDTO user);
+        Task<APIResponse> LoginAsync(string account, string password); // 登录
+        Task<APIResponse> Register(UserDTO user); // 注册
     }
 }

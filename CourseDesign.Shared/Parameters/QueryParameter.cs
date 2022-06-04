@@ -8,8 +8,9 @@ namespace CourseDesign.Shared.Parameters
 {
     public class QueryParameter
     {
-        public int PageIndex { get; set; }
-        public int PageSize { get; set; }
-        public string Search { get; set; }
+        public string Search { get; set; } // 查询的值
+        public string Field { get; set; }  // 查询的字段
+        public int PageIndex { get; set; } // 查询的页号
+        public int PageSize { get; set; }  // 查询的个数
     }
 }
