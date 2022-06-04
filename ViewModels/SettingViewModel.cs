@@ -51,9 +51,9 @@ namespace CourseDesign.ViewModels
         /// </summary>
         private void CreateSettingBars()
         {
-            SettingBars.Add(new MeauBar("Home", "主题", "SkinSettingView"));
-            SettingBars.Add(new MeauBar("Home", "其他设置", "OtherSettingView"));
-            SettingBars.Add(new MeauBar("Home", "关于", "AboutSettingView"));
+            SettingBars.Add(new MeauBar("Palette", "主题", "SkinSettingView"));
+            SettingBars.Add(new MeauBar("WrenchOutline", "其他设置", "OtherSettingView"));
+            SettingBars.Add(new MeauBar("MessageReplyTextOutline", "关于", "AboutSettingView"));
         }
     }
 }
