@@ -6,434 +6,234 @@
     xmlns:local="clr-namespace:CourseDesign.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    x:Name="taskView_page"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <!--  编辑页右侧弹窗  -->
-    <materialDesign:DialogHost>
-        <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
-            <materialDesign:DrawerHost.RightDrawerContent>
-                <DockPanel Width="300" LastChildFill="False">
-                    <TextBlock
-                        Padding="15"
-                        DockPanel.Dock="Top"
-                        FontWeight="Bold"
-                        Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                        Text="添加或修改计划" />
-                    <Border
-                        Width="180"
-                        Margin="10,5,10,10"
-                        HorizontalAlignment="Left"
-                        BorderBrush="{DynamicResource MaterialDesignDivider}"
-                        BorderThickness="0,0,0,2"
-                        DockPanel.Dock="Top" />
-                    <StackPanel
-                        Margin="20,0"
-                        DockPanel.Dock="Top"
-                        Orientation="Horizontal">
-                        <TextBlock VerticalAlignment="Center" Text="状态：" />
-                        <ComboBox>
-                            <ComboBoxItem
-                                Content="未完成"
-                                DockPanel.Dock="Top"
-                                IsSelected="True" />
-                            <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
-                        </ComboBox>
-                    </StackPanel>
-                    <TextBox
-                        Margin="20,30,20,10"
-                        materialDesign:HintAssist.Hint="计划标题"
-                        DockPanel.Dock="Top"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
-                    <TextBox
-                        MinHeight="100"
-                        MaxHeight="300"
-                        Margin="20,10"
-                        materialDesign:HintAssist.Hint="计划内容"
-                        DockPanel.Dock="Top"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                        TextWrapping="Wrap" />
-                    <Button
-                        Margin="30"
-                        HorizontalAlignment="Right"
-                        Command=""
-                        Content="添加到计划"
-                        DockPanel.Dock="Top" />
-                </DockPanel>
-            </materialDesign:DrawerHost.RightDrawerContent>
+    <Grid>
+        <!--  主页面  -->
+        <Grid Background="{Binding PrimaryHueMidForegroundBrush}">
+            <!--  背景图  -->
+            <Border>
+                <Border.Background>
+                    <ImageBrush
+                        ImageSource="\Assets\Images\background_task.jpg"
+                        Opacity="0.6"
+                        Stretch="UniformToFill" />
+                </Border.Background>
+            </Border>
 
+            <!--  真的页面  -->
+            <Grid x:Name="page">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Grid Background="{Binding PrimaryHueMidForegroundBrush}">
-                <!--  背景图  -->
-                <Border>
-                    <Border.Background>
-                        <ImageBrush
-                            ImageSource="\Assets\Images\background_task.jpg"
-                            Opacity="0.6"
-                            Stretch="UniformToFill" />
-                    </Border.Background>
-                </Border>
+                <!--  页面标题  -->
+                <Grid x:Name="main_title" Grid.Row="0">
+                    <Border Background="{DynamicResource PrimaryHueMidForegroundBrush}" Opacity="0.4" />
+                    <Grid>
+                        <StackPanel Margin="16" Orientation="Horizontal">
+                            <materialDesign:PackIcon
+                                Width="25"
+                                Height="25"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                Kind="ClipboardTextOutline" />
+                            <TextBlock
+                                Margin="20,0,0,0"
+                                VerticalAlignment="Center"
+                                FontSize="20"
+                                Text="计划列表" />
+                        </StackPanel>
+                        <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,3" />
+                    </Grid>
+                </Grid>
 
-                <!--  页面  -->
-                <Grid x:Name="page">
+                <!--  页面内容  -->
+                <Grid
+                    x:Name="main_content"
+                    Grid.Row="1"
+                    Margin="30,10">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <!--  页面标题  -->
-                    <Grid x:Name="main_title" Grid.Row="0">
-                        <Border Background="{DynamicResource PrimaryHueMidForegroundBrush}" Opacity="0.4" />
-                        <Grid>
-                            <StackPanel Margin="16" Orientation="Horizontal">
-                                <materialDesign:PackIcon
-                                    Width="25"
-                                    Height="25"
-                                    Margin="10,0,0,0"
-                                    VerticalAlignment="Center"
-                                    Kind="ClipboardTextOutline" />
-                                <TextBlock
-                                    Margin="20,0,0,0"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Text="计划列表" />
-                            </StackPanel>
-                            <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,3" />
-                        </Grid>
-                    </Grid>
+                    <!--  上方操作栏  -->
+                    <DockPanel Grid.Row="0">
+                        <!--  搜索栏  -->
+                        <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
+                        <TextBox
+                            MinWidth="200"
+                            MaxWidth="400"
+                            Margin="10,0"
+                            VerticalAlignment="Center"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            FontSize="16"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Margin="0" Orientation="Horizontal">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Magnify" />
+                                    <TextBlock Margin="5,0" Text="搜索" />
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+                        </TextBox>
 
-                    <!--  页面内容  -->
-                    <Grid
-                        x:Name="main_content"
+                        <!--  筛选栏  -->
+                        <ComboBox
+                            MinWidth="128"
+                            Margin="10,0"
+                            materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                            FontSize="16"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem Content="已完成" />
+                            <ComboBoxItem Content="未完成" />
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Margin="0" Orientation="Horizontal">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
+                                    <TextBlock Margin="5,0" Text="筛选" />
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+                        </ComboBox>
+
+                        <!--  添加计划按钮  -->
+                        <materialDesign:Badged
+                            Margin="10,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Bottom"
+                            Badge="{materialDesign:PackIcon Plus}"
+                            BadgeColorZoneMode="SecondaryMid">
+                            <Button
+                                materialDesign:ButtonAssist.CornerRadius="5"
+                                Command="{Binding AddTaskCommand}"
+                                Content="添加计划"
+                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                ToolTip="添加计划到计划列表" />
+                        </materialDesign:Badged>
+                    </DockPanel>
+
+                    <!--  计划卡片（滚动条支持）  -->
+                    <ScrollViewer
+                        x:Name="task_list"
                         Grid.Row="1"
-                        Margin="30,10">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-
-                        <!--  上方操作栏  -->
-                        <DockPanel Grid.Row="0">
-                            <!--  搜索栏  -->
-                            <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
-                            <TextBox
-                                MinWidth="200"
-                                MaxWidth="400"
-                                Margin="10,0"
-                                VerticalAlignment="Center"
-                                materialDesign:TextFieldAssist.HasClearButton="True"
-                                FontSize="16"
-                                Style="{StaticResource MaterialDesignFloatingHintTextBox}">
-                                <materialDesign:HintAssist.Hint>
-                                    <StackPanel Margin="0" Orientation="Horizontal">
-                                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="Magnify" />
-                                        <TextBlock Margin="5,0" Text="搜索" />
-                                    </StackPanel>
-                                </materialDesign:HintAssist.Hint>
-                            </TextBox>
-
-                            <!--  筛选栏  -->
-                            <ComboBox
-                                MinWidth="128"
-                                Margin="10,0"
-                                materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
-                                materialDesign:TextFieldAssist.HasClearButton="True"
-                                materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
-                                FontSize="16"
-                                Style="{StaticResource MaterialDesignFloatingHintComboBox}">
-                                <ComboBoxItem Content="已完成" />
-                                <ComboBoxItem Content="未完成" />
-                                <materialDesign:HintAssist.Hint>
-                                    <StackPanel Margin="0" Orientation="Horizontal">
-                                        <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
-                                        <TextBlock Margin="5,0" Text="筛选" />
-                                    </StackPanel>
-                                </materialDesign:HintAssist.Hint>
-                            </ComboBox>
-
-                            <!--  添加计划按钮  -->
-                            <materialDesign:Badged
-                                Margin="10,0"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Bottom"
-                                Badge="{materialDesign:PackIcon Plus}"
-                                BadgeColorZoneMode="SecondaryMid">
-                                <Button
-                                    materialDesign:ButtonAssist.CornerRadius="5"
-                                    Command="{Binding AddTaskCommand}"
-                                    Content="添加计划"
-                                    IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                    Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                    ToolTip="添加计划到计划列表" />
-                            </materialDesign:Badged>
-                        </DockPanel>
-
-
-                        <!--  滚动条支持  -->
-                        <ScrollViewer
-                            x:Name="task_list"
-                            Grid.Row="1"
-                            Margin="0,20,0,0"
-                            HorizontalScrollBarVisibility="Visible"
-                            Style="{StaticResource for_scrollviewer}">
-                            <!--  计划卡片展示区  -->
-                            <ItemsControl
-                                x:Name="task_list_son"
-                                MaxHeight="{Binding ActualHeight, ElementName=task_list}"
-                                ItemsSource="{Binding Tasks}">
-                                <!--  卡片资源（分为图片类和文字类）  -->
-                                <!--  规定：每个卡片宽度统一为300（高度存在Bug）  -->
-                                <ItemsControl.Resources>
-                                    <!--  图片类卡片  -->
-                                    <DataTemplate x:Key="imageCard">
-                                        <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变，要手动更新  -->
-                                        <materialDesign:Flipper
-                                            Grid.Row="15"
-                                            Width="300"
-                                            Height="280"
-                                            Margin="15"
-                                            materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                            Style="{StaticResource MaterialDesignCardFlipper}">
-                                            <!--  卡片前方 - 图片(16:9)x计划目标  -->
-                                            <!--  TODO: 到时候改为点击卡片触发翻面，点按钮是修改  -->
-                                            <materialDesign:Flipper.FrontContent>
-                                                <Grid x:Name="flipper_front" Width="300">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-                                                    <!--  图片  -->
-                                                    <!--  TODO: 背景改成萌娘那种，并且在之后根据数据库绑定  -->
-                                                    <materialDesign:ColorZone
-                                                        Grid.Row="0"
+                        Margin="0,20,0,0"
+                        HorizontalScrollBarVisibility="Visible"
+                        Style="{StaticResource for_scrollviewer}">
+                        <!--  计划卡片展示区  -->
+                        <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=task_list}" ItemsSource="{Binding Tasks}">
+                            <!--  卡片资源模板（分为图片类和文字类）  -->
+                            <!--  规定：每个卡片宽度统一为300  -->
+                            <ItemsControl.Resources>
+                                <!--  图片类卡片  -->
+                                <DataTemplate x:Key="imageCard">
+                                    <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变，要手动更新  -->
+                                    <materialDesign:Flipper
+                                        Grid.Row="15"
+                                        Width="300"
+                                        Height="280"
+                                        Margin="15"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                        Style="{StaticResource MaterialDesignCardFlipper}">
+                                        <!--  卡片前方 - 图片(16:9)x计划目标  -->
+                                        <!--  TODO: 到时候改为点击卡片触发翻面，点按钮是修改  -->
+                                        <materialDesign:Flipper.FrontContent>
+                                            <Grid x:Name="flipper_front" Width="300">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="auto" />
+                                                    <RowDefinition Height="*" />
+                                                </Grid.RowDefinitions>
+                                                <!--  图片  -->
+                                                <!--  TODO: 背景改成萌娘那种，并且在之后根据数据库绑定  -->
+                                                <materialDesign:ColorZone
+                                                    Grid.Row="0"
+                                                    Width="300"
+                                                    Mode="Dark">
+                                                    <Image
                                                         Width="300"
-                                                        Mode="Dark">
-                                                        <Image
-                                                            Width="300"
-                                                            Source="/Assets/T-Dolls/T-Doll-1_16x9.png"
-                                                            Stretch="UniformToFill" />
-                                                    </materialDesign:ColorZone>
-                                                    <!--  简要信息  -->
-                                                    <Grid Grid.Row="1">
-                                                        <Border Background="{DynamicResource PrimaryHueMidBrush}" />
-                                                        <Grid Margin="20">
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition />
-                                                                <RowDefinition Height="*" />
-                                                            </Grid.RowDefinitions>
-                                                            <TextBlock
-                                                                Grid.Row="0"
-                                                                HorizontalAlignment="Left"
-                                                                Opacity="0.8"
-                                                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="战术人形打捞计划：" />
-                                                            <!--  TODO: Super SASS修改  -->
-                                                            <TextBlock
-                                                                Grid.Row="1"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Bottom"
-                                                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                                                Text="Super SASS" />
-                                                        </Grid>
-                                                    </Grid>
-                                                    <!--  详细信息按钮  -->
-                                                    <Button
-                                                        Grid.Row="0"
-                                                        Width="60"
-                                                        Height="60"
-                                                        Margin="0,0,15,-30"
-                                                        HorizontalAlignment="Right"
-                                                        VerticalAlignment="Bottom"
-                                                        Command="{x:Static materialDesign:Flipper.FlipCommand}"
-                                                        Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
-                                                        ToolTip="查看详细信息">
-                                                        <materialDesign:PackIcon
-                                                            Width="30"
-                                                            Height="30"
-                                                            Kind="InformationOutline" />
-                                                    </Button>
-                                                </Grid>
-                                            </materialDesign:Flipper.FrontContent>
-                                            <!--  卡片后方 - 详细信息x打捞地点  -->
-                                            <materialDesign:Flipper.BackContent>
-                                                <Grid x:Name="flipper_back" Width="300">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="auto" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-
-                                                    <!--  上方标题、返回按钮和编辑按钮  -->
-                                                    <materialDesign:ColorZone
-                                                        Grid.Row="0"
-                                                        Padding="6"
-                                                        Mode="SecondaryMid">
-                                                        <DockPanel>
-                                                            <Button
-                                                                HorizontalAlignment="Left"
-                                                                Command="{x:Static materialDesign:Flipper.FlipCommand}"
-                                                                Style="{StaticResource MaterialDesignToolForegroundButton}">
-                                                                <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
-                                                            </Button>
-                                                            <TextBlock
-                                                                Margin="10,0,0,0"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Center"
-                                                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="详细信息" />
-                                                            <materialDesign:PopupBox
-                                                                Width="48"
-                                                                Height="48"
-                                                                Margin="0,0,10,-35"
-                                                                HorizontalAlignment="Right"
-                                                                VerticalAlignment="Center"
-                                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
-                                                                PlacementMode="BottomAndAlignCentres"
-                                                                Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"
-                                                                ToggleCheckedContentCommand="{Binding FloatingActionDemoCommand}"
-                                                                ToggleCheckedContentCommandParameter="wowsers"
-                                                                ToolTip="更多操作">
-                                                                <materialDesign:PopupBox.ToggleContent>
-                                                                    <materialDesign:PackIcon
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        Kind="DotsHorizontal" />
-                                                                </materialDesign:PopupBox.ToggleContent>
-                                                                <materialDesign:PopupBox.ToggleCheckedContent>
-                                                                    <materialDesign:PackIcon
-                                                                        Width="28"
-                                                                        Height="28"
-                                                                        Kind="DotsVertical" />
-                                                                </materialDesign:PopupBox.ToggleCheckedContent>
-                                                                <!--  TODO - BUG: 在按出按钮后，如果操作滚轮划走，按钮不会消失  -->
-                                                                <StackPanel>
-                                                                    <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="完成了这条计划">
-                                                                        <materialDesign:PackIcon
-                                                                            Width="21"
-                                                                            Height="21"
-                                                                            Foreground="White"
-                                                                            Kind="SourceBranchCheck" />
-                                                                    </Button>
-                                                                    <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="编辑这条计划">
-                                                                        <materialDesign:PackIcon
-                                                                            Width="21"
-                                                                            Height="21"
-                                                                            Foreground="White"
-                                                                            Kind="PencilOutline" />
-                                                                    </Button>
-                                                                    <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="删除这条计划">
-                                                                        <materialDesign:PackIcon
-                                                                            Width="21"
-                                                                            Height="21"
-                                                                            Foreground="White"
-                                                                            Kind="DeleteEmptyOutline" />
-                                                                    </Button>
-                                                                </StackPanel>
-                                                            </materialDesign:PopupBox>
-                                                        </DockPanel>
-                                                    </materialDesign:ColorZone>
-                                                    <!--  文本内容  -->
-                                                    <Grid
-                                                        Grid.Row="1"
-                                                        Margin="15,0"
-                                                        HorizontalAlignment="Left"
-                                                        VerticalAlignment="Top">
+                                                        Source="/Assets/T-Dolls/T-Doll-1_16x9.png"
+                                                        Stretch="UniformToFill" />
+                                                </materialDesign:ColorZone>
+                                                <!--  简要信息  -->
+                                                <Grid Grid.Row="1">
+                                                    <Border Background="{DynamicResource PrimaryHueMidBrush}" />
+                                                    <Grid Margin="20">
                                                         <Grid.RowDefinitions>
                                                             <RowDefinition />
-                                                            <RowDefinition />
+                                                            <RowDefinition Height="*" />
                                                         </Grid.RowDefinitions>
-                                                        <StackPanel Grid.Row="0" Margin="0,10">
-                                                            <TextBlock
-                                                                Opacity="0.6"
-                                                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="战术人形名称" />
-                                                            <TextBlock
-                                                                Margin="0,2,0,0"
-                                                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                                                                Text="Super SASS" />
-                                                        </StackPanel>
-                                                        <!--  打捞地点  -->
-                                                        <StackPanel Grid.Row="1" Margin="0,10">
-                                                            <TextBlock
-                                                                Opacity="0.6"
-                                                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="打捞地点" />
-                                                            <!--  TODO: 实现fish_list  -->
-                                                            <ScrollViewer x:Name="fish_list" Style="{StaticResource for_scrollviewer}">
-                                                                <ListBox
-                                                                    x:Name="fish_list_son"
-                                                                    HorizontalContentAlignment="Stretch"
-                                                                    ItemsSource="{Binding TaskLists}">
-                                                                    <ListBox.ItemTemplate>
-                                                                        <DataTemplate>
-                                                                            <TextBlock
-                                                                                Margin="10,5"
-                                                                                FontWeight="Bold"
-                                                                                Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                                                                Text="{Binding Title}" />
-                                                                        </DataTemplate>
-                                                                    </ListBox.ItemTemplate>
-                                                                </ListBox>
-                                                            </ScrollViewer>
-                                                        </StackPanel>
+                                                        <TextBlock
+                                                            Grid.Row="0"
+                                                            HorizontalAlignment="Left"
+                                                            Opacity="0.8"
+                                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                            Text="战术人形打捞计划：" />
+                                                        <!--  TODO: Super SASS修改  -->
+                                                        <TextBlock
+                                                            Grid.Row="1"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Bottom"
+                                                            Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                                                            Text="Super SASS" />
                                                     </Grid>
                                                 </Grid>
-                                            </materialDesign:Flipper.BackContent>
-                                        </materialDesign:Flipper>
-                                    </DataTemplate>
-                                    <!--  文字类卡片  -->
-                                    <DataTemplate x:Key="textCard">
-                                        <materialDesign:Card
-                                            Grid.Row="15"
-                                            Width="300"
-                                            Margin="15">
+                                                <!--  详细信息按钮  -->
+                                                <Button
+                                                    Grid.Row="0"
+                                                    Width="60"
+                                                    Height="60"
+                                                    Margin="0,0,15,-30"
+                                                    HorizontalAlignment="Right"
+                                                    VerticalAlignment="Bottom"
+                                                    Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                                    Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}"
+                                                    ToolTip="查看详细信息">
+                                                    <materialDesign:PackIcon
+                                                        Width="30"
+                                                        Height="30"
+                                                        Kind="InformationOutline" />
+                                                </Button>
+                                            </Grid>
+                                        </materialDesign:Flipper.FrontContent>
+                                        <!--  卡片后方 - 详细信息x打捞地点  -->
+                                        <materialDesign:Flipper.BackContent>
                                             <Grid x:Name="flipper_back" Width="300">
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="auto" />
                                                     <RowDefinition Height="*" />
                                                 </Grid.RowDefinitions>
 
-                                                <!--  标题  -->
+                                                <!--  上方标题、返回按钮和编辑按钮  -->
                                                 <materialDesign:ColorZone
                                                     Grid.Row="0"
-                                                    Height="auto"
                                                     Padding="6"
                                                     Mode="SecondaryMid">
                                                     <DockPanel>
-
-                                                        <!--  完成切换栏  -->
-                                                        <ToggleButton
-                                                            Margin="10"
-                                                            Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                                            ToolTip="点击按钮以完成计划">
-                                                            <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
-                                                                <materialDesign:PackIcon.RenderTransform>
-                                                                    <RotateTransform Angle="45" />
-                                                                </materialDesign:PackIcon.RenderTransform>
-                                                            </materialDesign:PackIcon>
-                                                            <materialDesign:ToggleButtonAssist.OnContent>
-                                                                <materialDesign:PackIcon Kind="Pin" />
-                                                            </materialDesign:ToggleButtonAssist.OnContent>
-                                                        </ToggleButton>
-
-                                                        <!--  标题内容  -->
+                                                        <Button
+                                                            HorizontalAlignment="Left"
+                                                            Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                                            Style="{StaticResource MaterialDesignToolForegroundButton}">
+                                                            <materialDesign:PackIcon HorizontalAlignment="Right" Kind="ArrowLeft" />
+                                                        </Button>
                                                         <TextBlock
+                                                            Margin="10,0,0,0"
+                                                            HorizontalAlignment="Left"
                                                             VerticalAlignment="Center"
                                                             Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                            Text="{Binding Title}"
-                                                            TextWrapping="Wrap" />
-
-                                                        <!--  更多操作  -->
+                                                            Text="详细信息" />
                                                         <materialDesign:PopupBox
-                                                            Width="32"
-                                                            Height="32"
-                                                            Margin="5,0"
+                                                            Width="48"
+                                                            Height="48"
+                                                            Margin="0,0,10,-35"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Center"
                                                             IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                                             PlacementMode="BottomAndAlignCentres"
-                                                            Style="{StaticResource MaterialDesignPopupBox}"
+                                                            Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"
                                                             ToggleCheckedContentCommand="{Binding FloatingActionDemoCommand}"
                                                             ToggleCheckedContentCommandParameter="wowsers"
                                                             ToolTip="更多操作">
@@ -451,57 +251,255 @@
                                                             </materialDesign:PopupBox.ToggleCheckedContent>
                                                             <!--  TODO - BUG: 在按出按钮后，如果操作滚轮划走，按钮不会消失  -->
                                                             <StackPanel>
+                                                                <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="完成了这条计划">
+                                                                    <materialDesign:PackIcon
+                                                                        Width="21"
+                                                                        Height="21"
+                                                                        Foreground="White"
+                                                                        Kind="SourceBranchCheck" />
+                                                                </Button>
                                                                 <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="编辑这条计划">
                                                                     <materialDesign:PackIcon
                                                                         Width="21"
                                                                         Height="21"
-                                                                        Foreground="{DynamicResource MaterialDesignBody}"
+                                                                        Foreground="White"
                                                                         Kind="PencilOutline" />
                                                                 </Button>
                                                                 <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="删除这条计划">
                                                                     <materialDesign:PackIcon
                                                                         Width="21"
                                                                         Height="21"
-                                                                        Foreground="{DynamicResource MaterialDesignBody}"
+                                                                        Foreground="White"
                                                                         Kind="DeleteEmptyOutline" />
                                                                 </Button>
                                                             </StackPanel>
                                                         </materialDesign:PopupBox>
-
                                                     </DockPanel>
                                                 </materialDesign:ColorZone>
-                                                <!--  内容  -->
-                                                <TextBlock
+                                                <!--  文本内容  -->
+                                                <Grid
                                                     Grid.Row="1"
-                                                    Margin="20,10,20,15"
+                                                    Margin="15,0"
                                                     HorizontalAlignment="Left"
-                                                    VerticalAlignment="Center"
-                                                    Text="{Binding Content}"
-                                                    TextWrapping="WrapWithOverflow" />
-                                                <!--  更多操作  -->
+                                                    VerticalAlignment="Top">
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition />
+                                                        <RowDefinition />
+                                                    </Grid.RowDefinitions>
+                                                    <StackPanel Grid.Row="0" Margin="0,10">
+                                                        <TextBlock
+                                                            Opacity="0.6"
+                                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                            Text="战术人形名称" />
+                                                        <TextBlock
+                                                            Margin="0,2,0,0"
+                                                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                                            Text="Super SASS" />
+                                                    </StackPanel>
+                                                    <!--  打捞地点  -->
+                                                    <StackPanel Grid.Row="1" Margin="0,10">
+                                                        <TextBlock
+                                                            Opacity="0.6"
+                                                            Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                            Text="打捞地点" />
+                                                        <!--  TODO: 实现fish_list  -->
+                                                        <ScrollViewer x:Name="fish_list" Style="{StaticResource for_scrollviewer}">
+                                                            <ListBox
+                                                                x:Name="fish_list_son"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                ItemsSource="{Binding TaskLists}">
+                                                                <ListBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock
+                                                                            Margin="10,5"
+                                                                            FontWeight="Bold"
+                                                                            Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                                            Text="{Binding Title}" />
+                                                                    </DataTemplate>
+                                                                </ListBox.ItemTemplate>
+                                                            </ListBox>
+                                                        </ScrollViewer>
+                                                    </StackPanel>
+                                                </Grid>
                                             </Grid>
-                                        </materialDesign:Card>
-                                    </DataTemplate>
-                                </ItemsControl.Resources>
+                                        </materialDesign:Flipper.BackContent>
+                                    </materialDesign:Flipper>
+                                </DataTemplate>
+                                <!--  文字类卡片  -->
+                                <DataTemplate x:Key="textCard">
+                                    <materialDesign:Card
+                                        Grid.Row="15"
+                                        Width="300"
+                                        Margin="15">
+                                        <Grid x:Name="flipper_back" Width="300">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="*" />
+                                            </Grid.RowDefinitions>
 
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel
-                                            x:Name="task_list__content"
-                                            Margin="0,10"
-                                            Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
+                                            <!--  标题  -->
+                                            <materialDesign:ColorZone
+                                                Grid.Row="0"
+                                                Height="auto"
+                                                Padding="6"
+                                                Mode="SecondaryMid">
+                                                <DockPanel>
 
-                                <ItemsControl.ItemTemplateSelector>
-                                    <local:TasksDataTemplate ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
-                                </ItemsControl.ItemTemplateSelector>
-                            </ItemsControl>
-                        </ScrollViewer>
+                                                    <!--  完成切换栏  -->
+                                                    <ToggleButton
+                                                        Margin="10"
+                                                        Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                                        ToolTip="点击按钮以完成计划">
+                                                        <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
+                                                            <materialDesign:PackIcon.RenderTransform>
+                                                                <RotateTransform Angle="45" />
+                                                            </materialDesign:PackIcon.RenderTransform>
+                                                        </materialDesign:PackIcon>
+                                                        <materialDesign:ToggleButtonAssist.OnContent>
+                                                            <materialDesign:PackIcon Kind="Pin" />
+                                                        </materialDesign:ToggleButtonAssist.OnContent>
+                                                    </ToggleButton>
 
-                    </Grid>
+                                                    <!--  标题内容  -->
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                        Text="{Binding Title}"
+                                                        TextWrapping="Wrap" />
+
+                                                    <!--  更多操作  -->
+                                                    <materialDesign:PopupBox
+                                                        Width="32"
+                                                        Height="32"
+                                                        Margin="5,0"
+                                                        HorizontalAlignment="Right"
+                                                        VerticalAlignment="Center"
+                                                        IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                                        PlacementMode="BottomAndAlignCentres"
+                                                        Style="{StaticResource MaterialDesignPopupBox}"
+                                                        ToggleCheckedContentCommand="{Binding FloatingActionDemoCommand}"
+                                                        ToggleCheckedContentCommandParameter="wowsers"
+                                                        ToolTip="更多操作">
+                                                        <materialDesign:PopupBox.ToggleContent>
+                                                            <materialDesign:PackIcon
+                                                                Width="28"
+                                                                Height="28"
+                                                                Kind="DotsHorizontal" />
+                                                        </materialDesign:PopupBox.ToggleContent>
+                                                        <materialDesign:PopupBox.ToggleCheckedContent>
+                                                            <materialDesign:PackIcon
+                                                                Width="28"
+                                                                Height="28"
+                                                                Kind="DotsVertical" />
+                                                        </materialDesign:PopupBox.ToggleCheckedContent>
+                                                        <!--  TODO - BUG: 在按出按钮后，如果操作滚轮划走，按钮不会消失  -->
+                                                        <StackPanel>
+                                                            <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="编辑这条计划">
+                                                                <materialDesign:PackIcon
+                                                                    Width="21"
+                                                                    Height="21"
+                                                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                                                    Kind="PencilOutline" />
+                                                            </Button>
+                                                            <Button Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="删除这条计划">
+                                                                <materialDesign:PackIcon
+                                                                    Width="21"
+                                                                    Height="21"
+                                                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                                                    Kind="DeleteEmptyOutline" />
+                                                            </Button>
+                                                        </StackPanel>
+                                                    </materialDesign:PopupBox>
+
+                                                </DockPanel>
+                                            </materialDesign:ColorZone>
+                                            <!--  内容  -->
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Margin="20,10,20,15"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Text="{Binding Content}"
+                                                TextWrapping="WrapWithOverflow" />
+                                            <!--  更多操作  -->
+                                        </Grid>
+                                    </materialDesign:Card>
+                                </DataTemplate>
+                            </ItemsControl.Resources>
+
+                            <!--  展示容器  -->
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel
+                                        x:Name="task_list__content"
+                                        Margin="0,10"
+                                        Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+
+                            <!--  展示数据选择器  -->
+                            <ItemsControl.ItemTemplateSelector>
+                                <local:TasksDataTemplate ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
+                            </ItemsControl.ItemTemplateSelector>
+                        </ItemsControl>
+                    </ScrollViewer>
                 </Grid>
             </Grid>
-        </materialDesign:DrawerHost>
-    </materialDesign:DialogHost>
+        </Grid>
+
+        <!--  右侧弹窗的编辑页  -->
+        <materialDesign:DialogHost>
+            <materialDesign:DrawerHost IsRightDrawerOpen="{Binding IsRightDrawerOpen}">
+                <materialDesign:DrawerHost.RightDrawerContent>
+                    <DockPanel Width="300" LastChildFill="False">
+                        <TextBlock
+                            Padding="15"
+                            DockPanel.Dock="Top"
+                            FontWeight="Bold"
+                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                            Text="添加或修改计划" />
+                        <Border
+                            Width="180"
+                            Margin="10,5,10,10"
+                            HorizontalAlignment="Left"
+                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                            BorderThickness="0,0,0,2"
+                            DockPanel.Dock="Top" />
+                        <StackPanel
+                            Margin="20,0"
+                            DockPanel.Dock="Top"
+                            Orientation="Horizontal">
+                            <TextBlock VerticalAlignment="Center" Text="状态：" />
+                            <ComboBox>
+                                <ComboBoxItem
+                                    Content="未完成"
+                                    DockPanel.Dock="Top"
+                                    IsSelected="True" />
+                                <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
+                            </ComboBox>
+                        </StackPanel>
+                        <TextBox
+                            Margin="20,30,20,10"
+                            materialDesign:HintAssist.Hint="计划标题"
+                            DockPanel.Dock="Top"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                        <TextBox
+                            MinHeight="100"
+                            MaxHeight="300"
+                            Margin="20,10"
+                            materialDesign:HintAssist.Hint="计划内容"
+                            DockPanel.Dock="Top"
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            TextWrapping="Wrap" />
+                        <Button
+                            Margin="30"
+                            HorizontalAlignment="Right"
+                            Command=""
+                            Content="添加到计划"
+                            DockPanel.Dock="Top" />
+                    </DockPanel>
+                </materialDesign:DrawerHost.RightDrawerContent>
+            </materialDesign:DrawerHost>
+        </materialDesign:DialogHost>
+    </Grid>
 </UserControl>
