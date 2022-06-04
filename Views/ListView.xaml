@@ -4,11 +4,241 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:CourseDesign.Views"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
-    <Grid>
-        <TextBlock FontSize="40" Text="图鉴页面" />
+
+    <!--  主页面  -->
+    <Grid Background="{Binding PrimaryHueMidForegroundBrush}">
+        <!--  背景图  -->
+        <Border>
+            <Border.Background>
+                <ImageBrush
+                    ImageSource="\Assets\Images\background_list.jpg"
+                    Opacity="0.6"
+                    Stretch="UniformToFill" />
+            </Border.Background>
+        </Border>
+
+        <!--  真的页面  -->
+        <Grid x:Name="page">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!--  页面标题  -->
+            <Grid x:Name="main_title" Grid.Row="0">
+                <Border Background="{DynamicResource PrimaryHueMidForegroundBrush}" Opacity="0.4" />
+                <Grid>
+                    <StackPanel Margin="16" Orientation="Horizontal">
+                        <materialDesign:PackIcon
+                            Width="25"
+                            Height="25"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            Kind="BadgeAccount" />
+                        <TextBlock
+                            Margin="20,0,0,0"
+                            VerticalAlignment="Center"
+                            FontSize="20"
+                            Text="战术人形图鉴" />
+                    </StackPanel>
+                    <Border BorderBrush="{DynamicResource MaterialDesignDivider}" BorderThickness="0,0,0,3" />
+                </Grid>
+            </Grid>
+
+            <!--  页面内容  -->
+            <Grid
+                x:Name="main_content"
+                Grid.Row="1"
+                Margin="30,10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!--  上方操作栏  -->
+                <DockPanel Grid.Row="0" LastChildFill="False">
+                    <!--  搜索栏  -->
+                    <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
+                    <TextBox
+                        MinWidth="200"
+                        MaxWidth="400"
+                        Margin="10,0"
+                        VerticalAlignment="Center"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        FontSize="16"
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Magnify" />
+                                <TextBlock Margin="5,0" Text="按回车进行搜索" />
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+                    </TextBox>
+
+                    <!--  筛选栏  -->
+                    <!--  TODO: 根据稀有度、枪械种类进行筛选  -->
+                    <ComboBox
+                        MinWidth="128"
+                        Margin="10,0"
+                        materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
+                        materialDesign:TextFieldAssist.HasClearButton="True"
+                        materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                        FontSize="16"
+                        Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                        <ComboBoxItem Content="已完成" />
+                        <ComboBoxItem Content="未完成" />
+                        <materialDesign:HintAssist.Hint>
+                            <StackPanel Margin="0" Orientation="Horizontal">
+                                <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
+                                <TextBlock Margin="5,0" Text="筛选" />
+                            </StackPanel>
+                        </materialDesign:HintAssist.Hint>
+                    </ComboBox>
+                </DockPanel>
+
+
+                <!--  滚动条支持  -->
+                <ScrollViewer
+                    x:Name="t_doll_list"
+                    Grid.Row="1"
+                    Margin="0,20,0,0"
+                    HorizontalScrollBarVisibility="Visible"
+                    Style="{StaticResource for_scrollviewer}">
+
+                    <!--  人形卡片展示区  -->
+                    <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=t_doll_list}" ItemsSource="{Binding T_Dolls}">
+
+                        <!--  展示容器  -->
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel
+                                    x:Name="t_doll_list__content"
+                                    Margin="0,10"
+                                    Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <!--  展示模板  -->
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:Name="card">
+                                <!--  人形展示卡 150x200  -->
+                                <Grid
+                                    Width="180"
+                                    Height="250"
+                                    Margin="15">
+                                    <!--  人形图片  -->
+                                    <!--  TODO: 背景改成萌娘那种，并且在之后根据数据库绑定  -->
+                                    <materialDesign:ColorZone
+                                        Width="180"
+                                        Height="250"
+                                        Mode="Dark">
+                                        <Image
+                                            Width="180"
+                                            Source="{Binding ArtworkPath}"
+                                            Stretch="UniformToFill" />
+                                    </materialDesign:ColorZone>
+                                    <!--  底部信息栏  -->
+                                    <Grid Height="auto" VerticalAlignment="Bottom">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="auto" />
+                                            <RowDefinition Height="auto" />
+                                        </Grid.RowDefinitions>
+
+                                        <!--  TODO: 颜色到时候对接数据库，根据等级选不同颜色  -->
+                                        <Grid Grid.Row="0">
+                                            <Border Background="{DynamicResource PrimaryHueMidBrush}" Opacity="0.7" />
+                                            <TextBlock
+                                                Margin="5,5"
+                                                HorizontalAlignment="Left"
+                                                Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                Text="{Binding Name}" />
+                                        </Grid>
+                                        <Grid Grid.Row="1" Opacity="0.8">
+                                            <Border Background="{DynamicResource MaterialDesignBackground}" />
+                                            <DockPanel LastChildFill="False">
+                                                <TextBlock
+                                                    Margin="10,1"
+                                                    HorizontalAlignment="Left"
+                                                    DockPanel.Dock="Left"
+                                                    Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                                    Text="{Binding Type}" />
+                                                <TextBlock
+                                                    Margin="5,0,10,1"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Right"
+                                                    Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                                    Text="{Binding ID}" />
+                                                <TextBlock
+                                                    Margin="0,1,1,1"
+                                                    VerticalAlignment="Bottom"
+                                                    DockPanel.Dock="Right"
+                                                    FontSize="8"
+                                                    Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                                    Text="编号" />
+                                            </DockPanel>
+                                        </Grid>
+                                    </Grid>
+
+                                    <!--  顶部信息栏  -->
+                                    <Grid Height="auto" VerticalAlignment="Top">
+                                        <!--  TODO: 颜色到时候对接数据库，根据等级选不同颜色  -->
+                                        <Grid
+                                            Width="auto"
+                                            Height="15"
+                                            VerticalAlignment="Top">
+                                            <Border Background="Black" Opacity="0.6" />
+                                            <!--  TODO: 动态生成星级、枪械类型还没处理  -->
+                                            <DockPanel LastChildFill="False">
+                                                <materialDesign:PackIcon
+                                                    Width="12"
+                                                    Height="12"
+                                                    Margin="0,0,3,0"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Right"
+                                                    Foreground="Goldenrod"
+                                                    Kind="Star" />
+                                                <materialDesign:PackIcon
+                                                    Width="12"
+                                                    Height="12"
+                                                    Margin="0,0,3,0"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Right"
+                                                    Foreground="Goldenrod"
+                                                    Kind="Star" />
+                                                <materialDesign:PackIcon
+                                                    Width="12"
+                                                    Height="12"
+                                                    Margin="0,0,3,0"
+                                                    VerticalAlignment="Center"
+                                                    DockPanel.Dock="Right"
+                                                    Foreground="Goldenrod"
+                                                    Kind="Star" />
+                                            </DockPanel>
+                                        </Grid>
+                                        <Border
+                                            Width="40"
+                                            Height="25"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            Background="{DynamicResource PrimaryHueMidBrush}">
+                                            <materialDesign:PackIcon
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Kind="Pistol" />
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+        </Grid>
     </Grid>
 </UserControl>

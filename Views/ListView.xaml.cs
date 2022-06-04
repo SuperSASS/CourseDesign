@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CourseDesign.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,8 @@ namespace CourseDesign.Views
         public ListView()
         {
             InitializeComponent();
+            AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(t_doll_list), true); // 使task_list可以横向滚动
         }
+
     }
 }

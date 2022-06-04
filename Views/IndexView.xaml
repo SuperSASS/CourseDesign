@@ -25,7 +25,7 @@
         <Canvas x:Name="adjutant_image" Margin="30">
             <Image
                 Height="1000"
-                Source="/Assets/T-Dolls/Super-SASS.png"
+                Source="/Assets/T-Dolls/T-Doll-1.png"
                 Stretch="Uniform" />
         </Canvas>
 

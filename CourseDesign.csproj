@@ -7,17 +7,17 @@
   <ItemGroup>
     <None Remove="Assets\Images\avatar.jpg" />
     <None Remove="Assets\Images\background_index.jpg" />
-    <None Remove="Assets\Images\background_setting.jpg" />
+    <None Remove="Assets\Images\background_list.jpg" />
     <None Remove="Assets\Images\background_task.jpg" />
-    <None Remove="Assets\T-Dolls\Super-SASS.png" />
+    <None Remove="Assets\T-Dolls\T-Doll-1.png" />
     <None Remove="Assets\T-Dolls\T-Doll-1_16x9.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Images\avatar.jpg" />
     <Resource Include="Assets\Images\background_index.jpg" />
-    <Resource Include="Assets\Images\background_setting.jpg" />
+    <Resource Include="Assets\Images\background_list.jpg" />
     <Resource Include="Assets\Images\background_task.jpg" />
-    <Resource Include="Assets\T-Dolls\Super-SASS.png" />
+    <Resource Include="Assets\T-Dolls\T-Doll-1.png" />
     <Resource Include="Assets\T-Dolls\T-Doll-1_16x9.png" />
   </ItemGroup>
   <ItemGroup>

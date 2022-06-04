@@ -13,8 +13,8 @@ namespace CourseDesign.ViewModels
     internal class TaskViewModel : BindableBase
     {
         public DelegateCommand AddTaskCommand { get; private set; }
-        private ObservableCollection<TasksBase> tasks;
         private bool isRightDrawerOpen;
+        private ObservableCollection<TasksBase> tasks;
 
         /// <summary>
         /// 右侧编辑窗是否弹出

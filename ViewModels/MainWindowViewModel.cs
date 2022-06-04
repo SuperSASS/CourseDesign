@@ -51,19 +51,10 @@ namespace CourseDesign.ViewModels
         {
             int index = 0;
             foreach (MeauBar nowMeauBar in MeauBars)
-                if (nowMeauBar.NameSpace == journal.CurrentEntry.Uri.ToString())
+                if (nowMeauBar.NameSpace == journal.CurrentEntry.Uri.ToString()) // journal中这个代表当前页面的uri（前面导航传进来的那个），因此可以遍历然后找到index
                     SelectIndex = index;
                 else
                     index++;
-            //navigationBars.SelectedIndex = navigationBars.SelectedIndex - 1;
-
-            //foreach (MeauBar item in navigationBars.Items)
-            //{
-            //    m=1 + 1;
-            //    item.
-            //}
-            //ListBoxItem t = (ListBoxItem)navigationBars.Items[navigationBars.SelectedIndex-1];
-            //t.IsSelected = true;
         }
 
         /// <summary>
