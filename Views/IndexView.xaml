@@ -57,6 +57,7 @@
                                 ToolTip="{Binding ToolTip}" />
 
                             <!--  信息栏  -->
+                            <!--  TODO：实现页面跳转 - 任务列表/图鉴  -->
                             <Grid x:Name="info_content">
                                 <Grid.InputBindings>
                                     <MouseBinding
@@ -130,6 +131,7 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                             Text="任务列表" />
+                        <!--  TODO：这个功能还没实现  -->
                         <Button
                             Width="50"
                             Height="50"

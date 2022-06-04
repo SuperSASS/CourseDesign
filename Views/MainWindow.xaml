@@ -6,6 +6,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
+    x:Name="window"
     Title="课程设计"
     Width="1200"
     Height="800"
@@ -30,8 +31,10 @@
         DialogTheme="Inherit"
         Identifier="RootDialog"
         SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+        <!--  这个应该是消息弹窗  -->
 
         <materialDesign:DrawerHost x:Name="meauBars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+
             <!--  弹出菜单栏  -->
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel MinWidth="220">
@@ -57,10 +60,12 @@
                     </StackPanel>
 
                     <!--  菜单列表（导航选项）  -->
+                    <!--  修复 - 按返回和主页时，菜单列表不变化：将SelectIndex与后端绑定，同步变化  -->
                     <ListBox
                         x:Name="navigationBars"
                         ItemContainerStyle="{StaticResource meauBarStyle}"
-                        ItemsSource="{Binding MeauBars}">
+                        ItemsSource="{Binding MeauBars}"
+                        SelectedIndex="{Binding SelectIndex}">
                         <!--  行为触发器：当导航被选中时触发，用于切换页面  -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
@@ -108,6 +113,7 @@
                                 IsChecked="False"
                                 Style="{StaticResource MaterialDesignHamburgerToggleButton}" />
                             <Button
+                                x:Name="btn_back"
                                 Margin="24,0,0,0"
                                 materialDesign:RippleAssist.Feedback="{Binding RelativeSource={RelativeSource Self}, Path=Foreground, Converter={StaticResource BrushRoundConverter}}"
                                 Command="{Binding GoBackCommand}"
@@ -117,6 +123,7 @@
                                 Style="{StaticResource MaterialDesignToolButton}"
                                 ToolTip="上一个页面" />
                             <Button
+                                x:Name="btn_home"
                                 Margin="16,0,0,0"
                                 materialDesign:RippleAssist.Feedback="{Binding RelativeSource={RelativeSource Self}, Path=Foreground, Converter={StaticResource BrushRoundConverter}}"
                                 Command="{Binding GoHomeCommand}"
@@ -131,7 +138,7 @@
                                 VerticalAlignment="Center"
                                 AutomationProperties.Name="Material Design In XAML Toolkit"
                                 FontSize="22"
-                                Text="应用程序" />
+                                Text="{Binding Title, ElementName=window}" />
                         </StackPanel>
 
                         <!--  标题栏右侧  -->
@@ -148,14 +155,14 @@
                                         RadiusY="16" />
                                 </Image.Clip>
                             </Image>
-                            <Button x:Name="btnMin" Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                            <Button x:Name="btn_min" Style="{StaticResource MaterialDesignFlatMidBgButton}">
                                 <materialDesign:PackIcon Kind="WindowMinimize" />
                             </Button>
-                            <Button x:Name="btnMax" Style="{StaticResource MaterialDesignFlatMidBgButton}">
+                            <Button x:Name="btn_max" Style="{StaticResource MaterialDesignFlatMidBgButton}">
                                 <materialDesign:PackIcon Kind="WindowMaximize" />
                             </Button>
                             <Button
-                                x:Name="btnClose"
+                                x:Name="btn_close"
                                 Cursor="Hand"
                                 Style="{StaticResource MaterialDesignFlatMidBgButton}">
                                 <materialDesign:PackIcon Kind="WindowClose" />
@@ -168,5 +175,6 @@
                 <ContentControl prism:RegionManager.RegionName="{x:Static ext:PrismManager.MainViewRegionName}" />
             </DockPanel>
         </materialDesign:DrawerHost>
+
     </materialDesign:DialogHost>
 </Window>
