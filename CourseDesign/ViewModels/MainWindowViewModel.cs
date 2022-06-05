@@ -1,12 +1,9 @@
 ﻿using CourseDesign.Command.Modules;
 using CourseDesign.Extensions;
-using CourseDesign.Views;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.ObjectModel;
-using System.Windows.Controls;
 
 namespace CourseDesign.ViewModels
 {
@@ -93,7 +90,7 @@ namespace CourseDesign.ViewModels
         void CreateMeauBars()
         {
             MeauBars.Add(new MeauBar("Home", "首页", "IndexView"));
-            MeauBars.Add(new MeauBar("CheckboxMultipleMarkedCircleOutline", "任务列表", "TaskView"));
+            MeauBars.Add(new MeauBar("CheckboxMultipleMarkedCircleOutline", "计划列表", "PlanView"));
             MeauBars.Add(new MeauBar("BadgeAccount", "图鉴", "ListView"));
             MeauBars.Add(new MeauBar("Cog", "设置", "SettingView"));
         }

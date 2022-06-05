@@ -10,7 +10,7 @@ namespace CourseDesign.Services.Interfaces
         Task<APIResponse<TEntity>> AddAsync(TEntity entity);
         Task<APIResponse<TEntity>> UpdateAsync(TEntity entity);
         Task<APIResponse> DeleteAsync(int id);
-        Task<APIResponse<TEntity>> GetFirstDefaultAsync(int id);
-        Task<APIResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter);
+        //Task<APIResponse<TEntity>> GetFirstDefaultAsync(int id);
+        //Task<APIResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter);
     }
 }

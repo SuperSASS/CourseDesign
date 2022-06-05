@@ -49,7 +49,7 @@ namespace CourseDesign.Extensions
         private void ListBox_HorizontalMouseWheel(object sender, MouseWheelEventArgs e)
         {
             // sender代表的就是窗口，则sender.AcutalWidth与滚轮的width呈线性关系，或许可以推算滚动相对距离
-            // TaskView items = (TaskView)sender;
+            // PlanView items = (PlanView)sender;
             if (Scroll != null)
             {
                 int d = e.Delta;

@@ -1,12 +1,7 @@
 ﻿using CourseDesign.Command.Classes;
 using CourseDesign.Command.Module;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 // 首页的实现逻辑
 namespace CourseDesign.ViewModels
@@ -22,9 +17,9 @@ namespace CourseDesign.ViewModels
         }
 
         // TODO: 这里没有处理多态情况，因为要等数据库api接口实现
-        private ObservableCollection<TasksBase> taskLists;
+        private ObservableCollection<PlansBase> taskLists;
 
-        public ObservableCollection<TasksBase> TaskLists
+        public ObservableCollection<PlansBase> PlanLists
         {
             get { return taskLists; }
             set { taskLists = value; }
@@ -38,9 +33,9 @@ namespace CourseDesign.ViewModels
         public IndexViewModel()
         {
             InfoBlocks = new ObservableCollection<infoBlock>();
-            TaskLists = new ObservableCollection<TasksBase>();
+            PlanLists = new ObservableCollection<PlansBase>();
             TEST_CreateInfoBlocks();
-            TEST_CreateTasksLists();
+            TEST_CreatePlansLists();
         }
 
         /// <summary>
@@ -49,16 +44,16 @@ namespace CourseDesign.ViewModels
         public void TEST_CreateInfoBlocks()
         {
             InfoBlocks.Add(new infoBlock("PercentCircle", "收集情况", "100%", "跳转到图鉴页面", ""));
-            InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "任务完成情况", "50%", "跳转到任务列表页面", ""));
+            InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "计划完成情况", "50%", "跳转到计划列表页面", ""));
         }
 
         /// <summary>
-        /// 生成测试用的任务列表
+        /// 生成测试用的计划列表
         /// </summary>
-        public void TEST_CreateTasksLists()
+        public void TEST_CreatePlansLists()
         {
             for (int i = 1; i <= 10; i++)
-                TaskLists.Add(new TextTasksClass(i, false, "测试" + i, "任务内容……"));
+                PlanLists.Add(new TextPlansClass(i, false, "测试" + i, "计划内容……"));
         }
     }
 }

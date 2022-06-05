@@ -1,9 +1,9 @@
 ﻿namespace CourseDesign.Shared.DTOs
 {
     /// <summary>
-    /// Task计划数据实体
+    /// Plan计划数据实体
     /// </summary>
-    public class TaskDTO : BaseDTO
+    public class PlanDTO : BaseDTO
     {
         public enum TypeEnum { text, image }; // 计划类型的枚举
 

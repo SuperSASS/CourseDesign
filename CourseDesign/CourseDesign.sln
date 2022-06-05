@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseDesign", "CourseDesig
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseDesign.API", "..\CourseDesign.API\CourseDesign.API.csproj", "{3A0FD42E-CD5C-4777-931A-F528D6B29F53}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CourseDesign.Shared", "..\CourseDesign.Shared\CourseDesign.Shared.csproj", "{00BA5208-6D98-4559-8448-E42959A981A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CourseDesign.Shared", "..\CourseDesign.Shared\CourseDesign.Shared.csproj", "{00BA5208-6D98-4559-8448-E42959A981A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

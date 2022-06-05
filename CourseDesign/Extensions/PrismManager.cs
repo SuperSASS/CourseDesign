@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CourseDesign.Extensions
+﻿namespace CourseDesign.Extensions
 {
     /// <summary>
     /// Prism管理插件：

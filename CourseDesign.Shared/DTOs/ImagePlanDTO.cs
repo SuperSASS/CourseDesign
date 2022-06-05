@@ -1,9 +1,9 @@
 ﻿namespace CourseDesign.Shared.DTOs
 {
     /// <summary>
-    /// ImageTask（计划列表的文字类计划）数据实体，继承于TaskDTO
+    /// ImagePlan（计划列表的文字类计划）数据实体，继承于PlanDTO
     /// </summary>
-    public class ImageTaskDTO : TaskDTO
+    public class ImagePlanDTO : PlanDTO
     {
         private int TDoll_id;
 

@@ -1,6 +1,4 @@
-﻿using CourseDesign.Command.Modules;
-using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows;
 
 namespace CourseDesign.Views
 {

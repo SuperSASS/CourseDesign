@@ -8,24 +8,44 @@ using System.Threading.Tasks;
 namespace CourseDesign.API.Controllers
 {
     /// <summary>
-    /// ImageTask（计划列表的文字类计划）的控制器层
+    /// ImagePlan（计划列表的文字类计划）的控制器层
     /// </summary>
     [ApiController]
     [Route("api/[controller]/[action]")]
-    public class ImageTaskController : ControllerBase
+    public class ImagePlanController : ControllerBase
     {
-        private readonly IImageTaskService service;
-        public ImageTaskController(IImageTaskService service) { this.service = service; }
+        private readonly IImagePlanService Service;
+        public ImagePlanController(IImagePlanService service) { Service = service; }
 
-        [HttpGet]
-        public async Task<APIResponse> Get(int id) => await service.GetSingleAsync(id);
-        [HttpGet]
-        public async Task<APIResponse> GetAll([FromQuery] QueryParameter parameter) => await service.GetAllAsync(parameter);
+        /// <summary>
+        /// 在<see cref="ImagePlanDTO"/>表中，异步添加元组dtoEntity。
+        /// </summary>
+        /// <param name="dtoEntity">所要增添的<see cref="ImagePlanDTO"/>类型元组</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         [HttpPost]
-        public async Task<APIResponse> Add([FromBody] ImageTaskDTO model) => await service.AddAsync(model);
-        [HttpPost]
-        public async Task<APIResponse> Update([FromBody] ImageTaskDTO model) => await service.UpdateAsync(model);
+        public async Task<APIResponse> Add([FromBody] ImagePlanDTO dtoEntity) => await Service.AddAsync(dtoEntity);
+
+        /// <summary>
+        /// 在<see cref="ImagePlanDTO"/>表中，异步删除ID为id的元组。
+        /// </summary>
+        /// <param name="id">要删除元组的ID</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         [HttpDelete]
-        public async Task<APIResponse> Delete(int id) => await service.DeleteAsync(id);
+        public async Task<APIResponse> Delete(int id) => await Service.DeleteAsync(id);
+
+        /// <summary>
+        /// 在<see cref="ImagePlanDTO"/>表中，查询用户ID为"user_id"的所有打捞计划。
+        /// </summary>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
+        [HttpGet]
+        public async Task<APIResponse> GetAllForUser(int id) => await Service.GetAllForUserAsync(id);
+
+        /// <summary>
+        /// 在<see cref="ImagePlanDTO"/>表中，修改元组dtoEntity。
+        /// </summary>
+        /// <param name="dtoEntity">所修改的新元组</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
+        [HttpPost]
+        public async Task<APIResponse> Update([FromBody] ImagePlanDTO dtoEntity) => await Service.UpdateAsync(dtoEntity);
     }
 }

@@ -1,23 +1,20 @@
 ﻿using CourseDesign.Command.Classes;
 using CourseDesign.Services.Interfaces;
+using CourseDesign.Shared;
+using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Prism.Commands;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CourseDesign.ViewModels
 {
-    internal class TaskViewModel : BindableBase
+    internal class PlanViewModel : BindableBase
     {
-        public DelegateCommand AddTaskCommand { get; private set; }
+        public DelegateCommand AddPlanCommand { get; private set; }
         private bool isRightDrawerOpen;
-        private ObservableCollection<TasksBase> tasks;
-        private readonly IImageTaskService ImageService;
+        private ObservableCollection<PlansBase> tasks;
+        private readonly IImagePlanService ImageService;
 
         /// <summary>
         /// 右侧编辑窗是否弹出
@@ -29,19 +26,25 @@ namespace CourseDesign.ViewModels
         }
 
         /// <summary>
-        /// 所有的任务列表
+        /// 所有的计划列表
         /// </summary>
-        public ObservableCollection<TasksBase> Tasks
+        public ObservableCollection<PlansBase> Plans
         {
             get { return tasks; }
             set { tasks = value; RaisePropertyChanged(); }
         }
-        public TaskViewModel(IImageTaskService imageService)
+
+        /// <summary>
+        /// init构造函数，初始化
+        /// </summary>
+        /// <param name="imageService"></param>
+        public PlanViewModel(IImagePlanService imageService)
         {
-            Tasks = new ObservableCollection<TasksBase>();
-            AddTaskCommand = new DelegateCommand(Add);
-            CreateTasks();
+            Plans = new ObservableCollection<PlansBase>();
+            AddPlanCommand = new DelegateCommand(Add);
+            //CreatePlans();
             ImageService = imageService;
+            LoadPlansForUser();
         }
 
         /// <summary>
@@ -52,31 +55,32 @@ namespace CourseDesign.ViewModels
             IsRightDrawerOpen = true;
         }
 
-        async void CreateTasks()
+        async void LoadPlansForUser()
         {
-            // TODO: 警告，这里没有加外键约束，所有人都可以访问到所有Task
-            var imageTaskResult = await ImageService.GetAllAsync(new QueryParameter() { PageIndex = 0, PageSize = 100 }); // 通过服务，查询数据库ImageTask中所有元组，最多查询前100项（分页大小为100）
+            Plans.Clear();
+            // TODO: 3 - 警告，这里没有加外键约束，所有人都可以访问到所有Plan
+            var imagePlanResult = await ImageService.GetAllForUser(new QueryParameter()); // 通过服务，查询数据库ImagePlan中所有元组，最多查询前100项（分页大小为100）
 
-            if (imageTaskResult.Status)
+            if (imagePlanResult.Status == false)
             {
-                foreach(var item in imageTaskResult.Result.Items)
+                foreach (var item in imagePlanResult.Result.Items)
                 {
-                    ImageTaskDTO
+                    Plans.Add(new ImagePlansClass(item.ID, item.Status, item.TDoll_ID));
                 }
             }
-
-            // 以下为测试样例
-            //int image_ID = 0, text_ID = 0;
-            //for (int i=1; i<=10; i++)
-            //{
-            //    if (i % 2 == 0) // 用偶数来模拟是文字类任务 
-            //    {
-            //        Tasks.Add(new TextTasksClass(++text_ID, false, "文字类计划测试", "内容这里是！……"));
-            //        Tasks.Add(new TextTasksClass(++text_ID, false, "文字类计划测试", "长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容"));
-            //    }
-            //    else
-            //        Tasks.Add(new ImageTasksClass(++image_ID, false, 1));
-            //}
         }
+
+        // 以下为测试样例
+        //int image_ID = 0, text_ID = 0;
+        //for (int i=1; i<=10; i++)
+        //{
+        //    if (i % 2 == 0) // 用偶数来模拟是文字类计划 
+        //    {
+        //        Plans.Add(new TextPlansClass(++text_ID, false, "文字类计划测试", "内容这里是！……"));
+        //        Plans.Add(new TextPlansClass(++text_ID, false, "文字类计划测试", "长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容"));
+        //    }
+        //    else
+        //        Plans.Add(new ImagePlansClass(++image_ID, false, 1));
+        //}
     }
 }
