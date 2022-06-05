@@ -5,11 +5,11 @@
     /// </summary>
     public class TDollDTO : BaseDTO
     {
-        public enum TypeEnum { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
+        public enum TDollType { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
 
         private string name;
         private int rarity;
-        private TypeEnum type;
+        private TDollType type;
         private string artworkPath; /// TODO : 把图片改为数据库端存储
 
         public string Name
@@ -22,7 +22,7 @@
             get { return rarity; }
             set { rarity = value; OnPropertyChanged(); }
         }
-        public TypeEnum Type
+        public TDollType Type
         {
             get { return type; }
             set { type = value; OnPropertyChanged(); }

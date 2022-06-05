@@ -7,7 +7,6 @@ namespace CourseDesign.Shared.DTOs
         private string account;
         private string userName;
         private string password;
-        private List<int> tdollObtain;
 
         /// <summary>
         /// 账号
@@ -32,14 +31,6 @@ namespace CourseDesign.Shared.DTOs
         {
             get { return password; }
             set { password = value; OnPropertyChanged(); }
-        }
-        /// <summary>
-        /// 拥有的战术人形集合
-        /// </summary>
-        public List<int> TDollObtain
-        {
-            get { return tdollObtain; }
-            set { tdollObtain = value; OnPropertyChanged(); }
         }
 
         // TODO: 还有用户的一些自定义选项应该存储，特别是头像系统！
