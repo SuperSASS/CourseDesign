@@ -39,7 +39,7 @@ namespace CourseDesign.API.Controllers
         /// <param name="user_id">传来的<see cref="APIResponse"/>用户ID</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         [HttpGet]
-        public async Task<APIResponse> GetAllForUserA([FromQuery] int user_id) => await Service.GetAllForUserAsync(user_id);
+        public async Task<APIResponse> GetAllForUser([FromQuery] int user_id) => await Service.GetAllForUserAsync(user_id);
 
         /// <summary>
         /// 在<see cref="TextPlanDTO"/>表中，获取用户ID为"user_id"，且满足parameter条件的所有元组，并分页展示。

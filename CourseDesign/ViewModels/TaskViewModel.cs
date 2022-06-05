@@ -1,5 +1,7 @@
 ﻿using CourseDesign.Command.Classes;
 using CourseDesign.Services.Interfaces;
+using CourseDesign.Shared;
+using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -31,12 +33,18 @@ namespace CourseDesign.ViewModels
             get { return tasks; }
             set { tasks = value; RaisePropertyChanged(); }
         }
+
+        /// <summary>
+        /// init构造函数，初始化
+        /// </summary>
+        /// <param name="imageService"></param>
         public PlanViewModel(IImagePlanService imageService)
         {
             Plans = new ObservableCollection<PlansBase>();
             AddPlanCommand = new DelegateCommand(Add);
             //CreatePlans();
             ImageService = imageService;
+            LoadPlansForUser();
         }
 
         /// <summary>
@@ -47,16 +55,17 @@ namespace CourseDesign.ViewModels
             IsRightDrawerOpen = true;
         }
 
-        async void CreatePlans()
+        async void LoadPlansForUser()
         {
-            // TODO: 警告，这里没有加外键约束，所有人都可以访问到所有Plan
-            var imagePlanResult = await ImageService.GetAllAsync(new(null,"",0,100)); // 通过服务，查询数据库ImagePlan中所有元组，最多查询前100项（分页大小为100）
+            Plans.Clear();
+            // TODO: 3 - 警告，这里没有加外键约束，所有人都可以访问到所有Plan
+            var imagePlanResult = await ImageService.GetAllForUser(new QueryParameter()); // 通过服务，查询数据库ImagePlan中所有元组，最多查询前100项（分页大小为100）
 
-            if (imagePlanResult.Status)
+            if (imagePlanResult.Status == false)
             {
                 foreach (var item in imagePlanResult.Result.Items)
                 {
-                    //ImagePlanDTO
+                    Plans.Add(new ImagePlansClass(item.ID, item.Status, item.TDoll_ID));
                 }
             }
         }
