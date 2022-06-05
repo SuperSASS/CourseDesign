@@ -3,24 +3,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CourseDesign.API.Migrations
 {
-    public partial class CourseDesgin : Migration
+    public partial class CourseDesign : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ImageTasks",
+                name: "ImagePlans",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TDoll_id = table.Column<int>(type: "INTEGER", nullable: false),
+                    TDoll_ID = table.Column<int>(type: "INTEGER", nullable: false),
                     Status = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UserID = table.Column<int>(type: "INTEGER", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ImageTasks", x => x.ID);
+                    table.PrimaryKey("PK_ImagePlans", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,7 +43,23 @@ namespace CourseDesign.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "TextTasks",
+                name: "TDollsObtain",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TDollID = table.Column<int>(type: "INTEGER", nullable: false),
+                    UserID = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TDollsObtain", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TextPlans",
                 columns: table => new
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
@@ -50,12 +67,13 @@ namespace CourseDesign.API.Migrations
                     Title = table.Column<string>(type: "TEXT", nullable: true),
                     Content = table.Column<string>(type: "TEXT", nullable: true),
                     Status = table.Column<bool>(type: "INTEGER", nullable: false),
+                    UserID = table.Column<int>(type: "INTEGER", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TextTasks", x => x.ID);
+                    table.PrimaryKey("PK_TextPlans", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -79,13 +97,16 @@ namespace CourseDesign.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ImageTasks");
+                name: "ImagePlans");
 
             migrationBuilder.DropTable(
                 name: "TDolls");
 
             migrationBuilder.DropTable(
-                name: "TextTasks");
+                name: "TDollsObtain");
+
+            migrationBuilder.DropTable(
+                name: "TextPlans");
 
             migrationBuilder.DropTable(
                 name: "Users");

@@ -1,9 +1,9 @@
 ﻿namespace CourseDesign.Shared.DTOs
 {
     /// <summary>
-    /// TextTask（计划列表的文字类计划）数据实体，继承于TaskDTO
+    /// TextPlan（计划列表的文字类计划）数据实体，继承于PlanDTO
     /// </summary>
-    public class TextTaskDTO : TaskDTO
+    public class TextPlanDTO : PlanDTO
     {
         private string title;
         private string content;

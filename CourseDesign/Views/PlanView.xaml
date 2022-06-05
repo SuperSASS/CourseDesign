@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="CourseDesign.Views.TaskView"
+    x:Class="CourseDesign.Views.PlanView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -109,7 +109,7 @@
                             BadgeColorZoneMode="SecondaryMid">
                             <Button
                                 materialDesign:ButtonAssist.CornerRadius="5"
-                                Command="{Binding AddTaskCommand}"
+                                Command="{Binding AddPlanCommand}"
                                 Content="添加计划"
                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
@@ -125,7 +125,7 @@
                         HorizontalScrollBarVisibility="Visible"
                         Style="{StaticResource for_scrollviewer}">
                         <!--  计划卡片展示区  -->
-                        <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=task_list}" ItemsSource="{Binding Tasks}">
+                        <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=task_list}" ItemsSource="{Binding Plans}">
                             <!--  卡片资源模板（分为图片类和文字类）  -->
                             <!--  规定：每个卡片宽度统一为300  -->
                             <ItemsControl.Resources>
@@ -307,7 +307,7 @@
                                                             <ListBox
                                                                 x:Name="fish_list_son"
                                                                 HorizontalContentAlignment="Stretch"
-                                                                ItemsSource="{Binding TaskLists}">
+                                                                ItemsSource="{Binding PlanLists}">
                                                                 <ListBox.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <TextBlock
@@ -439,7 +439,7 @@
 
                             <!--  展示数据选择器  -->
                             <ItemsControl.ItemTemplateSelector>
-                                <local:TasksDataTemplate ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
+                                <local:PlansDataTemplate ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
                             </ItemsControl.ItemTemplateSelector>
                         </ItemsControl>
                     </ScrollViewer>

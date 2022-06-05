@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-namespace CourseDesign.Command.Classes
+﻿namespace CourseDesign.Command.Classes
 {
     /// <summary>
     /// 计划列表的基类
@@ -16,7 +9,7 @@ namespace CourseDesign.Command.Classes
     /// <item><c>Status</c> - 计划状态，1代表完成</item>
     /// </list>
     /// </summary>
-    internal class TasksBase
+    internal class PlansBase
     {
         internal enum TypeEnum { text, image }; // 计划类型的枚举
 
@@ -40,12 +33,12 @@ namespace CourseDesign.Command.Classes
         }
 
         /// <summary>
-        /// 任务类的构造函数
+        /// 计划类的构造函数
         /// </summary>
-        /// <param name="id">任务ID</param>
-        /// <param name="type">任务种类（目前只有2类：图片类</param>
-        /// <param name="status">任务状态（0表示未完成，1表示已完成）</param>
-        public TasksBase(int id, TypeEnum type, bool status)
+        /// <param name="id">计划ID</param>
+        /// <param name="type">计划种类（目前只有2类：图片类</param>
+        /// <param name="status">计划状态（0表示未完成，1表示已完成）</param>
+        public PlansBase(int id, TypeEnum type, bool status)
         {
             ID = id;
             Type = type;

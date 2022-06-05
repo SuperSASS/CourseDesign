@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseDesign.API.Migrations
 {
     [DbContext(typeof(CourseDesignContext))]
-    [Migration("20220604082601_CourseDesgin")]
-    partial class CourseDesgin
+    [Migration("20220604214124_CourseDesign")]
+    partial class CourseDesign
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -18,7 +18,7 @@ namespace CourseDesign.API.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "5.0.17");
 
-            modelBuilder.Entity("CourseDesign.API.Context.ImageTaskDTO", b =>
+            modelBuilder.Entity("CourseDesign.API.Context.ImagePlan", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -30,15 +30,18 @@ namespace CourseDesign.API.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("TDoll_id")
+                    b.Property<int>("TDoll_ID")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
-                    b.ToTable("ImageTasks");
+                    b.ToTable("ImagePlans");
                 });
 
             modelBuilder.Entity("CourseDesign.API.Context.TDoll", b =>
@@ -70,7 +73,30 @@ namespace CourseDesign.API.Migrations
                     b.ToTable("TDolls");
                 });
 
-            modelBuilder.Entity("CourseDesign.API.Context.TextTask", b =>
+            modelBuilder.Entity("CourseDesign.API.Context.TDollObtain", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TDollID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TDollsObtain");
+                });
+
+            modelBuilder.Entity("CourseDesign.API.Context.TextPlan", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -91,9 +117,12 @@ namespace CourseDesign.API.Migrations
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("ID");
 
-                    b.ToTable("TextTasks");
+                    b.ToTable("TextPlans");
                 });
 
             modelBuilder.Entity("CourseDesign.API.Context.User", b =>

@@ -8,7 +8,8 @@ namespace CourseDesign.API.Services.Interfaces
     /// </summary>
     public interface ITDollService
     {
-        Task<APIResponse> GetAllAsync(QueryParameter parameter); // 按条件查询人形
-        Task<APIResponse> GetSingalAsync(int id); // 按ID查询人形
+        Task<APIResponse> GetParamContainAsync(QueryParameter parameter); // 按条件包含查询人形
+        Task<APIResponse> GetParamEqualAsync(QueryParameter parameter); // 按条件匹配查询人形
+        Task<APIResponse> GetIDAsync(int id); // 按ID查询人形
     }
 }

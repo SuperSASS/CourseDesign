@@ -2,8 +2,8 @@
 
 namespace CourseDesign.API.Context.Repository
 {
-    public class ImageTaskRepository : Repository<ImageTask>, IRepository<ImageTask>
+    public class ImagePlanRepository : Repository<ImagePlan>, IRepository<ImagePlan>
     {
-        public ImageTaskRepository(CourseDesignContext dbContext) : base(dbContext) { }
+        public ImagePlanRepository(CourseDesignContext dbContext) : base(dbContext) { }
     }
 }

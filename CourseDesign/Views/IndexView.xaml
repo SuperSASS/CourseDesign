@@ -57,7 +57,7 @@
                                 ToolTip="{Binding ToolTip}" />
 
                             <!--  信息栏  -->
-                            <!--  TODO：实现页面跳转 - 任务列表/图鉴  -->
+                            <!--  TODO：实现页面跳转 - 计划列表/图鉴  -->
                             <Grid x:Name="info_content">
                                 <Grid.InputBindings>
                                     <MouseBinding
@@ -115,7 +115,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!--  任务列表  -->
+            <!--  计划列表  -->
             <Grid Grid.Row="1" Margin="0,10,0,10">
                 <Border
                     Background="{DynamicResource PrimaryHueMidForegroundBrush}"
@@ -130,7 +130,7 @@
                         <TextBlock
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                            Text="任务列表" />
+                            Text="计划列表" />
                         <!--  TODO：这个功能还没实现  -->
                         <Button
                             Width="50"
@@ -145,16 +145,16 @@
                         </Button>
                     </DockPanel>
 
-                    <!--  任务列表内容  -->
+                    <!--  计划列表内容  -->
                     <ScrollViewer x:Name="task_list" Style="{StaticResource for_scrollviewer}">
                         <ListBox
                             x:Name="task_list_son"
                             HorizontalContentAlignment="Stretch"
-                            ItemsSource="{Binding TaskLists}">
+                            ItemsSource="{Binding PlanLists}">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DockPanel MaxHeight="80" LastChildFill="False">
-                                        <!--  任务状态切换滑块  -->
+                                        <!--  计划状态切换滑块  -->
                                         <ToggleButton
                                             Margin="10,0"
                                             materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="{DynamicResource MaterialDesignBody}"
@@ -163,13 +163,13 @@
                                             DockPanel.Dock="Right"
                                             IsChecked="{Binding Status}"
                                             Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
-                                            ToolTip="点击完成任务">
+                                            ToolTip="点击完成计划">
                                             <materialDesign:PackIcon Kind="ChevronRight" RenderTransformOrigin=".5,.5" />
                                             <materialDesign:ToggleButtonAssist.OnContent>
                                                 <materialDesign:PackIcon Kind="Check" />
                                             </materialDesign:ToggleButtonAssist.OnContent>
                                         </ToggleButton>
-                                        <!--  任务内容  -->
+                                        <!--  计划内容  -->
                                         <StackPanel>
                                             <TextBlock
                                                 Margin="10,5"

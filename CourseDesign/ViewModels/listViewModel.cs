@@ -1,11 +1,6 @@
 ﻿using CourseDesign.Command.Classes;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using static CourseDesign.Command.Classes.TDollClass;
 
 namespace CourseDesign.ViewModels

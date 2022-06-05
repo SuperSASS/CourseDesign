@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CourseDesign.Command.Modules;
+﻿using CourseDesign.Command.Modules;
 using CourseDesign.Extensions;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using System.Collections.ObjectModel;
 
 namespace CourseDesign.ViewModels
 {
@@ -16,7 +11,7 @@ namespace CourseDesign.ViewModels
     {
         private ObservableCollection<MeauBar> settingBars;  // 设置页列表
         public ObservableCollection<MeauBar> SettingBars { get { return settingBars; } set { settingBars = value; RaisePropertyChanged(); } }
-        
+
         // 命令部分
         public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递SettingBars到这个导航命令
 

@@ -5,8 +5,9 @@
     /// </summary>
     public class APIResponse
     {
+        public enum StatusCode { Success, Select__Wrong_filed, Select_Wrong_Equal, Get_Wrong_Account_or_Password , Get_Account_Haven , Add_Failed, Delete_Failed, Update_Failed, Update_Not_Haven, Unknown_Error }
         public object Result { get; set; }
-        public bool Status { get; set; }
+        public StatusCode Status { get; set; }
         public string Message { get; set; }
 
         /// <summary>
@@ -14,8 +15,8 @@
         /// </summary>
         public APIResponse()
         {
-            Result = null;
-            Status = true;
+            Result = default;
+            Status = 0;
             Message = "成功！……";
         }
 
@@ -26,7 +27,7 @@
         public APIResponse(object result)
         {
             Result = result;
-            Status = true;
+            Status = 0;
             Message = "成功！……";
         }
 
@@ -34,23 +35,10 @@
         /// 操作失败，返回失败消息
         /// </summary>
         /// <param name="message">失败提示消息</param>
-        /// <param name="status">默认为失败（也可以重写为操作成功返回消息）</param>
-        public APIResponse(string message, bool status = false)
+        /// <param name="status"></param>
+        public APIResponse(StatusCode status, string message)
         {
-            Result = null;
-            Status = status;
-            Message = message;
-        }
-
-        /// <summary>
-        /// 自定义消息
-        /// </summary>
-        /// <param name="result">返回元组结果</param>
-        /// <param name="status">操作状态</param>
-        /// <param name="message">返回消息</param>
-        public APIResponse(object result, bool status, string message)
-        {
-            Result = result;
+            Result = default;
             Status = status;
             Message = message;
         }

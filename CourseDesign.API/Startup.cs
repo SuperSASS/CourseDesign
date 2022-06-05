@@ -7,17 +7,11 @@ using CourseDesign.API.Services;
 using CourseDesign.API.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace CourseDesign.API
 {
@@ -40,14 +34,16 @@ namespace CourseDesign.API
                 option.UseSqlite(connectionString);
             })
             .AddUnitOfWork<CourseDesignContext>()                  // 添加工作单元
-            .AddCustomRepository<TextTask, TextTaskRepository>()   // 添加文本类计划的仓储
-            .AddCustomRepository<ImageTask, ImageTaskRepository>() // 添加图片类计划的仓储
+            .AddCustomRepository<TextPlan, TextPlanRepository>()   // 添加文本类计划的仓储
+            .AddCustomRepository<ImagePlan, ImagePlanRepository>() // 添加图片类计划的仓储
             .AddCustomRepository<User, UserRepository>()           // 添加用户的仓储
             .AddCustomRepository<TDoll, TDollRepository>();        // 添加战术人形的仓储
             // 依赖注入 - 添加服务
-            services.AddTransient<IImageTaskService, ImageTaskService>();
-            services.AddTransient<ITextTaskService, TextTaskService>();
-            services.AddTransient<ILoginService, LoginService>();
+            services.AddTransient<IImagePlanService, ImagePlanService>(); // 图像类计划的控制器
+            services.AddTransient<ITextPlanService, TextPlanService>();   // 文字类计划的控制器
+            services.AddTransient<ILoginService, LoginService>();         // 登录的控制器
+            services.AddTransient<ITDollService, TDollService>();         // 战术人形的控制器
+            // TODO: 2 - API还没实现人物图鉴！
             // 注册AutoMapper映射服务，并添加AutoMapper配置
             var automapperConfig = new MapperConfiguration(config =>
             {

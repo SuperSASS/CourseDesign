@@ -9,6 +9,6 @@ namespace CourseDesign.API.Services.Interfaces
     public interface ILoginService
     {
         Task<APIResponse> LoginAsync(string account, string password); // 登录
-        Task<APIResponse> Register(UserDTO user); // 注册
+        Task<APIResponse> RegisterAsync(UserDTO user); // 注册
     }
 }
