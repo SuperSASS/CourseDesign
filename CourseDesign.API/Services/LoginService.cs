@@ -12,6 +12,13 @@ using System.Threading.Tasks;
 
 namespace CourseDesign.API.Services
 {
+    public class Test : BaseEntity
+    {
+        public string Account { get; set; }
+        public int Roll { get; set; }
+    }
+
+
     public class LoginService : ILoginService
     {
         private readonly BasicDBService<User> userDB;
@@ -26,7 +33,7 @@ namespace CourseDesign.API.Services
             exp = (x) => x.Account.Equals(account);
             var getUser = await userDB.GetExpressionSingalAsync(exp);
             if (getUser.Result == null || ((User)getUser.Result).Password != password)
-                return new APIResponseInner(StatusCode.Get_Wrong_Account_or_Password, "账号或密码错啦！检查一下呢……");
+                return new APIResponseInner(APIStatusCode.Get_Wrong_Account_or_Password, "账号或密码错啦！检查一下呢……");
             else
                 return new APIResponseInner();
         }
@@ -40,7 +47,7 @@ namespace CourseDesign.API.Services
             var getUser = await userDB.GetExpressionSingalAsync(exp);
         
             if (getUser.Result != null) // 账号已存在，无法注册
-                return new APIResponseInner(StatusCode.Get_Account_Haven, $"当前账号“{dbEntity.Account}”已被注册啦，再想想别的呢……");
+                return new APIResponseInner(APIStatusCode.Get_Account_Haven, $"当前账号“{dbEntity.Account}”已被注册啦，再想想别的呢……");
 
             return await userDB.AddAsync(dbEntity); // 这里数据库的Add，ID是自增类型
         }

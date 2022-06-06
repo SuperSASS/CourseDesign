@@ -25,8 +25,8 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Menu.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.ToolTip.xaml" />
 
-                <ResourceDictionary Source="/Styles/ScrollStyle.xaml" />
-                <ResourceDictionary Source="/Styles/MeauBarStyle.xaml" />
+                <ResourceDictionary Source="/Styles/scrollStyle.xaml" />
+                <ResourceDictionary Source="/Styles/meauBarStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

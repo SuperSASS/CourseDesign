@@ -47,7 +47,7 @@ namespace CourseDesign.Services
             var request = new RestRequest();
             request.AddHeader("Content-Type", baseRequest.ContentType);
             // 添加请求参数
-            if (baseRequest.Parameter != null) // TODO: 0-0 - 问题可能在这个名字上
+            if (baseRequest.Parameter != null)
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
             // 执行请求
             Client.BaseUrl = new Uri(APIUrl + baseRequest.Route);

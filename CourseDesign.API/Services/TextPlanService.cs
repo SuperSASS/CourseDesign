@@ -54,7 +54,7 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.UserID == parameter.user_id && x.Status.ToString() == parameter.search;
                         break;
                     default:
-                        return new APIResponseInner(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                        return new APIResponseInner(APIStatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
                 }
             return await textDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
 

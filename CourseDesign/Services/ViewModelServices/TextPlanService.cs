@@ -31,7 +31,8 @@ namespace CourseDesign.Services.ViewModelServices
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
-            request.Parameter = parameter;
+            request.Route = $"api/{ServiceName}/GetAllForUser?user_id=" + user_id; // 用户user_id直接加载路由里
+            request.Parameter = parameter; 
             return await Client.ExecuteAsync<PagedList<TextPlanDTO>>(request);
         }
     }

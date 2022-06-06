@@ -36,7 +36,7 @@ namespace CourseDesign.API.Services
                             exp = (x) => x.Name.Contains(parameter.search);
                             break;
                         default:
-                            return new APIResponseInner(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                            return new APIResponseInner(APIStatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
                     }
                     return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
                 }
@@ -63,7 +63,7 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.Type == (TDollType)int.Parse(parameter.search);
                         break;
                     default:
-                        return new APIResponseInner(StatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
+                        return new APIResponseInner(APIStatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
                 }
                 return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             }

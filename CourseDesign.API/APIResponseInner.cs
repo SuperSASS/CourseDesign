@@ -17,7 +17,7 @@ namespace CourseDesign.API
         /// <summary>
         /// 操作的状态，状态码定义在Shared中（注意：没查询到也为成功，不过Result为null）
         /// </summary>
-        public StatusCode Status { get; set; }
+        public APIStatusCode Status { get; set; }
         /// <summary>
         /// 操作的信息。
         /// </summary>
@@ -31,7 +31,7 @@ namespace CourseDesign.API
         public APIResponseInner()
         {
             Result = default;
-            Status = StatusCode.Success;
+            Status = APIStatusCode.Success;
             Message = "成功！……";
         }
 
@@ -42,7 +42,7 @@ namespace CourseDesign.API
         public APIResponseInner(object result)
         {
             Result = result;
-            Status = StatusCode.Success;
+            Status = APIStatusCode.Success;
             Message = "成功！……";
         }
 
@@ -51,7 +51,7 @@ namespace CourseDesign.API
         /// </summary>
         /// <param name="message">失败提示消息</param>
         /// <param name="status"></param>
-        public APIResponseInner(StatusCode status, string message)
+        public APIResponseInner(APIStatusCode status, string message)
         {
             Result = null;
             Status = status;
