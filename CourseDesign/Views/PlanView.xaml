@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     x:Class="CourseDesign.Views.PlanView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -481,11 +481,10 @@
                             DockPanel.Dock="Top"
                             Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="状态：" />
-                            <ComboBox>
+                            <ComboBox SelectedIndex={"Binding CurrentDTO.Status"}>
                                 <ComboBoxItem
                                     Content="未完成"
-                                    DockPanel.Dock="Top"
-                                    IsSelected="True" />
+                                    DockPanel.Dock="Top"/>
                                 <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
                             </ComboBox>
                         </StackPanel>
