@@ -63,11 +63,7 @@ namespace CourseDesign.ViewModels
             // 各种命令的初始化
             ExecCommand = new DelegateCommand<string>(Exec);
             AddPlanCommand = new DelegateCommand(AddPlan);
-<<<<<<< HEAD
             // API服务初始化
-=======
-
->>>>>>> App
             ImageService = imageService;
             TextService = textService;
         }
