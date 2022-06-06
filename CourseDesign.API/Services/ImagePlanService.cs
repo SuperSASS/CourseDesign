@@ -2,6 +2,7 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -16,11 +17,11 @@ namespace CourseDesign.API.Services
     /// </summary>
     public class ImagePlanService : IImagePlanService
     {
-        private readonly BasicDBService<ImagePlan> imageDB; // 数据库服务器
+        private readonly BaseDBService<ImagePlan> imageDB; // 数据库服务器
         private readonly IMapper mapper;                     // 映射器
 
         // 构造函数，由注册依赖自己完成
-        public ImagePlanService(IUnitOfWork unitOfWork, IMapper _mapper) { imageDB = new BasicDBService<ImagePlan>(unitOfWork); mapper = _mapper; }
+        public ImagePlanService(IUnitOfWork unitOfWork, IMapper _mapper) { imageDB = new BaseDBService<ImagePlan>(unitOfWork); mapper = _mapper; }
 
         // 增
         public async Task<APIResponseInner> AddAsync(ImagePlanDTO dtoEntity) { return await imageDB.AddAsync(mapper.Map<ImagePlan>(dtoEntity)); } // 通过AutoMapper，将DTO类型转化为数据库实体类

@@ -1,4 +1,5 @@
 ﻿using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ namespace CourseDesign.API.Controllers
         /// </summary>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpGet]
-        public async Task<APIResponseInner> GetAllForUser(int id) => await Service.GetAllForUserAsync(id);
+        public async Task<APIResponseInner> GetAllForUser(int user_id) => await Service.GetAllForUserAsync(user_id);
 
         /// <summary>
         /// 在<see cref="ImagePlanDTO"/>表中，修改元组dtoEntity。

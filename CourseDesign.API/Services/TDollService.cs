@@ -2,6 +2,7 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -13,13 +14,17 @@ namespace CourseDesign.API.Services
 {
     public class TDollService : ITDollService
     {
-        private readonly BasicDBService<TDoll> tDollDB;
+        private readonly BaseDBService<TDoll> tDollDB;
         private readonly IMapper mapper;
 
-        public TDollService(IUnitOfWork unitOfWork, IMapper _mapper) { tDollDB = new BasicDBService<TDoll>(unitOfWork); mapper = _mapper; }
+        public TDollService(IUnitOfWork unitOfWork, IMapper _mapper) { tDollDB = new BaseDBService<TDoll>(unitOfWork); mapper = _mapper; }
+
+        #region 方法实现
+        // ID查询
+        public async Task<APIResponseInner> GetIDAsync(int id) { return await tDollDB.GetIDAsync(id); }
 
         // 按条件包含查询人形
-        public async Task<APIResponseInner> GetParamContainAsync(QueryParameter parameter)
+        public async Task<APIResponseInner> GetParamContainAsync(GETParameter parameter)
         {
             Expression<Func<TDoll, bool>> exp;
             //if (parameter.user_id != null) // TODO: 3 - 传了用户ID进来，只查该用户的
@@ -44,7 +49,7 @@ namespace CourseDesign.API.Services
         }
 
         // 按条件匹配查询人形
-        public async Task<APIResponseInner> GetParamEqualAsync(QueryParameter parameter)
+        public async Task<APIResponseInner> GetParamEqualAsync(GETParameter parameter)
         {
             Expression<Func<TDoll, bool>> exp;
             if (string.IsNullOrWhiteSpace(parameter.field))  // Field参数为空，按分页全条件查询
@@ -68,7 +73,6 @@ namespace CourseDesign.API.Services
                 return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             }
         }
-
-        public async Task<APIResponseInner> GetIDAsync(int id) { return await tDollDB.GetIDAsync(id); }
+        #endregion
     }
 }

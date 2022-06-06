@@ -1,6 +1,7 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -15,13 +16,13 @@ namespace CourseDesign.API.Services
     /// <para>即对单个表（<see cref="DBEntity"/>类型）的增、删、查、改、操作（查分为单值查询和表达查询）</para>
     /// </summary>
     /// <typeparam name="DBEntity">操作的数据库实体类（注：一定注意这是对数据库的操作，给的是数据库类型，即Mapper在Server中映射）</typeparam>
-    public class BasicDBService<DBEntity> : IBasicSQLService<DBEntity> where DBEntity : BaseEntity // 注：这边where DBEntity : BaseEntity，约束传进来的泛型必须是数据库基本类型实体，后面ID就都可以用了，很强大！
+    public class BaseDBService<DBEntity> : IBasicSQLService<DBEntity> where DBEntity : BaseEntity // 注：这边where DBEntity : BaseEntity，约束传进来的泛型必须是数据库基本类型实体，后面ID就都可以用了，很强大！
     {
         private readonly IUnitOfWork UnitOfWork;     // 工作单元
         private readonly IRepository<DBEntity> Repo; // 仓储
 
         // SQL操作的构造函数，由注册依赖自己构造，负责初始化工作单元和仓储
-        public BasicDBService(IUnitOfWork unitOfWork)
+        public BaseDBService(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
             Repo = unitOfWork.GetRepository<DBEntity>();

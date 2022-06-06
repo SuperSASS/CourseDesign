@@ -2,6 +2,7 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
@@ -21,10 +22,10 @@ namespace CourseDesign.API.Services
 
     public class LoginService : ILoginService
     {
-        private readonly BasicDBService<User> userDB;
+        private readonly BaseDBService<User> userDB;
         private readonly IMapper mapper;
 
-        public LoginService(IUnitOfWork unitOfWork, IMapper mapper) { userDB = new BasicDBService<User>(unitOfWork); this.mapper = mapper; }
+        public LoginService(IUnitOfWork unitOfWork, IMapper mapper) { userDB = new BaseDBService<User>(unitOfWork); this.mapper = mapper; }
 
         // 登录
         public async Task<APIResponseInner> LoginAsync(string account, string password)

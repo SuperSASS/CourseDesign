@@ -17,7 +17,7 @@ namespace CourseDesign.Context
     public class TDollsContext
     {
         private readonly ITDollService TDollService;
-        public static List<TDollClass> tDolls;
+        public static List<TDollClass> tDolls; // 所有的战术人形上下文
 
         public TDollsContext(ITDollService tDollService)
         {
@@ -32,7 +32,7 @@ namespace CourseDesign.Context
         async void FirstLoadTDollsAsync()
         {
             tDolls.Clear();
-            var tDollResult = await TDollService.GetParamContain(new QueryParameter());
+            var tDollResult = await TDollService.GetParamContain(new GETParameter());
 
             if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
             {

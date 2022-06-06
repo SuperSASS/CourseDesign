@@ -1,4 +1,5 @@
 ﻿using CourseDesign.API.Context;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
@@ -37,7 +38,7 @@ namespace CourseDesign.API.Services.Interfaces
         /// </summary>
         /// <param name="parameter">传来的<see cref="APIResponseInner"/>类型参数（若匹配<see cref="TextPlan.Status"/>，Search需要用<c>true/false</c>）</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
-        Task<APIResponseInner> GetParamForUserAsync(QueryParameter parameter);
+        Task<APIResponseInner> GetParamForUserAsync(GETParameter parameter);
 
         /// <summary>
         /// 在<see cref="TextPlan"/>表中，修改元组"dtoEntity。

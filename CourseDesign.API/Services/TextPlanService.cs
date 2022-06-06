@@ -2,13 +2,14 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static CourseDesign.API.APIResponseInner;
+using static CourseDesign.API.Services.Response.APIResponseInner;
 
 namespace CourseDesign.API.Services
 {
@@ -17,14 +18,14 @@ namespace CourseDesign.API.Services
     /// </summary>
     public class TextPlanService : ITextPlanService
     {
-        private readonly BasicDBService<TextPlan> textDB;
+        private readonly BaseDBService<TextPlan> textDB;
         private readonly IMapper mapper;
-        public TextPlanService(IUnitOfWork unitOfWork, IMapper _mapper) { textDB = new BasicDBService<TextPlan>(unitOfWork); mapper = _mapper; }
+        public TextPlanService(IUnitOfWork unitOfWork, IMapper _mapper) { textDB = new BaseDBService<TextPlan>(unitOfWork); mapper = _mapper; }
 
-
+        // 增
         public async Task<APIResponseInner> AddAsync(TextPlanDTO dtoEntity) { return await textDB.AddAsync(mapper.Map<TextPlan>(dtoEntity)); }
 
-
+        // 删
         public async Task<APIResponseInner> DeleteAsync(int id) { return await textDB.DeleteAsync(id); }
 
         // 查询某用户的所有文本计划
@@ -36,7 +37,7 @@ namespace CourseDesign.API.Services
         }
 
         // 按条件查询某用户的文本计划
-        public async Task<APIResponseInner> GetParamForUserAsync(QueryParameter parameter)
+        public async Task<APIResponseInner> GetParamForUserAsync(GETParameter parameter)
         {
             Expression<Func<TextPlan, bool>> exp;
             if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表全条件查询

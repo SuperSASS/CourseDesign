@@ -14,8 +14,9 @@ namespace CourseDesign.ViewModels
 {
     internal class PlanViewModel : NavigationViewModel
     {
-        private bool isRightDrawerOpen;
+        #region 字段
         private ObservableCollection<PlanBase> plans;
+        private bool isRightDrawerOpen;
         private string searchText;
 
         // 命令绑定
@@ -24,7 +25,9 @@ namespace CourseDesign.ViewModels
         // API服务
         private readonly IImagePlanService ImageService;
         private readonly ITextPlanService TextService;
+        #endregion
 
+        #region 属性
         /// <summary>
         /// 搜索文本，双向绑定
         /// </summary>
@@ -41,7 +44,6 @@ namespace CourseDesign.ViewModels
             get { return isRightDrawerOpen; }
             set { isRightDrawerOpen = value; RaisePropertyChanged(); }
         }
-
         /// <summary>
         /// 所有的计划列表
         /// </summary>
@@ -50,6 +52,7 @@ namespace CourseDesign.ViewModels
             get { return plans; }
             set { plans = value; RaisePropertyChanged(); }
         }
+        #endregion
 
         /// <summary>
         /// init构造函数，初始化
@@ -101,17 +104,21 @@ namespace CourseDesign.ViewModels
             Loading(true);
             Plans.Clear();
 
-            var textPlanResult = await TextService.GetParamContainForUser(1, new QueryParameter() { search = SearchText });
-            foreach (var textItem in textPlanResult.Result.Items)
-                Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
-
+            if (SearchText == null)
+                GetAllPlansForUserAsyna();
+            else
+            {
+                var textPlanResult = await TextService.GetParamContainForUser(new GETParameter() { user_id = 1, search = SearchText, field = "Title" }); // TODO: 2 - 这里选的是查标题
+                foreach (var textItem in textPlanResult.Result.Items)
+                    Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
+            }
             Loading(false);
         }
 
         /// <summary>
         /// 查询该用户所有计划
         /// </summary>
-        async void GetPlansForUserAsyna()
+        async void GetAllPlansForUserAsyna()
         {
             Loading(true); // 弹出等待会话
             Plans.Clear();
@@ -153,20 +160,7 @@ namespace CourseDesign.ViewModels
         {
             base.OnNavigatedTo(navigationContext);
 
-            GetPlansForUserAsyna();
+            GetAllPlansForUserAsyna();
         }
-
-        // 以下为测试样例
-        //int image_ID = 0, text_ID = 0;
-        //for (int i=1; i<=10; i++)
-        //{
-        //    if (i % 2 == 0) // 用偶数来模拟是文字类计划 
-        //    {
-        //        Plans.Add(new TextPlansClass(++text_ID, false, "文字类计划测试", "内容这里是！……"));
-        //        Plans.Add(new TextPlansClass(++text_ID, false, "文字类计划测试", "长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容长内容"));
-        //    }
-        //    else
-        //        Plans.Add(new ImagePlansClass(++image_ID, false, 1));
-        //}
     }
 }

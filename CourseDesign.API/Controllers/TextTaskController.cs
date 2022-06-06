@@ -1,4 +1,5 @@
 ﻿using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.Response;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +48,7 @@ namespace CourseDesign.API.Controllers
         /// <param name="param">传来的<see cref="APIResponseInner"/>类型参数</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpGet]
-        public async Task<APIResponseInner> GetParamContainForUser([FromQuery] QueryParameter parameter) => await Service.GetParamForUserAsync(parameter); // 这里将user_id整合进了参数param里，因为分开两个参数第二个参数接收不到，暂且不知道为什么
+        public async Task<APIResponseInner> GetParamContainForUser([FromQuery] GETParameter param) => await Service.GetParamForUserAsync(param); // 这里将user_id整合进了参数param里，因为分开两个参数第二个参数接收不到，暂且不知道为什么
 
         /// <summary>
         /// 在<see cref="TextPlanDTO"/>表中，修改元组"dtoEntity"。

@@ -9,14 +9,26 @@ namespace CourseDesign.Services.Interfaces
 {
     public interface IImagePlanService : IBaseService<ImagePlanDTO>
     {
-        /// <returns>API的返回消息APIResopnse，返回满足条件的实体页</returns>
-        public Task<APIResponse> Add(int user_id, ImagePlanClass imagePlan);
-        public Task<APIResponse> Delete(int id);
+        #region 继承的基本方法
+        //public new Task<APIResponse<ImagePlanDTO>> Add(int user_id, ImagePlanDTO imagePlanDTO);
+        //public new Task<APIResponse> Delete(int id);
+        //public new Task<APIResponse<ImagePlanDTO>> Update(int user_id, ImagePlanDTO imagePlanDTO);
+        #endregion
+
+        #region 额外的方法
         /// <summary>
-        /// 返回该用户符合条件的所有结果
+        /// [GET]返回该用户所有结果。
         /// </summary>
-        /// <param name="parameter">查询条件所用的参数</param>
-        public Task<APIResponse<PagedList<ImagePlanDTO>>> GetAllForUser(int user_id); 
-        public Task<APIResponse> Update(ImagePlanClass imagePlan); 
+        /// <param name="user_id">用户的ID</param>
+        /// <returns>
+        /// <see cref="APIResponse{PagedList{TDollDTO}}"/>类型消息
+        /// <list type="bullet">
+        /// <item>Result: 查询的分页结果集，类型为<see cref="PagedList{ImagePlanDTO}"/></item>
+        /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
+        /// <item>Message: API返回的消息</item>
+        /// </list>
+        /// </returns>
+        public Task<APIResponse<PagedList<ImagePlanDTO>>> GetAllForUser(int user_id);
+        #endregion
     }
 }

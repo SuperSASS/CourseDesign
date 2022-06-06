@@ -1,4 +1,5 @@
-﻿using CourseDesign.Shared.DTOs;
+﻿using CourseDesign.API.Services.Response;
+using CourseDesign.Shared.DTOs;
 using System.Threading.Tasks;
 
 namespace CourseDesign.API.Services.Interfaces

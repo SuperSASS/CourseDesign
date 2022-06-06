@@ -9,15 +9,40 @@ namespace CourseDesign.Services.Interfaces
 {
     public interface ITextPlanService : IBaseService<TextPlanDTO>
     {
-        /// <returns>API的返回消息APIResopnse，返回满足条件的实体页</returns>
-        public Task<APIResponse<TextPlanDTO>> AddAsync(TextPlanDTO imagePlan);
-        public Task<APIResponse> DeleteAsync(int id);
+        #region 继承的基本方法
+        public new Task<APIResponse<TextPlanDTO>> Add(int user_id, TextPlanDTO textPlan);
+        public new Task<APIResponse> Delete(int id);
+        public new Task<APIResponse<TextPlanDTO>> Update(int user_id, TextPlanDTO textPlan);
+        #endregion
+
+        #region 额外的方法
         /// <summary>
-        /// 返回该用户符合条件的所有结果
+        /// [GET]返回该用户所有结果。
         /// </summary>
-        /// <param name="parameter">查询条件所用的参数</param>
+        /// <param name="user_id">该用户的ID</param>
+        /// <returns>
+        /// <see cref="APIResponse{PagedList{TDollDTO}}"/>类型消息
+        /// <list type="bullet">
+        /// <item>Result: 查询的分页结果集，类型为<see cref="PagedList{TextPlanDTO}"/></item>
+        /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
+        /// <item>Message: API返回的消息</item>
+        /// </list>
+        /// </returns>
         public Task<APIResponse<PagedList<TextPlanDTO>>> GetAllForUser(int user_id);
-        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(int user_id, QueryParameter parameter);
-        public Task<APIResponse<TextPlanDTO>> UpdateAsync(TextPlanDTO imagePlan);
+
+        /// <summary>
+        /// [GET]异步查询，返回该用户<b>包含</b>条件的结果，用户ID以及条件均在参数中。
+        /// </summary>
+        /// <param name="parameter"><see cref="GETParameter"/>类型的查询条件，具体含义用GETParameter(){}查询。</param>
+        /// <returns>
+        /// <see cref="APIResponse{PagedList{TDollDTO}}"/>类型消息
+        /// <list type="bullet">
+        /// <item>Result: 查询的分页结果集，类型为<see cref="PagedList{TextPlanDTO}"/></item>
+        /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
+        /// <item>Message: API返回的消息</item>
+        /// </list>
+        /// </returns>
+        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(GETParameter parameter);
+        #endregion
     }
 }

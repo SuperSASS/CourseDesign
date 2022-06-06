@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 
-namespace CourseDesign.Services
+namespace CourseDesign.Services.Requests
 {
     /// <summary>
     /// 请求方式
@@ -14,6 +14,6 @@ namespace CourseDesign.Services
         public Method Method { get; set; }
         public string Route { get; set; }
         public string ContentType { get; set; } = "application/json";
-        public object Parameter { get; set; }
+        public object Parameter { get; set; } // 注意！这个Parameter只能适用于POST方法，GET方法请一个个?进去
     }
 }
