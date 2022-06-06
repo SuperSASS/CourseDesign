@@ -42,7 +42,7 @@ namespace CourseDesign.API.Services
         public async Task<APIResponse> GetAllForUserAsync(int user_id)
         {
             Expression<Func<TextPlan, bool>> exp;
-            exp = (x) => x.UserID.Equals(user_id);
+            exp = (x) => x.UserID == user_id;
             return await textDB.GetExpressionAllAsync(exp);
         }
 
@@ -54,27 +54,25 @@ namespace CourseDesign.API.Services
         /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         public async Task<APIResponse> GetParamForUserAsync(int user_id, QueryParameter parameter)
         {
-            if (string.IsNullOrWhiteSpace(parameter.Search))  // Search参数为空，代表全条件查询
-                return await textDB.GetAllAsync();
+            Expression<Func<TextPlan, bool>> exp;
+            if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表全条件查询
+                exp = (x) => x.UserID == user_id;
             else
-            {
-                Expression<Func<TextPlan, bool>> exp;
-                switch (parameter.Field)
+                switch (parameter.field)
                 {
                     case "Title": // 按标题查询
-                        exp = (x) => x.UserID == user_id && x.Title.Contains(parameter.Search);
+                        exp = (x) => x.UserID == user_id && x.Title.Contains(parameter.search);
                         break;
                     case "Content": // 按内容查询
-                        exp = (x) => x.UserID == user_id && x.Content.Contains(parameter.Search);
+                        exp = (x) => x.UserID == user_id && x.Content.Contains(parameter.search);
                         break;
                     case "Status": // 按内容查询
-                        exp = (x) => x.UserID == user_id && x.Status.ToString() == parameter.Search;
+                        exp = (x) => x.UserID == user_id && x.Status.ToString() == parameter.search;
                         break;
                     default:
                         return new APIResponse(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
                 }
-                return await textDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
-            }
+            return await textDB.GetExpressionAllAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
 
             // 下面方法有问题，看看后面能不能实现
             //return await textDB.GetExpressionAsync(predicate: x =>

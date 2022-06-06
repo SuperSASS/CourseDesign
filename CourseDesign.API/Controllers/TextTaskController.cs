@@ -45,10 +45,10 @@ namespace CourseDesign.API.Controllers
         /// 在<see cref="TextPlanDTO"/>表中，获取用户ID为"user_id"，且满足parameter条件的所有元组，并分页展示。
         /// <para>条件为：单字段包含</para>
         /// </summary>
-        /// <param name="parameter">传来的<see cref="APIResponse"/>类型参数</param>
+        /// <param name="param">传来的<see cref="APIResponse"/>类型参数</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         [HttpGet]
-        public async Task<APIResponse> GetParamContainForUser([FromQuery] int user_id, [FromQuery] QueryParameter parameter) => await Service.GetParamForUserAsync(user_id, parameter);
+        public async Task<APIResponse> GetParamContainForUser([FromQuery] QueryParameter param) => await Service.GetParamForUserAsync(param);
 
         /// <summary>
         /// 在<see cref="TextPlanDTO"/>表中，修改元组"dtoEntity"。

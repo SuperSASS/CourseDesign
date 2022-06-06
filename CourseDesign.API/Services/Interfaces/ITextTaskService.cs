@@ -12,7 +12,7 @@ namespace CourseDesign.API.Services.Interfaces
         Task<APIResponse> AddAsync(TextPlanDTO dbEntity); // 增
         Task<APIResponse> DeleteAsync(int id); // 删
         Task<APIResponse> GetAllForUserAsync(int user_id); // 查询某用户的所有文本计划
-        Task<APIResponse> GetParamForUserAsync(int user_id, QueryParameter parameter); // 按条件查询某用户的文本计划
+        Task<APIResponse> GetParamForUserAsync(QueryParameter parameter); // 按条件查询某用户的文本计划
         Task<APIResponse> UpdateAsync(TextPlanDTO dbUpdateEntity); // 改
     }
 }

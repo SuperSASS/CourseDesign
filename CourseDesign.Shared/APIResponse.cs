@@ -8,6 +8,16 @@
         public object Result { get; set; } // TODO: 删了这个，更规范
         public bool Status { get; set; }
         public string Message { get; set; }
+
+        /// <summary>
+        /// 操作成功，无返回值
+        /// </summary>
+        //public APIResponse()
+        //{
+        //    Result = default;
+        //    Status = APIStatusCode.Success;
+        //    Message = "成功！……";
+        //}
     }
 
     /// <summary>
@@ -20,4 +30,6 @@
         public bool Status { get; set; }
         public string Message { get; set; }
     }
+
+
 }

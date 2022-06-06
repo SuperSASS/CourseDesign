@@ -27,19 +27,19 @@ namespace CourseDesign.API.Services
         public async Task<APIResponse> GetParamContainAsync(QueryParameter parameter)
         {
             Expression<Func<TDoll, bool>> exp;
-            if (string.IsNullOrWhiteSpace(parameter.Search))  // Search参数为空，代表按分页全条件查询
-                return await tDollDB.GetExpressionAllAsync(exp = (x) => true, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
+            if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表按分页全条件查询
+                return await tDollDB.GetExpressionAllAsync(exp = (x) => true, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             else
             {
-                switch (parameter.Field)
+                switch (parameter.field)
                 {
                     case "Name":
-                        exp = (x) => x.Name.Contains(parameter.Search);
+                        exp = (x) => x.Name.Contains(parameter.search);
                         break;
                     default:
                         return new APIResponse(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
                 }
-                return await tDollDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
+                return await tDollDB.GetExpressionAllAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             }
         }
 
@@ -52,25 +52,25 @@ namespace CourseDesign.API.Services
         public async Task<APIResponse> GetParamEqualAsync(QueryParameter parameter)
         {
             Expression<Func<TDoll, bool>> exp;
-            if (string.IsNullOrWhiteSpace(parameter.Field))  // Field参数为空，按分页全条件查询
-                return await tDollDB.GetExpressionAllAsync(exp = (x) => true, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
+            if (string.IsNullOrWhiteSpace(parameter.field))  // Field参数为空，按分页全条件查询
+                return await tDollDB.GetExpressionAllAsync(exp = (x) => true, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             else
             {
-                switch (parameter.Field)
+                switch (parameter.field)
                 {
                     case "Name":
-                        exp = (x) => x.Name.Equals(parameter.Search);
+                        exp = (x) => x.Name.Equals(parameter.search);
                         break;
                     case "Rarity":
-                        exp = (x) => x.Rarity == int.Parse(parameter.Search);
+                        exp = (x) => x.Rarity == int.Parse(parameter.search);
                         break;
                     case "Type":
-                        exp = (x) => x.Type == (TDoll.TypeEnum)int.Parse(parameter.Search);
+                        exp = (x) => x.Type == (TDoll.TDollType)int.Parse(parameter.search);
                         break;
                     default:
                         return new APIResponse(StatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
                 }
-                return await tDollDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
+                return await tDollDB.GetExpressionAllAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
             }
         }
 
