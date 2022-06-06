@@ -81,6 +81,86 @@ namespace CourseDesign.ViewModels
             }
         }
 
+/* 新增部分 */
+        private PlansBase modifyPlan;
+        public PlansBase ModifyPlan =
+        {
+            get { return modifyPlan; }
+            set { modifyPlan = value; RaisePropertyChanged(); }
+        }
+        // 修改计划
+        private async void modifyPlan(PlanBase obj)
+        {
+            try
+            {
+                Loading(ture);
+
+                if (obj.type = PlansBase.TypeEnum.Text) // 文本类消息
+                {
+                    var textPlanResult = await textService.GetID(obj.ID); // 这里还未实现
+                    modifyPlan = textPlanResult.Result;
+                }
+                else
+                {
+                    var imagePlanResult = await imageService.GetID(obj.ID);
+                    modifyPlan = imagePlanResult.Result;
+                }
+
+                Loading(false);   
+            }
+        }
+        // 添加计划
+        privare async void addPlan()
+        {
+            if (string.IsNullOrWhiteSpace(obj.Title) || string.IsNullOrWhitSpace(obj.Content))
+                rertun; // 返回错误提示
+            Loading(true);
+            var addResult = await textService.Add(currentPlan)
+            if (addResult.Status)
+            {
+                Plan.Add(addResult.Result);
+            }
+                IsRightDrawerOpen=false;   
+        }
+        // 更新文本计划
+        private async void UpdatePlan()
+        {
+            if (string.IsNullOrWhiteSpace(currentPlan.Title) || string.IsNullOrWhitSpace(currentPlan.Content))
+                rertun; // 返回错误提示
+            Loading(true);
+            var updateResult = await textService.Update(currentPlan)
+            if (UpdateResult.Status)
+            {
+                var plan=currentPlan.FIrstOrDefault(t => t.ID == currentPlan.ID)
+                if (plan != null)
+                {
+                    plan.Title = currentPlan.Title;
+                    plan.Content = currentPlan.Content;
+                    plan.Status = currentPlan.Status;
+                }
+            }
+                IsRightDrawerOpen=false; 
+        }
+        /// <summary>
+        /// 右侧编辑窗是否弹出，这里可能要根据选择的是image还是text，返回不同的
+        /// </summary>
+        public bool IsRightDrawerOpen
+        {
+            get { return isRightDrawerOpen; }
+            set { isRightDrawerOpen = value; RaisePropertyChanged(); }
+        }
+
+        /// <summary>
+        /// 所有的计划列表
+        /// </summary>
+        public ObservableCollection<PlansBase> Plans
+        {
+            get { return tasks; }
+            set { tasks = value; RaisePropertyChanged(); }
+        }
+
+
+
         /// <summary>
         /// 增加计划
         /// </summary>
