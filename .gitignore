@@ -3,10 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Database
-CourseDesign.db
-CourseDesign.db-shm
-CourseDesign.db-wal
 
 # User-specific files
 *.rsuser
@@ -354,3 +350,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /.vscode
+CourseDesign.API/CourseDesign.db-shm
+CourseDesign.API/CourseDesign.db
+CourseDesign.API/CourseDesign.db-wal
