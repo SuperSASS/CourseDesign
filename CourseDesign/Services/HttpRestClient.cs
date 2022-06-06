@@ -27,7 +27,7 @@ namespace CourseDesign.Services
             // 生成请求，添加请求类型
             var request = new RestRequest();
             request.AddHeader("Content-Type", baseRequest.ContentType);
-            // 添加请求参数
+            // 添加请求参数，这里的parameter是个object，自动转换为json格式
             if (baseRequest.Parameter != null)
                 request.AddParameter("param", JsonConvert.SerializeObject(baseRequest.Parameter), ParameterType.RequestBody);
             // 得到并执行请求
@@ -52,6 +52,7 @@ namespace CourseDesign.Services
             // 执行请求
             Client.BaseUrl = new Uri(APIUrl + baseRequest.Route);
             var response = await Client.ExecuteAsync(request);
+            var re = JsonConvert.DeserializeObject<APIResponse<T>>(response.Content);
             return JsonConvert.DeserializeObject<APIResponse<T>>(response.Content);
         }
     }

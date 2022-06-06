@@ -1,6 +1,7 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq;
@@ -45,11 +46,11 @@ namespace CourseDesign.API.Services
                 if (await UnitOfWork.SaveChangesAsync() > 0) // 尝试保存插入操作
                     return new APIResponse(dbEntity);
                 else
-                    return new APIResponse(StatusCode.Add_Failed, "数据添加失败啦qwq……");
+                    return new APIResponse(APIStatusCode.Add_Failed, "数据添加失败啦qwq……");
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
 
@@ -68,11 +69,11 @@ namespace CourseDesign.API.Services
                 if (await UnitOfWork.SaveChangesAsync() > 0) // 上传插入
                     return new APIResponse();
                 else
-                    return new APIResponse(StatusCode.Delete_Failed, "数据删除失败啦qwq……");
+                    return new APIResponse(APIStatusCode.Delete_Failed, "数据删除失败啦qwq……");
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : ""));
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + (ex.InnerException != null ? "\n" + ex.InnerException.Message : ""));
             }
         }
 
@@ -89,7 +90,7 @@ namespace CourseDesign.API.Services
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
 
@@ -163,7 +164,7 @@ namespace CourseDesign.API.Services
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
 
@@ -181,7 +182,7 @@ namespace CourseDesign.API.Services
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
 
@@ -204,7 +205,7 @@ namespace CourseDesign.API.Services
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
 
@@ -219,7 +220,7 @@ namespace CourseDesign.API.Services
             {
                 var dbEntity = await Repo.GetFirstOrDefaultAsync(predicate: x => x.ID.Equals(dbUpdateEntity.ID)); // 先找到该元组
                 if (dbEntity == null)
-                    return new APIResponse(StatusCode.Update_Not_Haven, "不存在这条数据哦_(:зゝ∠)_……");
+                    return new APIResponse(APIStatusCode.Update_Not_Haven, "不存在这条数据哦_(:зゝ∠)_……");
 
                 BaseEntity bak = dbEntity;
                 dbEntity = dbUpdateEntity;
@@ -230,11 +231,11 @@ namespace CourseDesign.API.Services
                 if (await UnitOfWork.SaveChangesAsync() > 0) // 尝试保存修改操作
                     return new APIResponse(dbEntity);
                 else
-                    return new APIResponse(StatusCode.Update_Failed, "数据修改失败啦qwq，肯定不是服务器的问题！……");
+                    return new APIResponse(APIStatusCode.Update_Failed, "数据修改失败啦qwq，肯定不是服务器的问题！……");
             }
             catch (Exception ex)
             {
-                return new APIResponse(StatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
+                return new APIResponse(APIStatusCode.Unknown_Error, ex.Message + ex.InnerException != null ? "\n" + ex.InnerException.Message : "");
             }
         }
     }

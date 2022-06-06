@@ -6,6 +6,7 @@ using CourseDesign.Shared.Parameters;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
+using CourseDesign.Context;
 
 namespace CourseDesign.ViewModels
 {
@@ -13,8 +14,10 @@ namespace CourseDesign.ViewModels
     {
         public DelegateCommand AddPlanCommand { get; private set; }
         private bool isRightDrawerOpen;
-        private ObservableCollection<PlansBase> tasks;
+        private ObservableCollection<PlanBase> plans;
+        // API服务
         private readonly IImagePlanService ImageService;
+        private readonly ITextPlanService TextService;
 
         /// <summary>
         /// 右侧编辑窗是否弹出
@@ -28,23 +31,24 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 所有的计划列表
         /// </summary>
-        public ObservableCollection<PlansBase> Plans
+        public ObservableCollection<PlanBase> Plans
         {
-            get { return tasks; }
-            set { tasks = value; RaisePropertyChanged(); }
+            get { return plans; }
+            set { plans = value; RaisePropertyChanged(); }
         }
 
         /// <summary>
         /// init构造函数，初始化
         /// </summary>
         /// <param name="imageService"></param>
-        public PlanViewModel(IImagePlanService imageService)
+        public PlanViewModel(IImagePlanService imageService, ITextPlanService textService)
         {
-            Plans = new ObservableCollection<PlansBase>();
+            Plans = new ObservableCollection<PlanBase>();
             AddPlanCommand = new DelegateCommand(Add);
-            //CreatePlans();
             ImageService = imageService;
-            LoadPlansForUser();
+            TextService = textService;
+            // 读取数据
+            FirstLoadPlansForUser();
         }
 
         /// <summary>
@@ -55,17 +59,24 @@ namespace CourseDesign.ViewModels
             IsRightDrawerOpen = true;
         }
 
-        async void LoadPlansForUser()
+        async void FirstLoadPlansForUser()
         {
             Plans.Clear();
-            // TODO: 3 - 警告，这里没有加外键约束，所有人都可以访问到所有Plan
-            var imagePlanResult = await ImageService.GetAllForUser(new QueryParameter()); // 通过服务，查询数据库ImagePlan中所有元组，最多查询前100项（分页大小为100）
+            // TODO: 2 - 警告，这里给的用户id指定为给1
+            var imagePlanResult = await ImageService.GetAllForUser(1); // 通过服务，查询数据库ImagePlan中所有元组。
+            var textPlanResult = await TextService.GetAllForUserAsync(1);
 
-            if (imagePlanResult.Status == false)
+            if (imagePlanResult != null && imagePlanResult.Status == APIStatusCode.Success)
             {
-                foreach (var item in imagePlanResult.Result.Items)
+                int imageIndex = 0, textIndex = 0;
+                while (imageIndex <= imagePlanResult.Result.Items.Count && textIndex <= textPlanResult.Result.Items.Count)
                 {
-                    Plans.Add(new ImagePlansClass(item.ID, item.Status, item.TDoll_ID));
+                    var imageItem = imagePlanResult.Result.Items[imageIndex];
+                    var textItem = textPlanResult.Result.Items[textIndex];
+                    if (imageItem.ID < textItem.ID)
+                    { Plans.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID)); imageIndex++; }
+                    else
+                    { Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content)); textIndex++; }
                 }
             }
         }

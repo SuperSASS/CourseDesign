@@ -2,6 +2,7 @@
 using CourseDesign.Extensions;
 using System.Windows;
 using System.Windows.Controls;
+using CourseDesign.Context;
 
 namespace CourseDesign.Views
 {
@@ -10,12 +11,12 @@ namespace CourseDesign.Views
     /// </summary>
     public partial class PlanView : UserControl
     {
-
         public PlanView()
         {
             InitializeComponent();
             AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(task_list), true); // 使task_list可以横向滚动
         }
+
     }
 
     /// <summary>
@@ -35,13 +36,13 @@ namespace CourseDesign.Views
         /// <returns></returns>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            PlansBase t = (PlansBase)item;
+            PlanBase t = (PlanBase)item;
 
             switch (t.Type)
             {
-                case PlansBase.TypeEnum.text:
+                case PlanBase.TypeEnum.text:
                     return TextTemplate;
-                case PlansBase.TypeEnum.image:
+                case PlanBase.TypeEnum.image:
                     return ImageTemplate;
                 default:
                     return null;

@@ -2,6 +2,7 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -71,7 +72,7 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.UserID == user_id && x.Status.ToString() == parameter.Search;
                         break;
                     default:
-                        return new APIResponse(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                        return new APIResponse(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
                 }
                 return await textDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
             }

@@ -1,13 +1,14 @@
-﻿namespace CourseDesign.API.Services
+﻿using CourseDesign.Shared;
+
+namespace CourseDesign.API.Services
 {
     /// <summary>
     /// API的基本返回结果
     /// </summary>
     public class APIResponse
     {
-        public enum StatusCode { Success, Select__Wrong_filed, Select_Wrong_Equal, Get_Wrong_Account_or_Password , Get_Account_Haven , Add_Failed, Delete_Failed, Update_Failed, Update_Not_Haven, Unknown_Error }
         public object Result { get; set; }
-        public StatusCode Status { get; set; }
+        public APIStatusCode Status { get; set; }
         public string Message { get; set; }
 
         /// <summary>
@@ -16,7 +17,7 @@
         public APIResponse()
         {
             Result = default;
-            Status = 0;
+            Status = APIStatusCode.Success;
             Message = "成功！……";
         }
 
@@ -27,7 +28,7 @@
         public APIResponse(object result)
         {
             Result = result;
-            Status = 0;
+            Status = APIStatusCode.Success;
             Message = "成功！……";
         }
 
@@ -36,9 +37,9 @@
         /// </summary>
         /// <param name="message">失败提示消息</param>
         /// <param name="status"></param>
-        public APIResponse(StatusCode status, string message)
+        public APIResponse(APIStatusCode status, string message)
         {
-            Result = default;
+            Result = null;
             Status = status;
             Message = message;
         }

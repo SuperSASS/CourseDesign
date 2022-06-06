@@ -2,6 +2,7 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq.Expressions;
@@ -37,7 +38,7 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.Name.Contains(parameter.Search);
                         break;
                     default:
-                        return new APIResponse(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                        return new APIResponse(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
                 }
                 return await tDollDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
             }
@@ -65,10 +66,10 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.Rarity == int.Parse(parameter.Search);
                         break;
                     case "Type":
-                        exp = (x) => x.Type == (TDoll.TypeEnum)int.Parse(parameter.Search);
+                        exp = (x) => x.Type == (TDoll.TDollType)int.Parse(parameter.Search);
                         break;
                     default:
-                        return new APIResponse(StatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
+                        return new APIResponse(APIStatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
                 }
                 return await tDollDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
             }

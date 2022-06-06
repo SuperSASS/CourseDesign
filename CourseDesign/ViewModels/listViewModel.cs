@@ -1,4 +1,5 @@
 ﻿using CourseDesign.Command.Classes;
+using CourseDesign.Context;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using static CourseDesign.Command.Classes.TDollClass;
@@ -18,13 +19,9 @@ namespace CourseDesign.ViewModels
         public ListViewModel()
         {
             TDolls = new ObservableCollection<TDollClass>();
-            TEST_CreateTDolls();
+            foreach (var item in TDollsContext.tDolls) // 把API读取的加进来
+                tdolls.Add(item);
         }
 
-        void TEST_CreateTDolls()
-        {
-            for (int i = 1; i <= 15; i++)
-                TDolls.Add(new TDollClass(i, "SuperSASS", i % 4 + 1, (TypeEnum)(i % 6), @"/Assets/T-Dolls/T-Doll-1.png"));
-        }
     }
 }

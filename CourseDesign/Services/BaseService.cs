@@ -50,34 +50,6 @@ namespace CourseDesign.Services
         }
 
         /// <summary>
-        /// 返回符合条件的所有结果
-        /// </summary>
-        /// <param name="parameter">查询条件所用的参数</param>
-        /// <returns>API的返回消息APIResopnse，返回满足条件的实体页</returns>
-        //public async Task<APIResponse<PagedList<TEntity>>> GetAllAsync(QueryParameter parameter)
-        //{
-        //    BaseRequest request = new BaseRequest();
-        //    request.Method = RestSharp.Method.GET;
-        //    request.Route = $"api/{ServiceName}/GetAll?pageIndex={parameter.PageIndex}"
-        //        + $"&pageSize={parameter.PageSize}"
-        //        + $"$search={parameter.Search}";
-        //    return await Client.ExecuteAsync<PagedList<TEntity>>(request);
-        //}
-
-        /// <summary>
-        /// 返回ID为id的实体
-        /// </summary>
-        /// <param name="id">ID</param>
-        /// <returns>API的返回消息APIResopnse，返回满足条件的实体</returns>
-        //public async Task<APIResponse<TEntity>> GetFirstDefaultAsync(int id)
-        //{
-        //    BaseRequest request = new BaseRequest();
-        //    request.Method = RestSharp.Method.GET;
-        //    request.Route = $"api/{ServiceName}/Get?id={id}";
-        //    return await Client.ExecuteAsync<TEntity>(request);
-        //}
-
-        /// <summary>
         /// 更新实体
         /// </summary>
         /// <param name="entity">实体更新后的实体</param>

@@ -11,7 +11,7 @@
     /// <item><c>content</c> - 计划内容</item>
     /// </list>
     /// </summary>
-    internal class TextPlansClass : PlansBase
+    public class TextPlanClass : PlanBase
     {
         private string title;
         private string content;
@@ -35,7 +35,7 @@
         /// <param name="status">计划状态（0表示未完成，1表示已完成）（基类的属性）</param>
         /// <param name="title">计划标题</param>
         /// <param name="content">计划内容</param>
-        public TextPlansClass(int id, bool status, string title, string content) : base(id, TypeEnum.text, status)
+        public TextPlanClass(int id, bool status, string title, string content) : base(id, TypeEnum.text, status)
         {
             Title = title;
             Content = content;

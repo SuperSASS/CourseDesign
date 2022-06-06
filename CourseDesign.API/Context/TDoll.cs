@@ -3,7 +3,7 @@
     // 战术人形表
     public class TDoll : BaseEntity
     {
-        public enum TypeEnum { HG, SMG, RF, AR, MG, SG }; // 人形类型的枚举
+        public enum TDollType { HG, SMG, RF, AR, MG, SG }; // 人形类型的枚举
 
         /// <summary>
         /// 战术人形名称
@@ -16,7 +16,7 @@
         /// <summary>
         /// 种类
         /// </summary>
-        public TypeEnum Type { get; set; }
+        public TDollType Type { get; set; }
         /// <summary>
         /// 立绘在本地的路径
         /// </summary>

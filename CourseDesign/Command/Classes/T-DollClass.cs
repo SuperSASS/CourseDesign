@@ -11,7 +11,7 @@
     /// <item><c>Type</c> - 人形种类</item>
     /// <item><c>Artwork</c> - 人形立绘</item>
     /// </list>
-    internal class TDollClass
+    public class TDollClass
     {
         public enum TypeEnum { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
 
@@ -45,6 +45,10 @@
         {
             get { return artworkPath; }
             set { artworkPath = value; }
+        }
+        public string ArtworkPath_16x9 // 16比9的图片路径
+        {
+            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_16x9.png"; }
         }
 
         /// <summary>

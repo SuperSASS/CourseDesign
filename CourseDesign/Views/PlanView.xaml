@@ -155,7 +155,7 @@
                                                     Mode="Dark">
                                                     <Image
                                                         Width="300"
-                                                        Source="/Assets/T-Dolls/T-Doll-1_16x9.png"
+                                                        Source="{Binding TDoll.ArtworkPath_16x9}"
                                                         Stretch="UniformToFill" />
                                                 </materialDesign:ColorZone>
                                                 <!--  简要信息  -->
@@ -178,7 +178,7 @@
                                                             HorizontalAlignment="Center"
                                                             VerticalAlignment="Bottom"
                                                             Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                                            Text="Super SASS" />
+                                                            Text="{Binding TDoll.Name}" />
                                                     </Grid>
                                                 </Grid>
                                                 <!--  详细信息按钮  -->
@@ -294,7 +294,7 @@
                                                         <TextBlock
                                                             Margin="0,2,0,0"
                                                             Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                                                            Text="Super SASS" />
+                                                            Text="{Binding TDoll.Name}" />
                                                     </StackPanel>
                                                     <!--  打捞地点  -->
                                                     <StackPanel Grid.Row="1" Margin="0,10">

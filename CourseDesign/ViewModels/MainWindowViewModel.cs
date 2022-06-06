@@ -1,5 +1,8 @@
-﻿using CourseDesign.Command.Modules;
+﻿using CourseDesign.Command.Classes;
+using CourseDesign.Command.Modules;
+using CourseDesign.Context;
 using CourseDesign.Extensions;
+using CourseDesign.Services.Interfaces;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -27,7 +30,7 @@ namespace CourseDesign.ViewModels
         /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
         /// </summary>
         /// <param name="regionManager"> 区域管理器 </param>
-        public MainWindowViewModel(IRegionManager regionManager)
+        public MainWindowViewModel(IRegionManager regionManager, ITDollService tDollService)
         {
             MeauBars = new ObservableCollection<MeauBar>();
             CreateMeauBars();
@@ -39,6 +42,8 @@ namespace CourseDesign.ViewModels
             // TODO: 实现默认启动IndexView，但不能像下面那样简单的实现。
             SelectIndex = -1;
             // regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
+            // 创建人形上下文
+            new TDollsContext(tDollService);
         }
 
         /// <summary>
