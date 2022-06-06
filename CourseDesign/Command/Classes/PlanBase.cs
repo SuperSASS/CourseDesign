@@ -9,9 +9,9 @@
     /// <item><c>Status</c> - 计划状态，1代表完成</item>
     /// </list>
     /// </summary>
-    internal class PlansBase
+    public class PlanBase
     {
-        internal enum TypeEnum { text, image }; // 计划类型的枚举
+        public enum TypeEnum { text, image }; // 计划类型的枚举
 
         protected int id;        // 计划编号
         protected TypeEnum type; // 计划类型
@@ -38,7 +38,7 @@
         /// <param name="id">计划ID</param>
         /// <param name="type">计划种类（目前只有2类：图片类</param>
         /// <param name="status">计划状态（0表示未完成，1表示已完成）</param>
-        public PlansBase(int id, TypeEnum type, bool status)
+        public PlanBase(int id, TypeEnum type, bool status)
         {
             ID = id;
             Type = type;

@@ -23,4 +23,8 @@
     <ProjectReference Include="..\CourseDesign.Shared\CourseDesign.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Interface\" />
+  </ItemGroup>
+
 </Project>

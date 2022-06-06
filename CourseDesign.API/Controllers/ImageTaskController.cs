@@ -38,7 +38,7 @@ namespace CourseDesign.API.Controllers
         /// </summary>
         /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
         [HttpGet]
-        public async Task<APIResponse> GetAllForUser(int id) => await Service.GetAllForUserAsync(id);
+        public async Task<APIResponse> GetAllForUser(int user_id) => await Service.GetAllForUserAsync(user_id);
 
         /// <summary>
         /// 在<see cref="ImagePlanDTO"/>表中，修改元组dtoEntity。

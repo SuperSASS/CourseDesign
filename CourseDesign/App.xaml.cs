@@ -38,6 +38,8 @@ namespace CourseDesign
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl")); // 先给构造函数设置一个默认名称
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost:2333/", serviceKey: "webUrl"); // 注册服务地址
             containerRegistry.Register<IImagePlanService, ImagePlanService>(); // 注册ImagePlan的服务（接口，实现）
+            containerRegistry.Register<ITextPlanService, TextPlanService>(); // 注册ImagePlan的服务（接口，实现）
+            containerRegistry.Register<ITDollService, TDollService>(); // 注册ImagePlan的服务（接口，实现）
 
         }
     }

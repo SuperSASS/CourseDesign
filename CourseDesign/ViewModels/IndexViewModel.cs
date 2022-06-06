@@ -17,9 +17,9 @@ namespace CourseDesign.ViewModels
         }
 
         // TODO: 这里没有处理多态情况，因为要等数据库api接口实现
-        private ObservableCollection<PlansBase> taskLists;
+        private ObservableCollection<PlanBase> taskLists;
 
-        public ObservableCollection<PlansBase> PlanLists
+        public ObservableCollection<PlanBase> PlanLists
         {
             get { return taskLists; }
             set { taskLists = value; }
@@ -33,7 +33,7 @@ namespace CourseDesign.ViewModels
         public IndexViewModel()
         {
             InfoBlocks = new ObservableCollection<infoBlock>();
-            PlanLists = new ObservableCollection<PlansBase>();
+            PlanLists = new ObservableCollection<PlanBase>();
             TEST_CreateInfoBlocks();
             TEST_CreatePlansLists();
         }
@@ -53,7 +53,7 @@ namespace CourseDesign.ViewModels
         public void TEST_CreatePlansLists()
         {
             for (int i = 1; i <= 10; i++)
-                PlanLists.Add(new TextPlansClass(i, false, "测试" + i, "计划内容……"));
+                PlanLists.Add(new TextPlanClass(i, false, "测试" + i, "计划内容……"));
         }
     }
 }
