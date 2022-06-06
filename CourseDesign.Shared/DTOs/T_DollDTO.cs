@@ -10,7 +10,7 @@
         private string name;
         private int rarity;
         private TDollType type;
-        private string artworkPath; /// TODO : 把图片改为数据库端存储
+        private string artworkPath;
 
         public string Name
         {
