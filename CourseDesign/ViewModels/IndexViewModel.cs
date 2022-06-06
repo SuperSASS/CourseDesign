@@ -1,5 +1,5 @@
-﻿using CourseDesign.Command.Classes;
-using CourseDesign.Command.Module;
+﻿using CourseDesign.Common.Classes;
+using CourseDesign.Common.Module;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 

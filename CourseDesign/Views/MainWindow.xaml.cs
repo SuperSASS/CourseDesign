@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using CourseDesign.Extensions;
+using CourseDesign.Views.Dialogs;
+using Prism.Events;
+using System.Windows;
 
 namespace CourseDesign.Views
 {
@@ -7,10 +10,17 @@ namespace CourseDesign.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        public MainWindow(IEventAggregator aggregator)
         {
             InitializeComponent();
-            navigationBars.SelectedIndex = 3;
+            navigationBars.SelectedIndex = 3; // 初始化导航栏的所选项为不存在的ID，使得为空
+
+            aggregator.Register(arg => // 注册Dialog会话 - 弹窗等待
+            {
+                DialogHost.IsOpen = arg.IsOpen;
+                if (DialogHost.IsOpen)
+                    DialogHost.DialogContent = new ProgressView(); // 弹窗等待条
+            });
 
             btn_min.Click += (s, e) => { this.WindowState = WindowState.Minimized; }; // 菜单栏 - 窗口最小化按钮
             btn_max.Click += (s, e) => // 菜单栏 - 窗口最大化按钮

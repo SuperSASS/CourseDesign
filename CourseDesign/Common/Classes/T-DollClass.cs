@@ -1,4 +1,4 @@
-﻿namespace CourseDesign.Command.Classes
+﻿namespace CourseDesign.Common.Classes
 {
     /// <summary>
     /// 战术人形类

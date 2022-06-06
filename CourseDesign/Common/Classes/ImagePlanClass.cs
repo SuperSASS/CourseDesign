@@ -1,6 +1,6 @@
 ﻿using CourseDesign.Context;
 
-namespace CourseDesign.Command.Classes
+namespace CourseDesign.Common.Classes
 {
     /// <summary>
     /// 图片计划类，特指计划打捞某位战术人形。

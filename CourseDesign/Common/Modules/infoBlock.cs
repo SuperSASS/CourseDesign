@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace CourseDesign.Command.Module
+namespace CourseDesign.Common.Module
 {
     /// <summary>
     /// 首页信息类：

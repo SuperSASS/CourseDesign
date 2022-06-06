@@ -1,5 +1,5 @@
-﻿using CourseDesign.Command.Classes;
-using CourseDesign.Command.Modules;
+﻿using CourseDesign.Common.Classes;
+using CourseDesign.Common.Modules;
 using CourseDesign.Context;
 using CourseDesign.Extensions;
 using CourseDesign.Services.Interfaces;

@@ -5,6 +5,12 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Command\**" />
+    <EmbeddedResource Remove="Command\**" />
+    <None Remove="Command\**" />
+    <Page Remove="Command\**" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="Assets\Images\avatar.jpg" />
     <None Remove="Assets\Images\background_index.jpg" />
     <None Remove="Assets\Images\background_list.jpg" />

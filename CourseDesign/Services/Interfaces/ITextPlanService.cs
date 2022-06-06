@@ -1,5 +1,5 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using CourseDesign.Command.Classes;
+using CourseDesign.Common.Classes;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
@@ -16,8 +16,8 @@ namespace CourseDesign.Services.Interfaces
         /// 返回该用户符合条件的所有结果
         /// </summary>
         /// <param name="parameter">查询条件所用的参数</param>
-        public Task<APIResponse<PagedList<TextPlanDTO>>> GetAllForUserAsync(int user_id);
-        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUserAsync(int user_id, QueryParameter parameter);
+        public Task<APIResponse<PagedList<TextPlanDTO>>> GetAllForUser(int user_id);
+        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(int user_id, QueryParameter parameter);
         public Task<APIResponse<TextPlanDTO>> UpdateAsync(TextPlanDTO imagePlan);
     }
 }

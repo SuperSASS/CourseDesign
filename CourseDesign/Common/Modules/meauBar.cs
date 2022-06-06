@@ -1,6 +1,6 @@
 ﻿using Prism.Mvvm;
 
-namespace CourseDesign.Command.Modules
+namespace CourseDesign.Common.Modules
 {
     /// <summary>
     /// 菜单栏导航类：

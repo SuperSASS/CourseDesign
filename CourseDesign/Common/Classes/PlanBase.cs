@@ -1,4 +1,4 @@
-﻿namespace CourseDesign.Command.Classes
+﻿namespace CourseDesign.Common.Classes
 {
     /// <summary>
     /// 计划列表的基类

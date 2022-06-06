@@ -1,4 +1,4 @@
-﻿using CourseDesign.Command.Modules;
+﻿using CourseDesign.Common.Modules;
 using CourseDesign.Extensions;
 using Prism.Commands;
 using Prism.Mvvm;

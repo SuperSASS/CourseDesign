@@ -1,5 +1,5 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using CourseDesign.Command.Classes;
+using CourseDesign.Common.Classes;
 using CourseDesign.Services.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
@@ -19,7 +19,7 @@ namespace CourseDesign.Services.ViewModelServices
         /// <param name="parameter">查询条件所用的参数</param>
         /// <returns>API的返回消息APIResopnse，返回满足条件的实体页</returns>
 
-        public async Task<APIResponse<PagedList<TextPlanDTO>>> GetAllForUserAsync(int user_id)
+        public async Task<APIResponse<PagedList<TextPlanDTO>>> GetAllForUser(int user_id)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
@@ -27,7 +27,7 @@ namespace CourseDesign.Services.ViewModelServices
             return await Client.ExecuteAsync<PagedList<TextPlanDTO>>(request);
         }
 
-        public async Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUserAsync(int user_id, QueryParameter parameter)
+        public async Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(int user_id, QueryParameter parameter)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;

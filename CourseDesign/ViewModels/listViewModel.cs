@@ -1,8 +1,8 @@
-﻿using CourseDesign.Command.Classes;
+﻿using CourseDesign.Common.Classes;
 using CourseDesign.Context;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
-using static CourseDesign.Command.Classes.TDollClass;
+using static CourseDesign.Common.Classes.TDollClass;
 
 namespace CourseDesign.ViewModels
 {

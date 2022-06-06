@@ -28,14 +28,15 @@
     </Window.Resources>
 
     <materialDesign:DialogHost
+        x:Name="DialogHost"
         DialogTheme="Inherit"
         Identifier="RootDialog"
         SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
-        <!--  这个应该是消息弹窗  -->
+        <!--  这个应该是消息弹窗（对话）  -->
 
         <materialDesign:DrawerHost x:Name="meauBars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
 
-            <!--  弹出菜单栏  -->
+            <!--  对话：弹出菜单栏  -->
             <materialDesign:DrawerHost.LeftDrawerContent>
                 <DockPanel MinWidth="220">
                     <!--  个人信息  -->

@@ -1,4 +1,4 @@
-﻿using CourseDesign.Command.Classes;
+﻿using CourseDesign.Common.Classes;
 using CourseDesign.Services;
 using CourseDesign.Services.Interfaces;
 using CourseDesign.Shared;
@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using static CourseDesign.Command.Classes.TDollClass;
+using static CourseDesign.Common.Classes.TDollClass;
 
 namespace CourseDesign.Context
 {

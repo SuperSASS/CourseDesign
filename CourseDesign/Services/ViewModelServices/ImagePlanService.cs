@@ -1,5 +1,5 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using CourseDesign.Command.Classes;
+using CourseDesign.Common.Classes;
 using CourseDesign.Services.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;

@@ -1,4 +1,4 @@
-﻿using CourseDesign.Command.Classes;
+﻿using CourseDesign.Common.Classes;
 using CourseDesign.Extensions;
 using System.Windows;
 using System.Windows.Controls;
