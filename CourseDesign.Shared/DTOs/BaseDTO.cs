@@ -10,8 +10,9 @@ namespace CourseDesign.Shared.DTOs
     public class BaseDTO : INotifyPropertyChanged
     {
         public int ID { get; set; }
+
+        public DateTime CreateDate { get; set; }
         public DateTime UpdateDate { get; set; }
-        // 注：创建日期在一层便可以忽略，应用端并不需要在意此属性。
 
         public event PropertyChangedEventHandler PropertyChanged;
 
