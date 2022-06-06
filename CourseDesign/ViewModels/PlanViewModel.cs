@@ -9,156 +9,163 @@ using System.Collections.ObjectModel;
 using CourseDesign.Context;
 using Prism.Ioc;
 using Prism.Regions;
+using System;
 
 namespace CourseDesign.ViewModels
 {
     internal class PlanViewModel : NavigationViewModel
     {
         #region 字段
-        private ObservableCollection<PlanBase> plans;
-        private bool isRightDrawerOpen;
-        private string searchText;
-
-        // 命令绑定
-        public DelegateCommand<string> ExecCommand { get; private set; }
-        public DelegateCommand AddPlanCommand { get; private set; }
         // API服务
         private readonly IImagePlanService ImageService;
         private readonly ITextPlanService TextService;
+        // 属性内部字段
+        private ObservableCollection<PlanBase> plans; // 要展示的计划表
+        private string rightEditerTitle; // 右侧编辑栏的标题
+        private string rightEditerButton; // 右侧编辑栏的按钮
+        private int statusOfRightEditerOpen; // 右侧图像计划编辑栏开启情况
+        private string searchText; // 所搜索的文本，单向到源绑定
+        private PlanBase currentEditPlan; // 当前在编辑栏中编辑的对象，双向绑定
         #endregion
 
         #region 属性
-        /// <summary>
-        /// 搜索文本，双向绑定
-        /// </summary>
-        public string SearchText
-        {
-            get { return searchText; }
-            set { searchText = value; }
-        }
-        /// <summary>
-        /// 右侧编辑窗是否弹出
-        /// </summary>
-        public bool IsRightDrawerOpen
-        {
-            get { return isRightDrawerOpen; }
-            set { isRightDrawerOpen = value; RaisePropertyChanged(); }
-        }
+        // 命令绑定
+        public DelegateCommand<string> ExecCommand { get; private set; } // 执行各种命令
+        public DelegateCommand<PlanBase> SelectAddPlanCommand { get; private set; } // 增加增加命令
+        public DelegateCommand<PlanBase> SelectModifyPlanCommand { get; private set; } // 增加增加命令
+        public DelegateCommand DeletePlanCommand { get; private set; } // 增加删除命令
+        public DelegateCommand SearchPlanCommand { get; private set; } // 增加查询命令
+        public DelegateCommand UpdatePlanCommand { get; private set; } // 增加修改命令
+        // 外部访问属性
         /// <summary>
         /// 所有的计划列表
         /// </summary>
-        public ObservableCollection<PlanBase> Plans
-        {
-            get { return plans; }
-            set { plans = value; RaisePropertyChanged(); }
-        }
+        public ObservableCollection<PlanBase> Plans { get { return plans; } set { plans = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 右侧编辑栏的标题
+        /// </summary>
+        public string RightEditerTitle { get { return rightEditerTitle; } set { rightEditerTitle = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 右侧编辑栏的按钮
+        /// </summary>
+        public string RightEditerButton { get { return rightEditerButton; } set { rightEditerButton = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 右侧编辑窗弹出情况，0为不弹出，1为弹出文本类编辑栏，2为弹出图片类编辑栏
+        /// </summary>
+        public int StatusOfRightEditerOpen { get { return statusOfRightEditerOpen; } set { statusOfRightEditerOpen = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 搜索文本，单向到源绑定
+        /// </summary>
+        public string SearchText { get { return searchText; } set { searchText = value; } }
+        /// <summary>
+        /// 所选择的将要进行修改的计划，双向绑定
+        /// </summary>
+        public PlanBase CurrentEditPlan { get { return currentEditPlan; } set { currentEditPlan = value; RaisePropertyChanged(); } }
         #endregion
 
         /// <summary>
-        /// init构造函数，初始化
+        /// Init - 构造函数
         /// </summary>
         /// <param name="imageService">图片类计划的服务</param>
         /// <param name="textService">文本类计划的服务</param>
         /// <param name="containerProvider">该页面容器</param>
         public PlanViewModel(IImagePlanService imageService, ITextPlanService textService, IContainerProvider containerProvider) : base(containerProvider)
         {
-            Plans = new ObservableCollection<PlanBase>();
-            // 各种命令的初始化
-            ExecCommand = new DelegateCommand<string>(Exec);
-            AddPlanCommand = new DelegateCommand(AddPlan);
-
+            // 内部服务初始化
             ImageService = imageService;
             TextService = textService;
+            // 属性初始化
+            Plans = new ObservableCollection<PlanBase>();
+            IsRightImageEditerOpen = false;
+            SearchText = string.Empty;
+            // 各种命令的初始化
+            ExecCommand = new DelegateCommand<string>(Exec);
+            SelectAddPlanCommand = new DelegateCommand(SelectAddPlan);
+            SelectModifyPlanCommand = new DelegateCommand<PlanBase>(EditOfModifyPlan);
+            DeletePlanCommand = new DelegateCommand(DeletePlan);
+            SearchPlanCommand = new DelegateCommand(SearchPlan);
+            UpdatePlanCommand = new DelegateCommand(UpdatePlan);
         }
 
-        private void Exec(string cmd)
+        /// <summary>
+        /// 命令执行的总命令
+        /// </summary>
+        /// <param name="cmd">执行的命令</param>
+        private void Exec(string cmd, PlanBase obj = null)
         {
             switch (cmd)
             {
-                case "新增": AddPlan(); break;
-                case "修改": UpdatePlan(); break;
+                case "新增": EditOfAddPlan(obj); break;
+                case "修改": EditOfModifyPlan(obj); break;
+                case "删除": DeletePlan(); break;
                 case "查询": QueryPlan(); break;
+                case "上传": UpdatePlan(); break;
             }
         }
 
-/* 新增部分 */
-        private PlansBase modifyPlan;
-        public PlansBase ModifyPlan =
+        private void EditOfAddPlan(PlanBase obj)
         {
-            get { return modifyPlan; }
-            set { modifyPlan = value; RaisePropertyChanged(); }
+            throw new NotImplementedException();
         }
-        // 修改计划
-        private async void modifyPlan(PlanBase obj)
+
+        // 选择修改。会赋值给右侧编辑栏的用于相应属性SelectUpdatePlan，用于更改
+        private async void EditOfModifyPlan(PlanBase obj)
         {
             try
             {
-                Loading(ture);
+                Loading(true);
 
-                if (obj.type = PlansBase.TypeEnum.Text) // 文本类消息
+                if (obj.Type == PlanBase.PlanType.Text) // 选中的文本类消息
                 {
-                    var textPlanResult = await textService.GetID(obj.ID); // 这里还未实现
-                    modifyPlan = textPlanResult.Result;
+                    var textServiceResopnseResult = (await TextService.GetID(obj.ID)).Result; // 因为都能显示出来了，肯定能GetID到的，这里不做判断直接用Result
+                    CurrentEditPlan = new TextPlanClass(textServiceResopnseResult.ID, textServiceResopnseResult.Status, textServiceResopnseResult.Title, textServiceResopnseResult.Content);
                 }
-                else
+                else // 选中的图片类消息
                 {
-                    var imagePlanResult = await imageService.GetID(obj.ID);
-                    modifyPlan = imagePlanResult.Result;
+                    var imageServiceResopnseResult = (await ImageService.GetID(obj.ID)).Result;
+                    CurrentEditPlan = new ImagePlanClass(imageServiceResopnseResult.ID, imageServiceResopnseResult.Status, imageServiceResopnseResult.TDoll_ID);
                 }
-
-                Loading(false);   
+            }
+            catch (Exception ex) // 未处理异常情况
+            {
+            }
+            finally
+            {
+                Loading(false);
             }
         }
         // 添加计划
-        privare async void addPlan()
+        private async void addPlan()
         {
-            if (string.IsNullOrWhiteSpace(obj.Title) || string.IsNullOrWhitSpace(obj.Content))
-                rertun; // 返回错误提示
-            Loading(true);
-            var addResult = await textService.Add(currentPlan)
-            if (addResult.Status)
-            {
-                Plan.Add(addResult.Result);
-            }
-                IsRightDrawerOpen=false;   
+            //if (string.IsNullOrWhiteSpace(obj.Title) || string.IsNullOrWhitSpace(obj.Content))
+            //    rertun; // 返回错误提示
+            //Loading(true);
+            //var addResult = await textService.Add(currentPlan)
+            //if (addResult.Status)
+            //{
+            //    Plan.Add(addResult.Result);
+            //}
+            //    IsRightDrawerOpen=false;   
         }
         // 更新文本计划
         private async void UpdatePlan()
         {
-            if (string.IsNullOrWhiteSpace(currentPlan.Title) || string.IsNullOrWhitSpace(currentPlan.Content))
+            if (string.IsNullOrWhiteSpace(CurrentEditPlan.Title) || string.IsNullOrWhitSpace(currentEditPlan.Content))
                 rertun; // 返回错误提示
             Loading(true);
-            var updateResult = await textService.Update(currentPlan)
+            var updateResult = await textService.Update(currentEditPlan);
             if (UpdateResult.Status)
             {
-                var plan=currentPlan.FIrstOrDefault(t => t.ID == currentPlan.ID)
+                var plan = currentEditPlan.FIrstOrDefault(t => t.ID == currentEditPlan.ID);
                 if (plan != null)
                 {
-                    plan.Title = currentPlan.Title;
-                    plan.Content = currentPlan.Content;
-                    plan.Status = currentPlan.Status;
+                    plan.Title = currentEditPlan.Title;
+                    plan.Content = currentEditPlan.Content;
+                    plan.Status = currentEditPlan.Status;
                 }
             }
-                IsRightDrawerOpen=false; 
+            IsRightImageEditerOpen = false;
         }
-        /// <summary>
-        /// 右侧编辑窗是否弹出，这里可能要根据选择的是image还是text，返回不同的
-        /// </summary>
-        public bool IsRightDrawerOpen
-        {
-            get { return isRightDrawerOpen; }
-            set { isRightDrawerOpen = value; RaisePropertyChanged(); }
-        }
-
-        /// <summary>
-        /// 所有的计划列表
-        /// </summary>
-        public ObservableCollection<PlansBase> Plans
-        {
-            get { return tasks; }
-            set { tasks = value; RaisePropertyChanged(); }
-        }
-
 
 
         /// <summary>
@@ -166,14 +173,7 @@ namespace CourseDesign.ViewModels
         /// </summary>
         private void AddPlan()
         {
-            IsRightDrawerOpen = true;
-        }
-        /// <summary>
-        /// 修改计划
-        /// </summary>
-        private void UpdatePlan()
-        {
-
+            IsRightImageEditerOpen = true;
         }
 
         /// <summary>

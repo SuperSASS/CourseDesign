@@ -40,9 +40,9 @@ namespace CourseDesign.Views
 
             switch (t.Type)
             {
-                case PlanBase.TypeEnum.text:
+                case PlanBase.PlanType.Text:
                     return TextTemplate;
-                case PlanBase.TypeEnum.image:
+                case PlanBase.PlanType.Image:
                     return ImageTemplate;
                 default:
                     return null;

@@ -37,7 +37,7 @@ namespace CourseDesign.Context
             if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
             {
                 foreach (var item in tDollResult.Result.Items)
-                    tDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TypeEnum)(item.Type), item.ArtworkPath));
+                    tDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath));
             }
         }
 

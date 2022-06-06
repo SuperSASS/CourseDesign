@@ -26,6 +26,18 @@ namespace CourseDesign.API.Services.Interfaces
         Task<APIResponseInner> DeleteAsync(int id);
 
         /// <summary>
+        /// 对<see cref="ImagePlan"/>表进行“ID查询”操作。
+        /// </summary>
+        /// <param name="id">要查询元组的唯一标识ID</param>
+        /// <returns>API返回消息<see cref="APIResponseInner"/>
+        /// <list type="bullet">
+        /// <item>成功：状态码为Success，并在Result返回所查询到的单个元组<para>（若未找到则Result属性为null）</para></item>
+        /// <item>失败：返回相应错误代码和信息</item>
+        /// </list>
+        /// </returns>
+        Task<APIResponseInner> GetIDAsync(int id);
+
+        /// <summary>
         /// 在<see cref="ImagePlan"/>表中，查询用户ID为user_id"的所有打捞计划，按创建时间降序排序。
         /// <para>查询前100个返回。</para>
         /// </summary>

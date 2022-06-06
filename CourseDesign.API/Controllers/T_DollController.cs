@@ -17,6 +17,14 @@ namespace CourseDesign.API.Controllers
         public TDollController(ITDollService service) { Service = service; }
 
         /// <summary>
+        /// 得到某一ID的战术人形元组。
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        [HttpGet]
+        public async Task<APIResponseInner> GetID([FromQuery] int id) => await Service.GetIDAsync(id);
+
+        /// <summary>
         /// 得到满足<see cref="GETParameter"/>条件的战术人形元组。
         /// <para>条件为：单字段包含</para>
         /// </summary>
@@ -33,13 +41,5 @@ namespace CourseDesign.API.Controllers
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpGet]
         public async Task<APIResponseInner> GetParamEqual([FromQuery] GETParameter parameter) => await Service.GetParamEqualAsync(parameter);
-
-        /// <summary>
-        /// 得到某一ID的战术人形元组。
-        /// </summary>
-        /// <param name="id">ID</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
-        [HttpGet]
-        public async Task<APIResponseInner> GetID([FromQuery] int id) => await Service.GetIDAsync(id);
     }
 }

@@ -51,20 +51,26 @@
         <ItemsControl Grid.Row="2" ItemsSource="{Binding Swatches}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type materialDesignColors:ISwatch}">
+
                     <StackPanel Orientation="Horizontal">
+
                         <TextBlock
                             Width="100"
                             Margin="5,0"
                             VerticalAlignment="Center"
                             Text="{Binding Name}" />
+
                         <ItemsControl ItemTemplate="{StaticResource SwatchColorTemplate}" ItemsSource="{Binding Hues}">
+
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
+
                                     <VirtualizingStackPanel Orientation="Horizontal" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
+
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

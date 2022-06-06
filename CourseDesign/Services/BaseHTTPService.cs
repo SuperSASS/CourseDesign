@@ -10,7 +10,6 @@ namespace CourseDesign.Services
 {
     /// <summary>
     /// 通用的服务层，估计作用就是拿来给其他服务重用的
-    /// <para>本节理解不是很深刻，先照着范例写</para>
     /// </summary>
     public class BaseHTTPService<APPEntity> : IBaseService<APPEntity> where APPEntity : class
     {
@@ -28,7 +27,7 @@ namespace CourseDesign.Services
             ServiceName = serviceName;
         }
 
-        #region 具体实现的增、删、改方法
+        #region 具体实现的增、删、查ID、改方法
         // 增
         public async Task<APIResponse<APPEntity>> Add(int user_id, APPEntity entity)  // 注意：POST协议，参数要为一个序列化的object
         {
@@ -50,6 +49,17 @@ namespace CourseDesign.Services
                 Route = $"api/{ServiceName}/Delete?id={id}" // 直接传id即可
             };
             return await Client.ExecuteAsync(request); // 告诉结果即可，不用返回实体
+        }
+
+        // 查ID
+        public async Task<APIResponse<APPEntity>> GetID(int id)
+        {
+            BaseRequest request = new()
+            {
+                Method = RestSharp.Method.DELETE,
+                Route = $"api/{ServiceName}/Delete?id={id}" // 直接传id即可
+            };
+            return await Client.ExecuteAsync<APPEntity>(request);
         }
 
         // 改

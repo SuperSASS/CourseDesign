@@ -10,9 +10,10 @@ namespace CourseDesign.Services.Interfaces
     public interface ITextPlanService : IBaseService<TextPlanDTO>
     {
         #region 继承的基本方法
-        public new Task<APIResponse<TextPlanDTO>> Add(int user_id, TextPlanDTO textPlan);
-        public new Task<APIResponse> Delete(int id);
-        public new Task<APIResponse<TextPlanDTO>> Update(int user_id, TextPlanDTO textPlan);
+        //public new Task<APIResponse<ImagePlanDTO>> Add(int user_id, ImagePlanDTO imagePlanDTO);
+        //public new Task<APIResponse> Delete(int id);
+        //public new Task<APIResponse<ImagePlanDTO>> GetID(int id);
+        //public new Task<APIResponse<ImagePlanDTO>> Update(int user_id, ImagePlanDTO imagePlanDTO);
         #endregion
 
         #region 额外的方法

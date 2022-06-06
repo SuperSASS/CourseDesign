@@ -34,6 +34,19 @@ namespace CourseDesign.API.Controllers
         public async Task<APIResponseInner> Delete(int id) => await Service.DeleteAsync(id);
 
         /// <summary>
+        /// 对<see cref="TextPlanDTO"/>表进行“ID查询”操作。
+        /// </summary>
+        /// <param name="id">要查询元组的唯一标识ID</param>
+        /// <returns>API返回消息<see cref="APIResponseInner"/>
+        /// <list type="bullet">
+        /// <item>成功：状态码为Success，并在Result返回所查询到的单个元组<para>（若未找到则Result属性为null）</para></item>
+        /// <item>失败：返回相应错误代码和信息</item>
+        /// </list>
+        /// </returns>
+        [HttpGet]
+        public async Task<APIResponseInner> GetID(int id) => await Service.GetIDAsync(id);
+
+        /// <summary>
         /// 在<see cref="TextPlanDTO"/>表中，获取用户ID为"user_id"的所有文字计划。
         /// </summary>
         /// <param name="user_id">传来的<see cref="APIResponseInner"/>用户ID</param>

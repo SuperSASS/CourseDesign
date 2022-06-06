@@ -9,8 +9,9 @@ using System.Threading.Tasks;
 namespace CourseDesign.API.Services.Interfaces
 {
     /// <summary>
-    /// 对数据库各种实体的最基本服务（增删查改），用以实现其他各服务的基本操作
+    /// 对数据库各种实体的最基本服务（增删查改），用以实现其他各服务的基本操作。
     /// </summary>
+    /// 但注意这个不能像APP里的基本服务那样直接继承实现，因为这里还要将DTOEntity先Mappper为DBEntity
     internal interface IBasicSQLService<DBEntity> where DBEntity : BaseEntity
     {
         /// <summary>

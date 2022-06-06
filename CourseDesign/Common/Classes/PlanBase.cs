@@ -11,17 +11,17 @@
     /// </summary>
     public class PlanBase
     {
-        public enum TypeEnum { text, image }; // 计划类型的枚举
+        public enum PlanType { Text, Image }; // 计划类型的枚举
 
         protected int id;        // 计划编号
-        protected TypeEnum type; // 计划类型
+        protected PlanType type; // 计划类型
         protected bool status;   // 计划状态，1代表完成
         public int ID
         {
             get { return id; }
             set { id = value; }
         }
-        public TypeEnum Type
+        public PlanType Type
         {
             get { return type; }
             set { type = value; }
@@ -38,7 +38,7 @@
         /// <param name="id">计划ID</param>
         /// <param name="type">计划种类（目前只有2类：图片类</param>
         /// <param name="status">计划状态（0表示未完成，1表示已完成）</param>
-        public PlanBase(int id, TypeEnum type, bool status)
+        public PlanBase(int id, PlanType type, bool status)
         {
             ID = id;
             Type = type;

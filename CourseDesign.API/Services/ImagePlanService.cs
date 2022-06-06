@@ -27,7 +27,10 @@ namespace CourseDesign.API.Services
         public async Task<APIResponseInner> AddAsync(ImagePlanDTO dtoEntity) { return await imageDB.AddAsync(mapper.Map<ImagePlan>(dtoEntity)); } // 通过AutoMapper，将DTO类型转化为数据库实体类
 
         // 删
-        public async Task<APIResponseInner> DeleteAsync(int id) { return await imageDB.DeleteAsync(id); } 
+        public async Task<APIResponseInner> DeleteAsync(int id) { return await imageDB.DeleteAsync(id); }
+        
+        // 查ID
+        public async Task<APIResponseInner> GetIDAsync(int id) { return await imageDB.GetIDAsync(id); }
 
         // 查用户所有
         public async Task<APIResponseInner> GetAllForUserAsync(int user_id)

@@ -16,14 +16,14 @@ namespace CourseDesign.Services
     {
         public TDollService(HttpRestClient client) : base(client, "TDoll") { }
 
-        // ID查询
-        public async Task<APIResponse<TDollDTO>> GetID(int id)
-        {
-            BaseRequest request = new BaseRequest();
-            request.Method = RestSharp.Method.GET;
-            request.Route = $"api/{ServiceName}/GetID?id" + id;
-            return await Client.ExecuteAsync<TDollDTO>(request);
-        }
+        //// ID查询
+        //public async Task<APIResponse<TDollDTO>> GetID(int id)
+        //{
+        //    BaseRequest request = new BaseRequest();
+        //    request.Method = RestSharp.Method.GET;
+        //    request.Route = $"api/{ServiceName}/GetID?id" + id;
+        //    return await Client.ExecuteAsync<TDollDTO>(request);
+        //}
 
         // 参数包含查询
         // 注意！这里必须用PagedList类型，不能自作主张用成List！……

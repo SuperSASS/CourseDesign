@@ -28,6 +28,9 @@ namespace CourseDesign.API.Services
         // 删
         public async Task<APIResponseInner> DeleteAsync(int id) { return await textDB.DeleteAsync(id); }
 
+        // 查ID
+        public async Task<APIResponseInner> GetIDAsync(int id) { return await textDB.GetIDAsync(id); }
+
         // 查询某用户的所有文本计划
         public async Task<APIResponseInner> GetAllForUserAsync(int user_id)
         {

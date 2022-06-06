@@ -13,12 +13,12 @@
     /// </list>
     public class TDollClass
     {
-        public enum TypeEnum { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
+        public enum TDollType { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
 
         private int id;
         private string name;
         private int rarity;
-        private TypeEnum type;
+        private TDollType type;
         private string artworkPath;
 
         public int ID
@@ -36,7 +36,7 @@
             get { return rarity; }
             set { rarity = value; }
         }
-        public TypeEnum Type
+        public TDollType Type
         {
             get { return type; }
             set { type = value; }
@@ -59,7 +59,7 @@
         /// <param name="rarity">人形稀有度</param>
         /// <param name="type">人形种类</param>
         /// <param name="artwork">人形立绘</param>
-        public TDollClass(int id, string name, int rarity, TypeEnum type, string artworkPath)
+        public TDollClass(int id, string name, int rarity, TDollType type, string artworkPath)
         {
             ID = id;
             Name = name;

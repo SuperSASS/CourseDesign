@@ -21,8 +21,8 @@ namespace CourseDesign.Common.Classes
         /// </summary>
         /// <param name="id">计划ID（基类的属性）</param>
         /// <param name="status">计划状态（0表示未完成，1表示已完成）（基类的属性）</param>
-        /// <param name="TDoll_id">计划打捞战术人形的ID</param>
-        public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, TypeEnum.image, status)
+        /// <param name="tDoll_ID">计划打捞战术人形的ID</param>
+        public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, PlanType.Image, status)
         {
             this.tDoll_ID = tDoll_ID;
             TDoll = TDollsContext.GetTDoll(this.tDoll_ID);
