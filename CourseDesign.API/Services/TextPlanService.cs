@@ -8,7 +8,7 @@ using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static CourseDesign.API.Services.APIResponse;
+using static CourseDesign.API.APIResponseInner;
 
 namespace CourseDesign.API.Services
 {
@@ -17,76 +17,53 @@ namespace CourseDesign.API.Services
     /// </summary>
     public class TextPlanService : ITextPlanService
     {
-        private readonly BasicSQLService<TextPlan> textDB;
+        private readonly BasicDBService<TextPlan> textDB;
         private readonly IMapper mapper;
-        public TextPlanService(IUnitOfWork unitOfWork, IMapper _mapper) { textDB = new BasicSQLService<TextPlan>(unitOfWork); mapper = _mapper; }
+        public TextPlanService(IUnitOfWork unitOfWork, IMapper _mapper) { textDB = new BasicDBService<TextPlan>(unitOfWork); mapper = _mapper; }
 
-        /// <summary>
-        /// 在<see cref="TextPlan"/>表中，异步添加元组dtoEntity。
-        /// </summary>
-        /// <param name="dtoEntity">所要增添的<see cref="TextPlan"/>类型元组</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
-        public async Task<APIResponse> AddAsync(TextPlanDTO dtoEntity) { return await textDB.AddAsync(mapper.Map<TextPlan>(dtoEntity)); }
 
-        /// <summary>
-        /// 在<see cref="TextPlan"/>表中，异步删除ID为id的元组。
-        /// </summary>
-        /// <param name="id">要删除元组的ID</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
-        public async Task<APIResponse> DeleteAsync(int id) { return await textDB.DeleteAsync(id); }
+        public async Task<APIResponseInner> AddAsync(TextPlanDTO dtoEntity) { return await textDB.AddAsync(mapper.Map<TextPlan>(dtoEntity)); }
 
-        /// <summary>
-        /// 在<see cref="TextPlan"/>表中，获取用户ID为"user_id"的所有文字计划。
-        /// </summary>
-        /// <param name="user_id">传来的<see cref="APIResponse"/>用户ID</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
-        public async Task<APIResponse> GetAllForUserAsync(int user_id)
+
+        public async Task<APIResponseInner> DeleteAsync(int id) { return await textDB.DeleteAsync(id); }
+
+        // 查询某用户的所有文本计划
+        public async Task<APIResponseInner> GetAllForUserAsync(int user_id)
         {
             Expression<Func<TextPlan, bool>> exp;
-            exp = (x) => x.UserID.Equals(user_id);
-            return await textDB.GetExpressionAllAsync(exp);
+            exp = (x) => x.UserID == user_id;
+            return await textDB.GetExpressionAllPagedAsync(exp);
         }
 
-        /// <summary>
-        /// 在<see cref="TextPlan"/>表中，获取用户ID为"user_id"，且满足parameter条件的所有元组，并分页展示。
-        /// <para>条件为：单字段包含（对于状态来说是匹配）</para>
-        /// </summary>
-        /// <param name="parameter">传来的<see cref="APIResponse"/>类型参数（若匹配<see cref="TextPlan.Status"/>，Search需要用<c>true/false</c>）</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
-        public async Task<APIResponse> GetParamForUserAsync(int user_id, QueryParameter parameter)
+        // 按条件查询某用户的文本计划
+        public async Task<APIResponseInner> GetParamForUserAsync(QueryParameter parameter)
         {
-            if (string.IsNullOrWhiteSpace(parameter.Search))  // Search参数为空，代表全条件查询
-                return await textDB.GetAllAsync();
+            Expression<Func<TextPlan, bool>> exp;
+            if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表全条件查询
+                exp = (x) => x.UserID == parameter.user_id;
             else
-            {
-                Expression<Func<TextPlan, bool>> exp;
-                switch (parameter.Field)
+                switch (parameter.field)
                 {
                     case "Title": // 按标题查询
-                        exp = (x) => x.UserID == user_id && x.Title.Contains(parameter.Search);
+                        exp = (x) => x.UserID == parameter.user_id && x.Title.Contains(parameter.search);
                         break;
                     case "Content": // 按内容查询
-                        exp = (x) => x.UserID == user_id && x.Content.Contains(parameter.Search);
+                        exp = (x) => x.UserID == parameter.user_id && x.Content.Contains(parameter.search);
                         break;
                     case "Status": // 按内容查询
-                        exp = (x) => x.UserID == user_id && x.Status.ToString() == parameter.Search;
+                        exp = (x) => x.UserID == parameter.user_id && x.Status.ToString() == parameter.search;
                         break;
                     default:
-                        return new APIResponse(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
+                        return new APIResponseInner(StatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
                 }
-                return await textDB.GetExpressionAllAsync(exp, parameter.PageIndex, parameter.PageSize == 0 ? 100 : parameter.PageSize);
-            }
+            return await textDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
 
             // 下面方法有问题，看看后面能不能实现
             //return await textDB.GetExpressionAsync(predicate: x =>
             //    x.UserID == user_id && x.GetType().GetField(parameter.Field).GetValue(x).ToString().Contains(parameter.Search));
         }
 
-        /// <summary>
-        /// 在<see cref="TextPlan"/>表中，修改元组"dtoEntity。
-        /// </summary>
-        /// <param name="dtoEntity">所修改的新元组</param>
-        /// <returns>执行操作返回的消息 - <see cref="APIResponse"/></returns>
-        public async Task<APIResponse> UpdateAsync(TextPlanDTO dtoEntity) { return await textDB.UpdateAsync(mapper.Map<TextPlan>(dtoEntity)); }
+        // 改
+        public async Task<APIResponseInner> UpdateAsync(TextPlanDTO dtoEntity) { return await textDB.UpdateAsync(mapper.Map<TextPlan>(dtoEntity)); }
     }
 }

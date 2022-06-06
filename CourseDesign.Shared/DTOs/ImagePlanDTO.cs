@@ -6,7 +6,6 @@
     public class ImagePlanDTO : PlanDTO
     {
         private int TDoll_id;
-
         public int TDoll_ID
         {
             get { return TDoll_id; }

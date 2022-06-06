@@ -1,23 +1,23 @@
 ﻿namespace CourseDesign.Shared.DTOs
 {
     /// <summary>
-    /// Plan计划数据实体
+    /// Plan计划数据实体基类
     /// </summary>
     public class PlanDTO : BaseDTO
     {
-        public enum TypeEnum { text, image }; // 计划类型的枚举
+        public enum PlanType { text, image }; // 计划类型的枚举
 
-        private TypeEnum type;
+        private PlanType type;
         private bool status;
         private int userId;
 
         /// <summary>
         /// 该计划属于什么类型
         /// </summary>
-        public TypeEnum Type
+        public PlanType Type
         {
             get { return type; }
-            set { type = value; OnPropertyChanged(); }
+            set { type = value; }
         }
         /// <summary>
         /// 该计划状态

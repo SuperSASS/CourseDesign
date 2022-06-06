@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\Interface\**" />
+    <Content Remove="Controllers\Interface\**" />
+    <EmbeddedResource Remove="Controllers\Interface\**" />
+    <None Remove="Controllers\Interface\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="11.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.AutoHistory" Version="5.0.8" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.17">

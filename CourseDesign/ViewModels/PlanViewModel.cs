@@ -63,7 +63,7 @@ namespace CourseDesign.ViewModels
             // 各种命令的初始化
             ExecCommand = new DelegateCommand<string>(Exec);
             AddPlanCommand = new DelegateCommand(AddPlan);
-
+            // API服务初始化
             ImageService = imageService;
             TextService = textService;
         }
@@ -94,14 +94,15 @@ namespace CourseDesign.ViewModels
         }
 
         /// <summary>
-        /// 查询该用户包含条件的计划
+        /// 查询该用户包含筛选关键词的计划
         /// </summary>
         private async void QueryPlan()
         {
             Loading(true);
             Plans.Clear();
 
-            var textPlanResult = await TextService.GetParamContainForUser(1, new QueryParameter() { Search = SearchText });
+            //var textPlanResult = await TextService.GetAllForUser(1);
+            var textPlanResult = await TextService.GetParamContainForUser(1, new QueryParameter() { search = SearchText, field = "Title" }); // TODO: 2 - 这里默认搜索的是标题
             foreach (var textItem in textPlanResult.Result.Items)
                 Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
 

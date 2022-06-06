@@ -39,7 +39,6 @@ namespace CourseDesign.Services.ViewModelServices
         /// </summary>
         /// <param name="parameter">查询条件所用的参数</param>
         /// <returns>API的返回消息APIResopnse，返回满足条件的实体页</returns>
-
         public async Task<APIResponse<PagedList<ImagePlanDTO>>> GetAllForUser(int user_id)
         {
             BaseRequest request = new BaseRequest();

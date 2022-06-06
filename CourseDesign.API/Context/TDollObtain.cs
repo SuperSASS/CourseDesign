@@ -6,10 +6,11 @@
         /// <summary>
         /// 对应的人形ID，为外键
         /// </summary>
-        public int TDollID { get; set; }
+        public int FK_TDollID { get; set; }
+
         /// <summary>
         /// 对应的用户ID，为外键
         /// </summary>
-        public int UserID { get; set; }
+        public int FK_UserID { get; set; }
     }
 }

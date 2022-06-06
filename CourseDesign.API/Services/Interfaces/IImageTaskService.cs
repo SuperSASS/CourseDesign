@@ -10,9 +10,32 @@ namespace CourseDesign.API.Services.Interfaces
     /// </summary>
     public interface IImagePlanService
     {
-        Task<APIResponse> AddAsync(ImagePlanDTO dbEntity); // 增
-        Task<APIResponse> DeleteAsync(int id); // 删
-        Task<APIResponse> GetAllForUserAsync(int user_id); // 查询某用户所有的图片类计划
-        Task<APIResponse> UpdateAsync(ImagePlanDTO dbUpdateEntity); // 改
+        /// <summary>
+        /// 在<see cref="ImagePlan"/>表中，异步添加元组dtoEntity。
+        /// </summary>
+        /// <param name="dtoEntity">所要增添的<see cref="ImagePlan"/>类型元组</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        Task<APIResponseInner> AddAsync(ImagePlanDTO dbEntity);
+
+        /// <summary>
+        /// 在<see cref="ImagePlan"/>表中，异步删除ID为id的元组。
+        /// </summary>
+        /// <param name="id">要删除元组的ID</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        Task<APIResponseInner> DeleteAsync(int id);
+
+        /// <summary>
+        /// 在<see cref="ImagePlan"/>表中，查询用户ID为user_id"的所有打捞计划，按创建时间降序排序。
+        /// <para>查询前100个返回。</para>
+        /// </summary>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        Task<APIResponseInner> GetAllForUserAsync(int user_id);
+
+        /// <summary>
+        /// 在<see cref="ImagePlan"/>表中，修改元组dtoEntity。
+        /// </summary>
+        /// <param name="dtoEntity">所修改的新元组</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        Task<APIResponseInner> UpdateAsync(ImagePlanDTO dbUpdateEntity);
     }
 }
