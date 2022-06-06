@@ -354,3 +354,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /.vscode
+CourseDesign.API/CourseDesign.db-shm
+CourseDesign.API/CourseDesign.db
+CourseDesign.API/CourseDesign.db-wal
