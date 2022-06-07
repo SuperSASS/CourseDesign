@@ -30,8 +30,7 @@
     <materialDesign:DialogHost
         x:Name="DialogHost"
         DialogTheme="Inherit"
-        Identifier="RootDialog"
-        SnackbarMessageQueue="{Binding ElementName=MainSnackbar, Path=MessageQueue}">
+        Identifier="RootDialog">
         <!--  这个应该是消息弹窗（对话）  -->
 
         <materialDesign:DrawerHost x:Name="meauBars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">

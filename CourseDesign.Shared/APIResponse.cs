@@ -10,7 +10,6 @@
     /// </summary>
     public class APIResponse
     {
-
         public APIStatusCode Status { get; set; }
         public string Message { get; set; }
     }

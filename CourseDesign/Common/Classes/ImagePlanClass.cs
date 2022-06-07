@@ -1,5 +1,6 @@
 ﻿using CourseDesign.Context;
 using CourseDesign.Shared.DTOs;
+using Prism.Commands;
 
 namespace CourseDesign.Common.Classes
 {
@@ -17,7 +18,7 @@ namespace CourseDesign.Common.Classes
         private int? tDoll_ID;
 
         public int? TDoll_ID { get { return tDoll_ID; } set { tDoll_ID = value; } }
-        public TDollClass? TDoll { get; set; } // 根据ID找到的人形类
+        public TDollClass TDoll { get; set; } // 根据ID找到的人形类
 
         /// <summary>
         /// 图片计划类的构造函数，计划种类Type在这里传image给基类
