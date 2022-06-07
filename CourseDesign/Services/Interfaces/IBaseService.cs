@@ -8,22 +8,22 @@ namespace CourseDesign.Services.Interfaces
     /// <summary>
     /// 这个是作为一个基类来继承，可以避免其他类重复写Add、Delete、GetID和Update操作。
     /// </summary>
-    /// <typeparam name="APPEntity">所继承的其他类型的服务（需要为DTO的，如<seealso cref="ImagePlanDTO"></seealso>）</typeparam>
-    public interface IBaseService<APPEntity> where APPEntity : class
+    /// <typeparam name="DTOEntity">所继承的其他类型的服务（需要为DTO类型的！如"ImagePlanDTO"）</typeparam>
+    public interface IBaseService<DTOEntity> where DTOEntity : class
     {
         /// <summary>
         /// [POST]异步上传，上传数据到某一用户的记录中
         /// </summary>
         /// <param name="user_id">上传到哪个用户ID上</param>
-        /// <param name="entity">上传的<see cref="APPEntity"/>类型实体</param>
+        /// <param name="entity">上传的<see cref="DTOEntity"/>类型实体</param>
         /// <returns> API返回的<see cref="APIResponse{APPEntity}"/>类型消息
         /// <list type="bullet">
-        /// <item>Result: 上传成功后的数据，类型为<see cref="APPEntity"/></item>
+        /// <item>Result: 上传成功后的数据，类型为<see cref="DTOEntity"/></item>
         /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
         /// <item>Message: API返回的消息</item>
         /// </list>
         /// </returns>
-        Task<APIResponse<APPEntity>> Add(int user_id, APPEntity entity);
+        Task<APIResponse<DTOEntity>> Add(DTOEntity entity);
 
         /// <summary>
         /// [DELETE]异步删除，删除唯一标识符为ID的数据
@@ -47,20 +47,20 @@ namespace CourseDesign.Services.Interfaces
         /// <item>Message: API返回的消息</item>
         /// </list>
         /// </returns>
-        Task<APIResponse<APPEntity>> GetID(int id);
+        Task<APIResponse<DTOEntity>> GetID(int id);
 
         /// <summary>
         /// [POST]异步更新，更新用户的数据
         /// </summary>
         /// <param name="user_id">更新哪个用户ID上的数据</param>
-        /// <param name="entity">更新的<see cref="APPEntity"/>类型实体</param>
+        /// <param name="entity">更新的<see cref="DTOEntity"/>类型实体</param>
         /// <returns> API返回的<see cref="APIResponse{APPEntity}"/>类型消息
         /// <list type="bullet">
-        /// <item>Result: 更新成功后的数据，类型为<see cref="APPEntity"/></item>
+        /// <item>Result: 更新成功后的数据，类型为<see cref="DTOEntity"/></item>
         /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
         /// <item>Message: API返回的消息</item>
         /// </list>
         /// </returns>
-        Task<APIResponse<APPEntity>> Update(int user_id, APPEntity entity);
+        Task<APIResponse<DTOEntity>> Update(DTOEntity entity);
     }
 }

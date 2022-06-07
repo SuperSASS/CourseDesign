@@ -29,30 +29,30 @@ namespace CourseDesign.Services
         // 注意！这里必须用PagedList类型，不能自作主张用成List！……
         // 依次参数要用?x=y的形式。
 
-        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamContain(GETParameter parameter)
+        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamContain(GETParameter param)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
             request.Route = $"api/{ServiceName}/GetParamContain"
-                + $"?user_id={parameter.user_id}"
-                + $"&search={parameter.search}"
-                + $"&field={parameter.field}"
-                + $"&page_index={parameter.page_index}"
-                + $"&page_size={parameter.page_size}";
+                + $"?user_id={param.user_id}"
+                + $"&search={param.search}"
+                + $"&field={param.field}"
+                + $"&page_index={param.page_index}"
+                + $"&page_size={param.page_size}";
             return await Client.ExecuteAsync<PagedList<TDollDTO>>(request);
         }
 
         // 参数匹配查询
-        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamEqual(GETParameter parameter)
+        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamEqual(GETParameter param)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
             request.Route = $"api/{ServiceName}/GetParamContain"
-                + $"?user_id={parameter.user_id}"
-                + $"&search={parameter.search}"
-                + $"&field={parameter.field}"
-                + $"&page_index={parameter.page_index}"
-                + $"&page_size={parameter.page_size}";
+                + $"?user_id={param.user_id}"
+                + $"&search={param.search}"
+                + $"&field={param.field}"
+                + $"&page_index={param.page_index}"
+                + $"&page_size={param.page_size}";
             return await Client.ExecuteAsync<PagedList<TDollDTO>>(request);
         }
     }

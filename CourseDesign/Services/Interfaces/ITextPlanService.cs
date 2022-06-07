@@ -10,10 +10,10 @@ namespace CourseDesign.Services.Interfaces
     public interface ITextPlanService : IBaseService<TextPlanDTO>
     {
         #region 继承的基本方法
-        //public new Task<APIResponse<ImagePlanDTO>> Add(int user_id, ImagePlanDTO imagePlanDTO);
+        //public new Task<APIResponse<ImagePlanDTO>> Add(ImagePlanDTO imagePlanDTO);
         //public new Task<APIResponse> Delete(int id);
         //public new Task<APIResponse<ImagePlanDTO>> GetID(int id);
-        //public new Task<APIResponse<ImagePlanDTO>> Update(int user_id, ImagePlanDTO imagePlanDTO);
+        //public new Task<APIResponse<ImagePlanDTO>> Update(ImagePlanDTO imagePlanDTO);
         #endregion
 
         #region 额外的方法
@@ -34,7 +34,7 @@ namespace CourseDesign.Services.Interfaces
         /// <summary>
         /// [GET]异步查询，返回该用户<b>包含</b>条件的结果，用户ID以及条件均在参数中。
         /// </summary>
-        /// <param name="parameter"><see cref="GETParameter"/>类型的查询条件，具体含义用GETParameter(){}查询。</param>
+        /// <param name="param"><see cref="GETParameter"/>类型的查询条件，具体含义用GETParameter(){}查询。</param>
         /// <returns>
         /// <see cref="APIResponse{PagedList{TDollDTO}}"/>类型消息
         /// <list type="bullet">
@@ -43,7 +43,7 @@ namespace CourseDesign.Services.Interfaces
         /// <item>Message: API返回的消息</item>
         /// </list>
         /// </returns>
-        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(GETParameter parameter);
+        public Task<APIResponse<PagedList<TextPlanDTO>>> GetParamContainForUser(GETParameter param);
         #endregion
     }
 }

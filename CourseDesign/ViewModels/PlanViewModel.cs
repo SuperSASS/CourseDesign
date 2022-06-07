@@ -36,12 +36,11 @@ namespace CourseDesign.ViewModels
         public DelegateCommand<string> EditOfAddPlanCommand { get; private set; } // 增加命令（不知道这种能不能合并到Exec中，待修改）
         public DelegateCommand<PlanBase> EditOfModifyPlanCommand { get; private set; } // 修改命令
         public DelegateCommand<PlanBase> DeletePlanCommand { get; private set; } // 删除命令
-        public DelegateCommand<PlanBase> CompletePlanCommand { get; private set;}
+        public DelegateCommand<PlanBase> CompletePlanCommand { get; private set; }
 
         public DelegateCommand<string> ExecCommand { get; private set; } // 执行无参数命令（有参数的因为CommandParameter要绑定参数，无法绑定命令，只能用另一种）
         public DelegateCommand SearchPlanCommand { get; private set; } // 查找命令
         public DelegateCommand UpdatePlanCommand { get; private set; } // 上传更新命令
-        public DelegateCommand CompletePlanCommand {get; private set;} // 完成计划命令
         // 外部访问属性
         /// <summary>
         /// 所有的计划列表
@@ -58,11 +57,11 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 右侧编辑窗弹出情况，0为不弹出，1为弹出文本类编辑栏，2为弹出图片类编辑栏
         /// </summary>
-        public int IsRightTextEditorOpen { get { return isRightTextEditorOpen; } private set { isRightTextEditorOpen = value; RaisePropertyChanged(); } }
+        public bool IsRightTextEditorOpen { get { return isRightTextEditorOpen; } set { isRightTextEditorOpen = value; RaisePropertyChanged(); } }
         /// <summary>
         /// 右侧编辑窗弹出情况，0为不弹出，1为弹出文本类编辑栏，2为弹出图片类编辑栏
         /// </summary>
-        public int IsRightImageEditorOpen { get { return isRightImageEditorOpen ; } private set { isRightImageEditorOpen = value; RaisePropertyChanged(); } }
+        public bool IsRightImageEditorOpen { get { return isRightImageEditorOpen; } set { isRightImageEditorOpen = value; RaisePropertyChanged(); } }
         /// <summary>
         /// 搜索文本，单向到源绑定
         /// </summary>
@@ -87,39 +86,42 @@ namespace CourseDesign.ViewModels
             // 部分初始展示属性初始化
             Plans = new ObservableCollection<PlanBase>();
             IsRightTextEditorOpen = false;
-            IsRightImageEditerOpen = false;
+            IsRightImageEditorOpen = false;
             searchText = null;
             // 各种命令的初始化
-            EditOfAddPlanCommand = new DelegateCommand<string>(EditOfAddPlan)
+            EditOfAddPlanCommand = new DelegateCommand<string>(EditOfAddPlan);
             EditOfModifyPlanCommand = new DelegateCommand<PlanBase>(EditOfModifyPlan);
-            DeletePlanCommand = new DeletePlanCommand<PlanBase>(DeletePlan);
+            DeletePlanCommand = new DelegateCommand<PlanBase>(DeletePlan);
             CompletePlanCommand = new DelegateCommand<PlanBase>(CompletePlan);
             ExecCommand = new DelegateCommand<string>(Exec);
             SearchPlanCommand = new DelegateCommand(SearchPlan);
             UpdatePlanCommand = new DelegateCommand(UpdatePlan);
         }
 
+        /// <summary>
+        /// 增加计划
+        /// </summary>
+        /// <param name="type">传的参数，用"Text"表示增加的文本类，"Image"表示增加的图片类</param>
         private void EditOfAddPlan(string type)
         {
             try
             {
                 Loading(true);
-                isAddOrModify = false; // 操作是增加
+                isAddOrModify = false; // 记录操作是增加
 
-                if (type.Equal("Text")) // 选中的文本类消息
+                if (type.Equals("Text")) // 选中的文本类消息
                 {
                     IsRightTextEditorOpen = true; // 窗口为“文本编辑状态”
                     rightEditerTitle = "常规计划添加";
                     rightEditerButton = "确认添加";
-                    CurrentEditPlan = new TextPlanClass();
+                    CurrentEditPlan = new TextPlanClass(0, false, null, null);
                 }
                 else // 选中的图片类消息
                 {
                     IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
                     rightEditerTitle = "人形计划添加";
                     rightEditerButton = "确认添加";
-                    var t = (ImagePlanClass)obj;
-                    CurrentEditPlan = new ImagePlanClass();
+                    CurrentEditPlan = new ImagePlanClass(0, false, null);
                 }
             }
             catch (Exception ex) // 未处理异常情况
@@ -131,40 +133,37 @@ namespace CourseDesign.ViewModels
             }
         }
 
-        // 选择修改。会赋值给右侧编辑栏的用于相应属性SelectUpdatePlan，用于更改。
-        private async void EditOfModifyPlan(PlanBase obj) // TODO: 0 - obj传来的是什么需要确认
+        /// <summary>
+        /// 修改计划（会赋值给右侧编辑栏的用于相应属性SelectUpdatePlan，用于更改）
+        /// </summary>
+        /// <param name="obj">修改计划的基类</param>
+        private void EditOfModifyPlan(PlanBase obj) // TODO: 0 - obj传来的是什么需要确认
         {
-            try
-            {
-                Loading(true);
-                isAddOrModify = true; // 操作是修改
+            Loading(true);
+            isAddOrModify = true; // 操作是修改
 
-                if (obj.Type == PlanBase.PlanType.Text) // 选中的文本类消息
-                {
-                    IsRightTextEditorOpen = true; // 窗口为“文本编辑状态”
-                    rightEditerTitle = "常规计划修改";
-                    rightEditerButton = "确认修改";
-                    CurrentEditPlan = new TextPlanClass(obj.ID, obj.Status, obj.Title, obj.Content);
-                }
-                else // 选中的图片类消息
-                {
-                    IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
-                    rightEditerTitle = "人形计划修改";
-                    rightEditerButton = "确认修改";
-                    // var imageServiceResopnseResult = (await ImageService.GetID(obj.ID)).Result;
-                    CurrentEditPlan = new ImagePlanClass(obj.ID, obj.Status, obj.TDoll_ID);
-                }
-            }
-            catch (Exception ex) // 未处理异常情况
+            if (obj is TextPlanClass) // 选中的文本类消息
             {
+                IsRightTextEditorOpen = true; // 窗口为“文本编辑状态”
+                rightEditerTitle = "常规计划修改";
+                rightEditerButton = "确认修改";
+                TextPlanClass t = (TextPlanClass)obj;
+                CurrentEditPlan = new TextPlanClass(t.ID, t.Status, t.Title, t.Content);
             }
-            finally
+            else // 选中的图片类消息
             {
-                Loading(false);
+                IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
+                rightEditerTitle = "人形计划修改";
+                rightEditerButton = "确认修改";
+                ImagePlanClass t = (ImagePlanClass)obj;
+                CurrentEditPlan = new ImagePlanClass(t.ID, t.Status, t.TDoll_ID);
             }
         }
 
-        // 删除
+        /// <summary>
+        /// 删除计划
+        /// </summary>
+        /// <param name="detelePlan">所删除计划的基类</param>
         private async void DeletePlan(PlanBase detelePlan)
         {
             try
@@ -175,8 +174,8 @@ namespace CourseDesign.ViewModels
                 Loading(true);
 
                 var deleteResponse = detelePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(detelePlan.ID) : await ImageService.Delete(detelePlan.ID);
-                if (deleteResult.Status == APIStatusCode.Success)
-                    Plans.Remove(Plans.FirstOrDefault(t => t.ID==detelePlan.ID));
+                if (deleteResponse.Status == APIStatusCode.Success)
+                    Plans.Remove(Plans[detelePlan.ID]);
             }
             finally
             {
@@ -184,15 +183,27 @@ namespace CourseDesign.ViewModels
             }
         }
 
-
-        private void CompletePlanCommand(PlanBase completePlan)
+        /// <summary>
+        /// 完成任务的命令
+        /// </summary>
+        /// <param name="planBase">所完成的任务，传的为基类</param>
+        private async void CompletePlan(PlanBase planBase)
         {
-            Loadinging(true);
-            var plan = Plans.FirstOrDefault(t => t.ID==completePlan.ID);
-            plan.Status = true;
-            var completeResponse = completePlan.Type=PlanBase.PlanType.Text ? textService.Update(plan) : imageService.Update(plan);
-            if (completeResponse.Status != APIStatusCode.Success)
-                Plans.Status = false; // 回滚事务
+            APIStatusCode APIResponseStatus;
+            if (planBase is TextPlanClass) // 基类是TextPlan类型
+            {
+                TextPlanClass plan = (TextPlanClass)Plans[planBase.ID];
+                plan.Status = true;
+                APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, 1))).Status;
+            }
+            else // 基类是ImagePlan类型
+            {
+                ImagePlanClass plan = (ImagePlanClass)Plans[planBase.ID];
+                plan.Status = true;
+                APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, 1))).Status;
+            }
+            if (APIResponseStatus == APIStatusCode.Success)
+                planBase.Status = true; // 将本地的状态也更改
         }
 
         /// <summary>
@@ -212,9 +223,8 @@ namespace CourseDesign.ViewModels
             }
         }
 
-
         /// <summary>
-        /// 查询该用户包含条件的计划，目前只支持文字内计划的搜索
+        /// 查询该用户包含条件的计划，目前只支持文字类计划的搜索
         /// </summary>
         private async void SearchPlan()
         {
@@ -237,39 +247,41 @@ namespace CourseDesign.ViewModels
         {
             if (IsRightTextEditorOpen) // 打开的是文字编辑
             {
-                if (string.IsNullOrWhiteSpace(CurrentEditPlan.Title) || string.IsNullOrWhitSpace(currentEditPlan.Content)) // 计划的标题或内容为空
-                rertun; // 返回错误提示
-            Loading(true);
-            var updateResult = await isAddOrModify ? textService.Add(currentEditPlan) : textService.Update(currentEditPlan);
-            if (UpdateResult.Status)
-            {
-                var plan = Plan.FirstOrDefault(t => t.ID == currentEditPlan.ID);
-                if (plan != null)
+                TextPlanClass textPlan = (TextPlanClass)CurrentEditPlan;
+                if (string.IsNullOrWhiteSpace(textPlan.Title) || string.IsNullOrWhiteSpace(textPlan.Content)) // 计划的标题或内容为空
+                    return; // 返回错误提示
+                Loading(true);
+                var updateResponse = isAddOrModify ? await TextService.Add(textPlan.ConvertDTO(textPlan, 1)) : await TextService.Update(textPlan.ConvertDTO(textPlan, 1));
+                if (updateResponse.Status == APIStatusCode.Success)
                 {
-                    plan.Title = currentEditPlan.Title;
-                    plan.Content = currentEditPlan.Content;
-                    plan.Status = currentEditPlan.Status;
+                    TextPlanClass plan = (TextPlanClass)Plans[currentEditPlan.ID];
+                    if (plan != null)
+                    {
+                        plan.Title = textPlan.Title;
+                        plan.Content = textPlan.Content;
+                        plan.Status = textPlan.Status;
+                    }
+                    else // 代表新增
+                        Plans.Add(textPlan);
                 }
-                else // 代表新增
-                    plan.Add(currentEditPlan);
-            }
-            IsRightTextEditerOpen = false;
+                IsRightTextEditorOpen = false;
             }
             else
             {
-                if (string.IsNullOrWhiteSpace(currentEditPlan.TDoll_ID)) // 人形计划的人形ID为空
-                rertun; // 返回错误提示
-            Loading(true);
-            var updateResult = await isAddOrModify ? textService.Add(currentEditPlan) : textService.Update(currentEditPlan);
-            if (UpdateResult.Status)
-            {
-                var plan = Plan.FirstOrDefault(t => t.ID == currentEditPlan.ID);
-                if (plan != null)
-                    plan.TDoll_ID = currentEditPlan.Title;
-                else // 代表新增
-                    plan.Add(currentEditPlan);
-            }
-            IsRightImageEditerOpen = false;
+                ImagePlanClass imagePlan = (ImagePlanClass)CurrentEditPlan;
+                if (imagePlan.TDoll_ID == null) // 人形计划的人形ID为空
+                    return; // 返回错误提示
+                Loading(true);
+                APIStatusCode updateResponseStatus = isAddOrModify ? (await ImageService.Add(imagePlan.ConvertDTO(imagePlan, 1))).Status : (await ImageService.Update(imagePlan.ConvertDTO(imagePlan, 1))).Status;
+                if (updateResponseStatus == APIStatusCode.Success)
+                {
+                    ImagePlanClass plan = (ImagePlanClass)Plans[currentEditPlan.ID];
+                    if (plan != null)
+                        plan.TDoll_ID = imagePlan.TDoll_ID;
+                    else // 代表新增
+                        Plans.Add(currentEditPlan);
+                }
+                IsRightImageEditorOpen = false;
             }
 
         }

@@ -1,4 +1,6 @@
-﻿namespace CourseDesign.Common.Classes
+﻿using CourseDesign.Shared.DTOs;
+
+namespace CourseDesign.Common.Classes
 {
     /// <summary>
     /// 文字计划类
@@ -38,6 +40,25 @@
         {
             Title = title;
             Content = content;
+        }
+
+        /// <summary>
+        /// 与DTO的类型转换，会缺少CreateDate（不过传输过去并不需要）
+        /// </summary>
+        /// <param name="APPEntity">APP中的实体类型</param>
+        /// <param name="userID">该实体属于哪个用户</param>
+        public TextPlanDTO ConvertDTO(TextPlanClass APPEntity, int userID)
+        {
+            return new TextPlanDTO()
+            {
+                ID = APPEntity.ID,
+                Title = APPEntity.Title,
+                Content = APPEntity.Content,
+                CreateDate = null,
+                Status = APPEntity.Status,
+                Type = (PlanDTO.PlanType)APPEntity.Type,
+                UserID = userID
+            };
         }
     }
 }

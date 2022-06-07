@@ -11,7 +11,7 @@ namespace CourseDesign.Services
     /// <summary>
     /// 通用的服务层，估计作用就是拿来给其他服务重用的
     /// </summary>
-    public class BaseHTTPService<APPEntity> : IBaseService<APPEntity> where APPEntity : class
+    public class BaseHTTPService<DTOEntity> : IBaseService<DTOEntity> where DTOEntity : class
     {
         public readonly HttpRestClient Client;
         public readonly string ServiceName;
@@ -29,15 +29,15 @@ namespace CourseDesign.Services
 
         #region 具体实现的增、删、查ID、改方法
         // 增
-        public async Task<APIResponse<APPEntity>> Add(int user_id, APPEntity entity)  // 注意：POST协议，参数要为一个序列化的object
+        public async Task<APIResponse<DTOEntity>> Add(DTOEntity param)  // 注意：POST协议，参数要为一个序列化的object
         {
             BaseRequest request = new()
             {
                 Method = RestSharp.Method.POST,
                 Route = $"api/{ServiceName}/Add",
-                Parameter = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(user_id) + JsonConvert.SerializeObject(entity)) // 先要反序列化为json，再序列化为object
+                Parameter = param
             };
-            return await Client.ExecuteAsync<APPEntity>(request);
+            return await Client.ExecuteAsync<DTOEntity>(request);
         }
 
         // 删
@@ -52,26 +52,26 @@ namespace CourseDesign.Services
         }
 
         // 查ID
-        public async Task<APIResponse<APPEntity>> GetID(int id)
+        public async Task<APIResponse<DTOEntity>> GetID(int id)
         {
             BaseRequest request = new()
             {
                 Method = RestSharp.Method.DELETE,
                 Route = $"api/{ServiceName}/Delete?id={id}" // 直接传id即可
             };
-            return await Client.ExecuteAsync<APPEntity>(request);
+            return await Client.ExecuteAsync<DTOEntity>(request);
         }
 
         // 改
-        public async Task<APIResponse<APPEntity>> Update(int user_id, APPEntity entity)
+        public async Task<APIResponse<DTOEntity>> Update(DTOEntity param)
         {
             BaseRequest request = new()
             {
                 Method = RestSharp.Method.POST,
                 Route = $"api/{ServiceName}/Update",
-                Parameter = JsonConvert.DeserializeObject(JsonConvert.SerializeObject(user_id) + JsonConvert.SerializeObject(entity)) // 先要反序列化为json，再序列化为object
+                Parameter = param
             };
-            return await Client.ExecuteAsync<APPEntity>(request);
+            return await Client.ExecuteAsync<DTOEntity>(request);
         }
         #endregion
     }

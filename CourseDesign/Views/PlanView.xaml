@@ -89,7 +89,7 @@
                         </TextBox>
 
                         <!--  筛选栏  -->
-                        <!--TODO: 1- 还未实现-->
+                        <!--  TODO: 1- 还未实现  -->
                         <ComboBox
                             MinWidth="128"
                             Margin="10,0"
@@ -109,19 +109,17 @@
                         </ComboBox>
 
                         <!--  添加计划按钮  -->
-                        <!-- TODO: 2 - 这里默认添加的是文字类 -->
+                        <!--  TODO: 2 - 这里默认添加的是文字类  -->
                         <materialDesign:Badged
                             Margin="10,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
-                            Command="{Binding EditOfAddPlanCommand}"
-                            CommandParameter="Text"
                             Badge="{materialDesign:PackIcon Plus}"
                             BadgeColorZoneMode="SecondaryMid">
                             <Button
                                 materialDesign:ButtonAssist.CornerRadius="5"
-                                Command="{Binding ExecCommand}"
-                                CommandParameter="新增"
+                                Command="{Binding EditOfAddPlanCommand}"
+                                CommandParameter="Text"
                                 Content="添加计划"
                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
@@ -264,10 +262,10 @@
                                                                 <!--  TODO - BUG: 在按出按钮后，如果操作滚轮划走，按钮不会消失  -->
                                                                 <StackPanel>
                                                                     <Button
-
-                                                                Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
-                                                                CommandParameter="{Binding}"
-                                                                     Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="完成这条计划">
+                                                                        Background="{DynamicResource SecondaryHueLightBrush}"
+                                                                        Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        ToolTip="完成这条计划">
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
                                                                             Height="21"
@@ -275,10 +273,10 @@
                                                                             Kind="SourceBranchCheck" />
                                                                     </Button>
                                                                     <Button
-
-                                                                Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
-                                                                CommandParameter="{Binding}"
-                                                                    Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="编辑这条计划">
+                                                                        Background="{DynamicResource SecondaryHueLightBrush}"
+                                                                        Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        ToolTip="编辑这条计划">
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
                                                                             Height="21"
@@ -286,10 +284,10 @@
                                                                             Kind="PencilOutline" />
                                                                     </Button>
                                                                     <Button
-                                                                Command="{Binding DataContext.DeletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
-                                                                CommandParameter="{Binding}"
-
-                                                                     Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="删除这条计划">
+                                                                        Background="{DynamicResource SecondaryHueLightBrush}"
+                                                                        Command="{Binding DataContext.DeletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        CommandParameter="{Binding}"
+                                                                        ToolTip="删除这条计划">
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
                                                                             Height="21"
@@ -374,9 +372,9 @@
                                                         <!--  完成切换栏  -->
                                                         <ToggleButton
                                                             Margin="10"
+                                                            Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                            CommandParameter="{Binding}"
                                                             Style="{StaticResource MaterialDesignSwitchToggleButton}"
-                                                                Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
-                                                                CommandParameter="{Binding}"
                                                             ToolTip="点击按钮以完成计划">
                                                             <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
                                                                 <materialDesign:PackIcon.RenderTransform>
@@ -423,10 +421,10 @@
                                                             <!--  TODO - BUG: 在按出按钮后，如果操作滚轮划走，按钮不会消失  -->
                                                             <StackPanel>
                                                                 <Button
-                                                                Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor,AncestorType=ItemsControl}}"
-                                                                CommandParameter="{Binding}"
-
-                                                                Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="编辑这条计划">
+                                                                    Background="{DynamicResource SecondaryHueLightBrush}"
+                                                                    Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                    CommandParameter="{Binding}"
+                                                                    ToolTip="编辑这条计划">
                                                                     <materialDesign:PackIcon
                                                                         Width="21"
                                                                         Height="21"
@@ -434,8 +432,10 @@
                                                                         Kind="PencilOutline" />
                                                                 </Button>
                                                                 <Button
-                                                                Command="ExecCommand" CommandParameter="删除"
-                                                                 Background="{DynamicResource SecondaryHueLightBrush}" ToolTip="删除这条计划">
+                                                                    Background="{DynamicResource SecondaryHueLightBrush}"
+                                                                    Command="ExecCommand"
+                                                                    CommandParameter="删除"
+                                                                    ToolTip="删除这条计划">
                                                                     <materialDesign:PackIcon
                                                                         Width="21"
                                                                         Height="21"
@@ -483,7 +483,7 @@
 
         <!--  右侧弹窗的编辑页  -->
         <materialDesign:DialogHost>
-            <!-- 文字编辑页 -->
+            <!--  文字编辑页  -->
             <materialDesign:DrawerHost x:Name="text_editor" IsRightDrawerOpen="{Binding IsRightTextEditorOpen}">
                 <materialDesign:DrawerHost.RightDrawerContent>
                     <DockPanel Width="300" LastChildFill="False">
@@ -505,27 +505,25 @@
                             DockPanel.Dock="Top"
                             Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="状态：" />
-                            <ComboBox SelectedIndex={"Binding CurrentEditPlan.Status"}>
-                                <ComboBoxItem
-                                    Content="未完成"
-                                    DockPanel.Dock="Top"/>
+                            <ComboBox SelectedIndex="{Binding CurrentEditPlan.Status}">
+                                <ComboBoxItem Content="未完成" DockPanel.Dock="Top" />
                                 <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
                             </ComboBox>
                         </StackPanel>
                         <TextBox
                             Margin="20,30,20,10"
                             materialDesign:HintAssist.Hint="计划标题"
-                            Text="{Binding CurrentEditPlan.Title}"
                             DockPanel.Dock="Top"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}" />
+                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentEditPlan.Title}" />
                         <TextBox
                             MinHeight="100"
                             MaxHeight="300"
                             Margin="20,10"
                             materialDesign:HintAssist.Hint="计划内容"
-                            Text="{Binding CurrentEditPlan.Content}"
                             DockPanel.Dock="Top"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentEditPlan.Content}"
                             TextWrapping="Wrap" />
                         <Button
                             Margin="30"
@@ -536,7 +534,9 @@
                     </DockPanel>
                 </materialDesign:DrawerHost.RightDrawerContent>
             </materialDesign:DrawerHost>
-            <!-- 图片编辑页 -->
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost>
+            <!--  图片编辑页  -->
             <materialDesign:DrawerHost x:Name="image_editor" IsRightDrawerOpen="{Binding IsRightImageEditorOpen}">
                 <materialDesign:DrawerHost.RightDrawerContent>
                     <DockPanel Width="300" LastChildFill="False">
@@ -558,10 +558,8 @@
                             DockPanel.Dock="Top"
                             Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="状态：" />
-                            <ComboBox SelectedIndex={"Binding CurrentDTO.Status"}>
-                                <ComboBoxItem
-                                    Content="未完成"
-                                    DockPanel.Dock="Top"/>
+                            <ComboBox SelectedIndex="{Binding CurrentDTO.Status}">
+                                <ComboBoxItem Content="未完成" DockPanel.Dock="Top" />
                                 <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
                             </ComboBox>
                         </StackPanel>

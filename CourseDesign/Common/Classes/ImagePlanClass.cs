@@ -1,4 +1,5 @@
 ﻿using CourseDesign.Context;
+using CourseDesign.Shared.DTOs;
 
 namespace CourseDesign.Common.Classes
 {
@@ -13,10 +14,10 @@ namespace CourseDesign.Common.Classes
     /// </list>
     public class ImagePlanClass : PlanBase
     {
-        private int tDoll_ID;
+        private int? tDoll_ID;
 
-        public TDollClass TDoll { get; set; } // 根据ID找到的人形类
-        public int TDoll_ID { get { return tDoll_ID;} set { tDoll_ID = value; }}
+        public int? TDoll_ID { get { return tDoll_ID; } set { tDoll_ID = value; } }
+        public TDollClass? TDoll { get; set; } // 根据ID找到的人形类
 
         /// <summary>
         /// 图片计划类的构造函数，计划种类Type在这里传image给基类
@@ -24,10 +25,28 @@ namespace CourseDesign.Common.Classes
         /// <param name="id">计划ID（基类的属性）</param>
         /// <param name="status">计划状态（0表示未完成，1表示已完成）（基类的属性）</param>
         /// <param name="tDoll_ID">计划打捞战术人形的ID</param>
-        public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, PlanType.Image, status)
+        public ImagePlanClass(int id, bool status, int? tDoll_ID) : base(id, PlanType.Image, status)
         {
             TDoll_ID = tDoll_ID;
-            TDoll = TDollsContext.GetTDoll(this.tDoll_ID);
+            if (tDoll_ID != null) TDoll = TDollsContext.GetTDoll((int)tDoll_ID);
+        }
+
+        /// <summary>
+        /// 与DTO的类型转换，会缺少CreateDate（不过传输过去并不需要）
+        /// </summary>
+        /// <param name="APPEntity">APP中的实体类型</param>
+        /// <param name="userID">该实体属于哪个用户</param>
+        public ImagePlanDTO ConvertDTO(ImagePlanClass APPEntity, int userID)
+        {
+            return new ImagePlanDTO()
+            {
+                ID = APPEntity.ID,
+                CreateDate = null,
+                Status = APPEntity.Status,
+                TDoll_ID = (int)APPEntity.TDoll_ID,
+                Type = (PlanDTO.PlanType)APPEntity.Type,
+                UserID = userID
+            };
         }
     }
 }
