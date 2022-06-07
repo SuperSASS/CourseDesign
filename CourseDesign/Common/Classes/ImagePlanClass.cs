@@ -14,7 +14,9 @@ namespace CourseDesign.Common.Classes
     public class ImagePlanClass : PlanBase
     {
         private int tDoll_ID;
+
         public TDollClass TDoll { get; set; } // 根据ID找到的人形类
+        public int TDoll_ID { get { return tDoll_ID;} set { tDoll_ID = value; }}
 
         /// <summary>
         /// 图片计划类的构造函数，计划种类Type在这里传image给基类
@@ -24,7 +26,7 @@ namespace CourseDesign.Common.Classes
         /// <param name="tDoll_ID">计划打捞战术人形的ID</param>
         public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, PlanType.Image, status)
         {
-            this.tDoll_ID = tDoll_ID;
+            TDoll_ID = tDoll_ID;
             TDoll = TDollsContext.GetTDoll(this.tDoll_ID);
         }
     }
