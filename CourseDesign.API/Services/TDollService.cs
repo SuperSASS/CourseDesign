@@ -2,7 +2,6 @@
 using AutoMapper;
 using CourseDesign.API.Constants;
 using CourseDesign.API.Context;
-using CourseDesign.API.Services.InnerServices;
 using CourseDesign.API.Services.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;

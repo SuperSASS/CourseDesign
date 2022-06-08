@@ -21,7 +21,6 @@ namespace CourseDesign.API.Services
         private readonly BaseDBService<TDoll> tDollDB; // 由于有多表查询，也需要把TDollDB表拿过来
         private readonly IMapper mapper;
 
-
         // 简化表达式用，代表该用户ID的所拥有人形数据给查出来
         Expression<Func<TDollObtain, bool>> exp_user(int user_id) { return (x) => x.FK_UserID == user_id; }
 

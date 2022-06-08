@@ -44,7 +44,7 @@ namespace CourseDesign.API
             services.AddTransient<ITextPlanService, TextPlanService>();       // 文字类计划的服务
             services.AddTransient<ILoginService, LoginService>();             // 登录的服务
             services.AddTransient<ITDollService, TDollService>();             // 战术人形的服务
-            services.AddTransient<ITDollObtainService, TDollObtainService>(); // 用户所拥有的战术人形的服务
+            //services.AddTransient<ITDollObtainService, TDollObtainService>(); // 用户所拥有的战术人形的服务
             // 注册AutoMapper映射服务，并添加AutoMapper配置
             var automapperConfig = new MapperConfiguration(config =>
             {

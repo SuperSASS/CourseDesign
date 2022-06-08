@@ -1,4 +1,5 @@
 using CourseDesign.API.Services.Interfaces;
+using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -12,8 +13,8 @@ namespace CourseDesign.API.Controllers
     [Route("api/[controller]/[action]")]
     public class TDollObtainController : ControllerBase
     {
-        private readonly ITDollService Service;
-        public TDollController(ITDollService service) { Service = service; }
+        private readonly ITDollObtainService Service;
+        public TDollObtainController(ITDollObtainService service) { Service = service; }
 
         /// <summary>
         /// [POST]用户获得新的战术人形。
@@ -64,6 +65,6 @@ namespace CourseDesign.API.Controllers
         /// </list>
         /// </returns>
         [HttpGet]
-        public async Task<APIResponseInner> GetParamEqual([FromQuery] GETParameter parameter) => await Service.GetParamEquGetUserParamEqualObtainTDollAsyncalAsync(parameter);
+        public async Task<APIResponseInner> GetParamEqual([FromQuery] GETParameter parameter) => await Service.GetUserParamEqualObtainTDollAsync(parameter);
     }
 }
