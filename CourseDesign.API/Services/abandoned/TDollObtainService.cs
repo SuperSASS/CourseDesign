@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using static CourseDesign.API.Context.TDoll;
 
-namespace CourseDesign.API.Services
+namespace CourseDesign.API.Services.abandoned
 {
     public class TDollObtainService : ITDollObtainService
     {
@@ -34,7 +34,7 @@ namespace CourseDesign.API.Services
         public async Task<APIResponseInner> GetUserAllObtainTDollAsync(int user_id)
         {
 
-            APIResponseInner userTDolls = await tDollObtainDB.GetExpressionAllPagedAsync(exp_user((int)user_id)); // 先直接得到用户拥有的所有人形
+            APIResponseInner userTDolls = await tDollObtainDB.GetExpressionAllPagedAsync(exp_user(user_id)); // 先直接得到用户拥有的所有人形
             if (userTDolls.Status != APIStatusCode.Success) // 发生神必异常，直接return，后同
                 return userTDolls;
 

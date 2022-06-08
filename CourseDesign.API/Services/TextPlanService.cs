@@ -65,6 +65,7 @@ namespace CourseDesign.API.Services
             // 下面方法有问题，看看后面能不能实现
             //return await textDB.GetExpressionAsync(predicate: x =>
             //    x.UserID == user_id && x.GetType().GetField(parameter.Field).GetValue(x).ToString().Contains(parameter.Search));
+            // 备注：表达式树
         }
 
         // 改

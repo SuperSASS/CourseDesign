@@ -1,11 +1,12 @@
-using CourseDesign.API.Services.Interfaces;
+using CourseDesign.API.Services.abandoned;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace CourseDesign.API.Controllers
+namespace CourseDesign.API.Controllers.abandoned
 {
+    /* 该控制器已废弃，合并到了TDollController中
     /// <summary>
     /// 用户所拥有战术人形的控制器层
     /// </summary>
@@ -67,4 +68,5 @@ namespace CourseDesign.API.Controllers
         [HttpGet]
         public async Task<APIResponseInner> GetParamEqual([FromQuery] GETParameter parameter) => await Service.GetUserParamEqualObtainTDollAsync(parameter);
     }
+    */
 }

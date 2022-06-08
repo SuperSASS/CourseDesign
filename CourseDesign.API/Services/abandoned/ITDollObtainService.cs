@@ -3,10 +3,11 @@ using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
-namespace CourseDesign.API.Services.Interfaces
+namespace CourseDesign.API.Services.abandoned
 {
     /// <summary>
     /// 用户所拥有战术人形的服务接口
+    /// 【目前已被废弃，已经整合到了TDollService中……
     /// </summary>
     public interface ITDollObtainService
     {

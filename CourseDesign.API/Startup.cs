@@ -4,6 +4,7 @@ using CourseDesign.API.Context;
 using CourseDesign.API.Context.Repository;
 using CourseDesign.API.Extensions;
 using CourseDesign.API.Services;
+using CourseDesign.API.Services.abandoned;
 using CourseDesign.API.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +45,7 @@ namespace CourseDesign.API
             services.AddTransient<ITextPlanService, TextPlanService>();       // 文字类计划的服务
             services.AddTransient<ILoginService, LoginService>();             // 登录的服务
             services.AddTransient<ITDollService, TDollService>();             // 战术人形的服务
-            services.AddTransient<ITDollObtainService, TDollObtainService>(); // 用户所拥有的战术人形的服务
+            //services.AddTransient<ITDollObtainService, TDollObtainService>(); // 用户所拥有的战术人形的服务【该服务合并到了TDollService中
             // 注册AutoMapper映射服务，并添加AutoMapper配置
             var automapperConfig = new MapperConfiguration(config =>
             {
