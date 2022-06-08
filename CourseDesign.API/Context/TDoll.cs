@@ -18,6 +18,10 @@
         /// </summary>
         public TDollType Type { get; set; }
         /// <summary>
+        /// 人形的获取方法
+        /// </summary>
+        public string ObtainMethod { get; set; }
+        /// <summary>
         /// 立绘在本地的路径
         /// </summary>
         public string ArtworkPath { get; set; }

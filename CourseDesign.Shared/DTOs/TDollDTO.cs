@@ -11,6 +11,7 @@
         private int rarity;
         private TDollType type;
         private string artworkPath;
+        private string obtainMethod;
 
         public string Name
         {
@@ -31,6 +32,11 @@
         {
             get { return artworkPath; }
             set { artworkPath = value; OnPropertyChanged(); }
+        }
+        public string ObtainMethod
+        {
+            get { return obtainMethod; }
+            set { obtainMethod = value; }
         }
     }
 }

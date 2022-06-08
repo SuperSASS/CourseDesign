@@ -18,10 +18,6 @@
         /// </summary>
         public string field { get; set; }  // 【数据库里不分字段属性，所以这里叫字段，但实际上在C#里是属性
         /// <summary>
-        /// 查询元组的状态（0代表未完成/为拥有，1代表已完成/已拥有，null代表全部）
-        /// </summary>
-        public int? status { get; set; }
-        /// <summary>
         /// 分页结果，查询的页号
         /// </summary>
         public int? page_index { get; set; }
@@ -31,5 +27,6 @@
        public int? page_size { get; set; }  // 查询的个数
 
         // 注意！不能用构造函数，否则报错【应该是没考虑所有情况的构造，所以干脆就不写
+        // 注：有关元组Status状态（完成/拥有），将放在应用层处理，而不是服务器层处理：服务器层始终返回满足**一条**要求的
     }
 }

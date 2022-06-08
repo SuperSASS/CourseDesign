@@ -5,6 +5,6 @@ namespace CourseDesign.API.Context.Repository
 {
     public class TDollObtainRepository : Repository<TDollObtain>, IRepository<TDollObtain>
     {
-        public TDollObtainRepository(DbContext dbContext) : base(dbContext) { }
+        public TDollObtainRepository(CourseDesignContext dbContext) : base(dbContext) { }
     }
 }

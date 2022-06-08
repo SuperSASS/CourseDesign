@@ -57,6 +57,9 @@ namespace CourseDesign.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ObtainMethod")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Rarity")
                         .HasColumnType("INTEGER");
 
@@ -80,14 +83,14 @@ namespace CourseDesign.API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TDollID")
+                    b.Property<int>("FK_TDollID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FK_UserID")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 

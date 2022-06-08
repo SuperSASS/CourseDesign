@@ -39,10 +39,11 @@ namespace CourseDesign.API.Services
                 return userTDolls;
 
             // 开始遍历用户的所有拥有的人形，然后作为表达式条件进行单值查询，再增加到最终结果
+            // 因此是按照获得顺序（ID递减）降序排序
             List<TDoll> getUserTDolls = new();
             foreach (var userTDoll in (userTDolls.Result as PagedList<TDollObtain>).Items)
             {
-                APIResponseInner getTDoll = await tDollDB.GetExpressionSingalAsync((x) => true);
+                APIResponseInner getTDoll = await tDollDB.GetExpressionSingalAsync((x) => x.ID == userTDoll.FK_TDollID);
                 if (getTDoll.Status != APIStatusCode.Success)
                     return getTDoll;
                 if (getTDoll.Result != null) // 不为空，代表确实找到，增加到队列
@@ -65,7 +66,7 @@ namespace CourseDesign.API.Services
             {
                 Expression<Func<TDoll, bool>> exp_param; // 条件查询表达式
                 if (string.IsNullOrWhiteSpace(parameter.search) || string.IsNullOrWhiteSpace(parameter.field))  // Search或field参数为空，代表按分页对该用户全条件查询，因此直接返回user_tDoll
-                    exp_param = (x) => true;
+                    exp_param = (x) => x.ID == userTDoll.FK_TDollID;
                 else
                     switch (parameter.field)
                     {
@@ -100,18 +101,18 @@ namespace CourseDesign.API.Services
             {
                 Expression<Func<TDoll, bool>> exp_param; // 条件查询表达式
                 if (string.IsNullOrWhiteSpace(parameter.search) || string.IsNullOrWhiteSpace(parameter.field))  // Search或field参数为空，代表按分页对该用户全条件查询，因此直接返回user_tDoll
-                    exp_param = (x) => true;
+                    exp_param = (x) => x.ID == userTDoll.FK_TDollID;
                 else
                     switch (parameter.field)
                     {
                         case "Name":
-                            exp_param = (x) => x.Name.Equals(parameter.search);
+                            exp_param = (x) => x.ID == userTDoll.FK_TDollID && x.Name.Equals(parameter.search);
                             break;
                         case "Rarity":
-                            exp_param = (x) => x.Rarity == int.Parse(parameter.search);
+                            exp_param = (x) => x.ID == userTDoll.FK_TDollID && x.Rarity == int.Parse(parameter.search);
                             break;
                         case "Type":
-                            exp_param = (x) => x.Type == (TDollType)int.Parse(parameter.search);
+                            exp_param = (x) => x.ID == userTDoll.FK_TDollID && x.Type == (TDollType)int.Parse(parameter.search);
                             break;
                         default:
                             return new APIResponseInner(APIStatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");

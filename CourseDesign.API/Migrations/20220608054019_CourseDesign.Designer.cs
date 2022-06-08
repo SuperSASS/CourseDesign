@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CourseDesign.API.Migrations
 {
     [DbContext(typeof(CourseDesignContext))]
-    [Migration("20220604214124_CourseDesign")]
+    [Migration("20220608054019_CourseDesign")]
     partial class CourseDesign
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +59,9 @@ namespace CourseDesign.API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("ObtainMethod")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("Rarity")
                         .HasColumnType("INTEGER");
 
@@ -82,14 +85,14 @@ namespace CourseDesign.API.Migrations
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("TDollID")
+                    b.Property<int>("FK_TDollID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("FK_UserID")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("UpdateDate")
                         .HasColumnType("TEXT");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
 

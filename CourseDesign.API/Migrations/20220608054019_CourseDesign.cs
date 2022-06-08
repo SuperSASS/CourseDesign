@@ -33,6 +33,7 @@ namespace CourseDesign.API.Migrations
                     Name = table.Column<string>(type: "TEXT", nullable: true),
                     Rarity = table.Column<int>(type: "INTEGER", nullable: false),
                     Type = table.Column<int>(type: "INTEGER", nullable: false),
+                    ObtainMethod = table.Column<string>(type: "TEXT", nullable: true),
                     ArtworkPath = table.Column<string>(type: "TEXT", nullable: true),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
@@ -48,8 +49,8 @@ namespace CourseDesign.API.Migrations
                 {
                     ID = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    TDollID = table.Column<int>(type: "INTEGER", nullable: false),
-                    UserID = table.Column<int>(type: "INTEGER", nullable: false),
+                    FK_TDollID = table.Column<int>(type: "INTEGER", nullable: false),
+                    FK_UserID = table.Column<int>(type: "INTEGER", nullable: false),
                     CreateDate = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
