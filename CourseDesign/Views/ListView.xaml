@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <!--  主页面  -->
-    <Grid Background="{Binding PrimaryHueMidForegroundBrush}">
+    <Grid>
         <!--  背景图  -->
         <Border>
             <Border.Background>

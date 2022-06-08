@@ -12,7 +12,7 @@
 
     <Grid>
         <!--  主页面  -->
-        <Grid Background="{Binding PrimaryHueMidForegroundBrush}">
+        <Grid>
             <!--  背景图  -->
             <Border>
                 <Border.Background>
@@ -135,13 +135,16 @@
                         HorizontalScrollBarVisibility="Visible"
                         Style="{StaticResource for_scrollviewer}">
                         <!--  计划卡片展示区  -->
-                        <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=task_list}" ItemsSource="{Binding Plans}">
+                        <ItemsControl
+                            x:Name="items_control"
+                            MaxHeight="{Binding ActualHeight, ElementName=task_list}"
+                            ItemsSource="{Binding Plans}">
                             <!--  卡片资源模板（分为图片类和文字类）  -->
                             <!--  规定：每个卡片宽度统一为300  -->
                             <ItemsControl.Resources>
                                 <!--  图片类卡片  -->
                                 <DataTemplate x:Key="imageCard">
-                                    <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变，要手动更新  -->
+                                    <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变【注：这是主题自带的bug，无法修复  -->
                                     <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromRight}" OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.1}">
                                         <materialDesign:Flipper
                                             Grid.Row="15"
@@ -217,7 +220,7 @@
                                                         <RowDefinition Height="*" />
                                                     </Grid.RowDefinitions>
 
-                                                    <!--  上方标题、返回按钮和编辑按钮  -->
+                                                    <!--  上方标题、返回按钮、编辑下拉按钮栏  -->
                                                     <materialDesign:ColorZone
                                                         Grid.Row="0"
                                                         Padding="6"
@@ -235,17 +238,16 @@
                                                                 VerticalAlignment="Center"
                                                                 Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
                                                                 Text="详细信息" />
+
+                                                            <!--  注：这个编辑按钮绑定，必须用里面的那种Bingding，否则找不到上下文  -->
                                                             <materialDesign:PopupBox
                                                                 Width="48"
                                                                 Height="48"
                                                                 Margin="0,0,10,-35"
                                                                 HorizontalAlignment="Right"
                                                                 VerticalAlignment="Center"
-                                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                                                 PlacementMode="BottomAndAlignCentres"
                                                                 Style="{StaticResource MaterialDesignMultiFloatingActionAccentPopupBox}"
-                                                                ToggleCheckedContentCommand="{Binding FloatingActionDemoCommand}"
-                                                                ToggleCheckedContentCommandParameter="wowsers"
                                                                 ToolTip="更多操作">
                                                                 <materialDesign:PopupBox.ToggleContent>
                                                                     <materialDesign:PackIcon
@@ -263,8 +265,9 @@
                                                                 <StackPanel>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        Command="{Binding DataContext.CompletePlanCommand, Source={x:Reference items_control}}"
                                                                         CommandParameter="{Binding}"
+                                                                        IsEnabled="True"
                                                                         ToolTip="完成这条计划">
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
@@ -274,7 +277,7 @@
                                                                     </Button>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        Command="{Binding DataContext.EditOfModifyPlanCommand, Source={x:Reference items_control}}"
                                                                         CommandParameter="{Binding}"
                                                                         ToolTip="编辑这条计划">
                                                                         <materialDesign:PackIcon
@@ -285,7 +288,7 @@
                                                                     </Button>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.DeletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                        Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control}}"
                                                                         CommandParameter="{Binding}"
                                                                         ToolTip="删除这条计划">
                                                                         <materialDesign:PackIcon
@@ -329,7 +332,7 @@
                                                                 <ListBox
                                                                     x:Name="fish_list_son"
                                                                     HorizontalContentAlignment="Stretch"
-                                                                    ItemsSource="{Binding PlanLists}">
+                                                                    ItemsSource="{Binding FishLists}">
                                                                     <ListBox.ItemTemplate>
                                                                         <DataTemplate>
                                                                             <TextBlock
@@ -372,7 +375,7 @@
                                                         <!--  完成切换栏  -->
                                                         <ToggleButton
                                                             Margin="10"
-                                                            Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                            Command="{Binding DataContext.CompletePlanCommand, Source={x:Reference items_control}}"
                                                             CommandParameter="{Binding}"
                                                             Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                                             ToolTip="点击按钮以完成计划">
@@ -400,11 +403,8 @@
                                                             Margin="5,0"
                                                             HorizontalAlignment="Right"
                                                             VerticalAlignment="Center"
-                                                            IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                                             PlacementMode="BottomAndAlignCentres"
                                                             Style="{StaticResource MaterialDesignPopupBox}"
-                                                            ToggleCheckedContentCommand="{Binding FloatingActionDemoCommand}"
-                                                            ToggleCheckedContentCommandParameter="wowsers"
                                                             ToolTip="更多操作">
                                                             <materialDesign:PopupBox.ToggleContent>
                                                                 <materialDesign:PackIcon
@@ -422,7 +422,7 @@
                                                             <StackPanel>
                                                                 <Button
                                                                     Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                    Command="{Binding DataContext.EditOfModifyPlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                                                    Command="{Binding DataContext.EditOfModifyPlanCommand, Source={x:Reference items_control}}"
                                                                     CommandParameter="{Binding}"
                                                                     ToolTip="编辑这条计划">
                                                                     <materialDesign:PackIcon
@@ -433,8 +433,8 @@
                                                                 </Button>
                                                                 <Button
                                                                     Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                    Command="ExecCommand"
-                                                                    CommandParameter="删除"
+                                                                    Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control}}"
+                                                                    CommandParameter="{Binding}"
                                                                     ToolTip="删除这条计划">
                                                                     <materialDesign:PackIcon
                                                                         Width="21"
@@ -492,7 +492,7 @@
                             DockPanel.Dock="Top"
                             FontWeight="Bold"
                             Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                            Text="{Binding RightEditerTitle}" />
+                            Text="{Binding RightEditorTitle}" />
                         <Border
                             Width="180"
                             Margin="10,5,10,10"
@@ -528,8 +528,9 @@
                         <Button
                             Margin="30"
                             HorizontalAlignment="Right"
-                            Command=""
-                            Content="{Binding RightEditerButton}"
+                            Command="{Binding ExecCommand}"
+                            CommandParameter="上传"
+                            Content="{Binding RightEditorButton}"
                             DockPanel.Dock="Top" />
                     </DockPanel>
                 </materialDesign:DrawerHost.RightDrawerContent>
@@ -545,7 +546,7 @@
                             DockPanel.Dock="Top"
                             FontWeight="Bold"
                             Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                            Text="{Binding rightEditerTitle}" />
+                            Text="{Binding RightEditorTitle}" />
                         <Border
                             Width="180"
                             Margin="10,5,10,10"
@@ -558,7 +559,7 @@
                             DockPanel.Dock="Top"
                             Orientation="Horizontal">
                             <TextBlock VerticalAlignment="Center" Text="状态：" />
-                            <ComboBox SelectedIndex="{Binding CurrentDTO.Status}">
+                            <ComboBox SelectedIndex="{Binding CurrentEditPlan.Status}">
                                 <ComboBoxItem Content="未完成" DockPanel.Dock="Top" />
                                 <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
                             </ComboBox>
@@ -570,12 +571,13 @@
                             materialDesign:HintAssist.Hint="战术人形编号"
                             DockPanel.Dock="Top"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                            Text="{Binding CurrentEditPlan.TDoll_ID}"
                             TextWrapping="Wrap" />
                         <Button
                             Margin="30"
                             HorizontalAlignment="Right"
-                            Command=""
-                            Content="{Binding rightEditerButton}"
+                            Command="{Binding UpdatePlanCommand}"
+                            Content="{Binding RightEditorButton}"
                             DockPanel.Dock="Top" />
                     </DockPanel>
                 </materialDesign:DrawerHost.RightDrawerContent>

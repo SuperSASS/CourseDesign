@@ -28,7 +28,7 @@ namespace CourseDesign.Services
         public async Task<APIResponse> ExecuteAsync(BaseRequest baseRequest)
         {
             // 生成请求，添加请求类型
-            var request = new RestRequest();
+            var request = new RestRequest(baseRequest.Method); // Debug记录：这里生成的时候要带请求方式，否则默认为GET，导致方式错误
             request.AddHeader("Content-Type", baseRequest.ContentType);
             // 添加请求参数，这里的parameter是个object，然后转换为json格式
             if (baseRequest.Parameter != null)
@@ -47,7 +47,7 @@ namespace CourseDesign.Services
         public async Task<APIResponse<T>> ExecuteAsync<T>(BaseRequest baseRequest)
         {
             // 生成请求，添加请求类型
-            var request = new RestRequest();
+            var request = new RestRequest(baseRequest.Method);
             request.AddHeader("Content-Type", baseRequest.ContentType);
             // 添加请求参数
             if (baseRequest.Parameter != null)

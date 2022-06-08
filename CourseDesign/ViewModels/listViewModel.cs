@@ -6,7 +6,7 @@ using static CourseDesign.Common.Classes.TDollClass;
 
 namespace CourseDesign.ViewModels
 {
-    internal class ListViewModel : BindableBase
+    public class ListViewModel : BindableBase
     {
         private ObservableCollection<TDollClass> tdolls;
 
@@ -19,7 +19,7 @@ namespace CourseDesign.ViewModels
         public ListViewModel()
         {
             TDolls = new ObservableCollection<TDollClass>();
-            foreach (var item in TDollsContext.tDolls) // 把API读取的加进来
+            foreach (var item in TDollsContext.AllTDolls) // 把API读取的加进来
                 tdolls.Add(item);
         }
 
