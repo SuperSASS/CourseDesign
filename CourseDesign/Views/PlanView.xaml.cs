@@ -2,7 +2,7 @@
 using CourseDesign.Extensions;
 using System.Windows;
 using System.Windows.Controls;
-using CourseDesign.ViewModels;
+using CourseDesign.Context;
 
 namespace CourseDesign.Views
 {
@@ -16,6 +16,7 @@ namespace CourseDesign.Views
             InitializeComponent();
             AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(task_list), true); // 使task_list可以横向滚动
         }
+
     }
 
     /// <summary>
