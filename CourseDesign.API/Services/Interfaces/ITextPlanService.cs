@@ -1,5 +1,4 @@
 ﻿using CourseDesign.API.Context;
-using CourseDesign.API.Services.Response;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
@@ -38,7 +37,7 @@ namespace CourseDesign.API.Services.Interfaces
         Task<APIResponseInner> GetIDAsync(int id);
 
         /// <summary>
-        /// 在<see cref="TextPlan"/>表中，获取用户ID为"user_id"的所有文字计划。
+        /// 在<see cref="TextPlan"/>表中，获取用户ID为"user_id"的所有文字计划。【这个功能其实在GetParamForUserAsync也有实现，可以考虑为容错
         /// </summary>
         /// <param name="user_id">传来的<see cref="APIResponseInner"/>用户ID</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
@@ -46,9 +45,9 @@ namespace CourseDesign.API.Services.Interfaces
 
         /// <summary>
         /// 在<see cref="TextPlan"/>表中，获取用户ID为"user_id"，且满足parameter条件的所有元组，并分页展示。
-        /// <para>条件为：单字段包含（对于状态来说是匹配）</para>
+        /// <para>条件为：单字段包含；这里的Status代表是否完成（0代表未完成）</para>
         /// </summary>
-        /// <param name="parameter">传来的<see cref="APIResponseInner"/>类型参数（若匹配<see cref="TextPlan.Status"/>，Search需要用<c>true/false</c>）</param>
+        /// <param name="parameter">传来的<see cref="APIResponseInner"/>类型参数</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         Task<APIResponseInner> GetParamForUserAsync(GETParameter parameter);
 

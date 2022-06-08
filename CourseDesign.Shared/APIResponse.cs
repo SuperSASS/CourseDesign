@@ -3,7 +3,7 @@
     /// <summary>
     /// 约定的状态码
     /// </summary>
-    public enum APIStatusCode { Success, Select__Wrong_filed, Select_Wrong_Equal, Get_Wrong_Account_or_Password, Get_Account_Haven, Add_Failed, Delete_Failed, Update_Failed, Update_Not_Haven, Unknown_Error }
+    public enum APIStatusCode { Success, Select_Wrong_filed, Select_Wrong_Equal, Get_Wrong_Account_or_Password, Get_Account_Haven, Add_Failed, Delete_Failed, Update_Failed, Update_Not_Haven, Unknown_Error }
 
     /// <summary>
     /// 所约定的API到APP的返回消息，不需要执行结果Result

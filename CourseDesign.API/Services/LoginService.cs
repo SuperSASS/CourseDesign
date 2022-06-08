@@ -2,7 +2,6 @@
 using AutoMapper;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
-using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
@@ -13,13 +12,6 @@ using System.Threading.Tasks;
 
 namespace CourseDesign.API.Services
 {
-    public class Test : BaseEntity
-    {
-        public string Account { get; set; }
-        public int Roll { get; set; }
-    }
-
-
     public class LoginService : ILoginService
     {
         private readonly BaseDBService<User> userDB;

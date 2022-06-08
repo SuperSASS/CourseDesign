@@ -1,15 +1,15 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
+using CourseDesign.API.Constants;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
-using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using static CourseDesign.API.Services.Response.APIResponseInner;
+using static CourseDesign.API.APIResponseInner;
 
 namespace CourseDesign.API.Services
 {
@@ -58,9 +58,9 @@ namespace CourseDesign.API.Services
                         exp = (x) => x.UserID == parameter.user_id && x.Status.ToString() == parameter.search;
                         break;
                     default:
-                        return new APIResponseInner(APIStatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                        return new APIResponseInner(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
                 }
-            return await textDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
+            return await textDB.GetExpressionAllPagedAsync(exp, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
 
             // 下面方法有问题，看看后面能不能实现
             //return await textDB.GetExpressionAsync(predicate: x =>

@@ -33,16 +33,19 @@ namespace CourseDesign.API
                 var connectionString = Configuration.GetConnectionString("CourseDesignConnection");
                 option.UseSqlite(connectionString);
             })
-            .AddUnitOfWork<CourseDesignContext>()                  // 添加工作单元
-            .AddCustomRepository<TextPlan, TextPlanRepository>()   // 添加文本类计划的仓储
-            .AddCustomRepository<ImagePlan, ImagePlanRepository>() // 添加图片类计划的仓储
-            .AddCustomRepository<User, UserRepository>()           // 添加用户的仓储
-            .AddCustomRepository<TDoll, TDollRepository>();        // 添加战术人形的仓储
+            .AddUnitOfWork<CourseDesignContext>()                       // 添加工作单元
+            .AddCustomRepository<TextPlan, TextPlanRepository>()        // 添加文本类计划的仓储
+            .AddCustomRepository<ImagePlan, ImagePlanRepository>()      // 添加图片类计划的仓储
+            .AddCustomRepository<User, UserRepository>()                // 添加用户的仓储
+            .AddCustomRepository<TDoll, TDollRepository>()              // 添加战术人形的仓储
+            .AddCustomRepository<TDollObtain, TDollObtainRepository>(); // 添加用户拥有战术人形的仓储
             // 依赖注入 - 添加服务
-            services.AddTransient<IImagePlanService, ImagePlanService>(); // 图像类计划的控制器
-            services.AddTransient<ITextPlanService, TextPlanService>();   // 文字类计划的控制器
-            services.AddTransient<ILoginService, LoginService>();         // 登录的控制器
-            services.AddTransient<ITDollService, TDollService>();         // 战术人形的控制器
+            services.AddTransient<IImagePlanService, ImagePlanService>(); // 图像类计划的服务
+            services.AddTransient<ITextPlanService, TextPlanService>();   // 文字类计划的服务
+            services.AddTransient<ILoginService, LoginService>();         // 登录的服务
+            services.AddTransient<ITDollService, TDollService>();         // 战术人形的服务
+            // 依赖注入 - 添加检查
+            //services.AddTransient<ITDollObtainCheck, TDollObtainCheck>();
             // TODO: 2 - API还没实现人物图鉴！
             // 注册AutoMapper映射服务，并添加AutoMapper配置
             var automapperConfig = new MapperConfiguration(config =>

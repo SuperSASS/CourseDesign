@@ -1,5 +1,5 @@
-﻿using CourseDesign.API.Context;
-using CourseDesign.API.Services.Response;
+﻿using CourseDesign.API.Constants;
+using CourseDesign.API.Context;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq;
@@ -83,7 +83,7 @@ namespace CourseDesign.API.Services.Interfaces
         /// <item>失败：返回相应错误代码和信息</item>
         /// </list>
         /// </returns>
-        Task<APIResponseInner> GetExpressionAllPagedAsync(Expression<Func<DBEntity, bool>> exp, int index = 0, int size = 100, Func<IQueryable<DBEntity>, IOrderedQueryable<DBEntity>> orderBy = null); // 查 - 表达式 - 分页查询
+        Task<APIResponseInner> GetExpressionAllPagedAsync(Expression<Func<DBEntity, bool>> exp, int index, int size, Func<IQueryable<DBEntity>, IOrderedQueryable<DBEntity>> orderBy = null); // 查 - 表达式 - 分页查询
 
         /// <summary>
         /// 对<see cref="DBEntity"/>表进行“修改”操作。（就是个扩展接口，需要自己写表达式）

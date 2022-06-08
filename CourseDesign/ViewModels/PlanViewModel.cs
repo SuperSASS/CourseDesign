@@ -370,7 +370,7 @@ namespace CourseDesign.ViewModels
                     }
                     for (; textIndex < textPlanResult.Result.Items.Count; textIndex++)
                     {
-                        //var textItem = textPlanResult.Result.Items[textIndex]; Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
+                        var textItem = textPlanResult.Result.Items[textIndex]; Plans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
                     }
                 }
             }

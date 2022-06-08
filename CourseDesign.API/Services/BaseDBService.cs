@@ -1,13 +1,13 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using CourseDesign.API.Context;
 using CourseDesign.API.Services.Interfaces;
-using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using CourseDesign.API.Constants;
 
 namespace CourseDesign.API.Services
 {
@@ -34,7 +34,8 @@ namespace CourseDesign.API.Services
         {
             try
             {
-                dbEntity.CreateDate = dbEntity.UpdateDate = DateTime.Now;
+                dbEntity.ID = 0; // ID自增
+                dbEntity.CreateDate = dbEntity.UpdateDate = DateTime.Now; // 将创建日期、修改日期设为服务器当前日期
                 await Repo.InsertAsync(dbEntity);
                 if (await UnitOfWork.SaveChangesAsync() > 0) // 尝试保存插入操作
                     return new APIResponseInner(dbEntity);
@@ -108,7 +109,7 @@ namespace CourseDesign.API.Services
         }
 
         // 查 - 表达式 - 多条查询
-        public async Task<APIResponseInner> GetExpressionAllPagedAsync(Expression<Func<DBEntity, bool>> exp, int index = 0, int size = 100, Func<IQueryable<DBEntity>, IOrderedQueryable<DBEntity>> order = null)
+        public async Task<APIResponseInner> GetExpressionAllPagedAsync(Expression<Func<DBEntity, bool>> exp, int index = PageConst.PageIndex, int size = PageConst.PageSize, Func<IQueryable<DBEntity>, IOrderedQueryable<DBEntity>> order = null)
         {
             try
             {

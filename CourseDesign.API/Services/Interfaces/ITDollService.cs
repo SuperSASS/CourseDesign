@@ -1,5 +1,4 @@
-﻿using CourseDesign.API.Services.Response;
-using CourseDesign.Shared.Parameters;
+﻿using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
 namespace CourseDesign.API.Services.Interfaces
@@ -22,26 +21,29 @@ namespace CourseDesign.API.Services.Interfaces
         Task<APIResponseInner> GetIDAsync(int id); // 按ID查询人形
 
         /// <summary>
-        /// 得到满足<see cref="GETParameter"/>条件的所有战术人形元组。（条件为：单字段、包含）
+        /// 得到满足<see cref="GETParameter"/>条件的所有战术人形元组。（条件为：单字段、包含；是否拥有）
         /// <para>（注：Field参数为空，代表按分页全查询，否则参数查询）（若PageSize=0，默认为100）</para>
         /// </summary>
-        /// <param name="parameter">参数，其中若指定user_id，是查找某一用户的人形，否则是在图鉴里查询全部人形</param>
+        /// <param name="parameter">参数，其中若指定user_id，是查找某一用户的人形，否则是在图鉴里查询全部人形；这里的Status代表是否拥有，0是未拥有</param>
         /// <returns>API返回消息<see cref="APIResponseInner"/>
         /// <list type="bullet">
-        /// <item>成功：状态码为Success，并返回查询的的元组集，为PagedList类型<para>（若未找到则Result属性为null）（</item>
+        /// <item>成功：状态码为Success，并返回查询的的元组集，为PagedList类型（若未找到则Result属性为null）（</item>
         /// <item>失败：返回相应错误代码和信息</item>
         /// </list>
+        /// </returns>
         Task<APIResponseInner> GetParamContainAsync(GETParameter parameter);
 
         /// <summary>
-        /// 得到满足<see cref="GETParameter"/>条件的所有战术人形元组。（条件为：单字段、匹配）
+        /// 得到满足<see cref="GETParameter"/>条件的所有战术人形元组。（条件为：单字段、匹配；是否拥有）
         /// <para>（注：Field参数为空，代表按分页全查询，否则参数查询）（若PageSize=0，默认为100）</para>
         /// </summary>
-        /// <param name="parameter">参数</param>
+        /// <param name="parameter">参数，其中若指定user_id，是查找某一用户的人形，否则是在图鉴里查询全部人形；这里的Status代表是否拥有，0是未拥有</param>
+        /// <returns>API返回消息<see cref="APIResponseInner"/>
         /// <list type="bullet">
-        /// <item>成功：状态码为Success，并返回查询的的元组集，为PagedList类型<para>（若未找到则Result属性为null）（</item>
+        /// <item>成功：状态码为Success，并返回查询的的元组集，为PagedList类型（若未找到则Result属性为null）（</item>
         /// <item>失败：返回相应错误代码和信息</item>
         /// </list>
+        /// </returns>
         Task<APIResponseInner> GetParamEqualAsync(GETParameter parameter); 
     }
 }

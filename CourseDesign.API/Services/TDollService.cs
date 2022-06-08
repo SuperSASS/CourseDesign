@@ -1,8 +1,9 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork;
 using AutoMapper;
+using CourseDesign.API.Constants;
 using CourseDesign.API.Context;
+using CourseDesign.API.Services.InnerServices;
 using CourseDesign.API.Services.Interfaces;
-using CourseDesign.API.Services.Response;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -23,7 +24,7 @@ namespace CourseDesign.API.Services
         // ID查询
         public async Task<APIResponseInner> GetIDAsync(int id) { return await tDollDB.GetIDAsync(id); }
 
-        // 按条件包含查询人形
+        // 按条件包含查询人形【注意，这里只是图鉴查询，如果用户查询调用GetUserParamContainObtainAsync
         public async Task<APIResponseInner> GetParamContainAsync(GETParameter parameter)
         {
             Expression<Func<TDoll, bool>> exp;
@@ -32,7 +33,7 @@ namespace CourseDesign.API.Services
             //else
             {
                 if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表按分页全条件查询
-                    return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
+                    return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
                 else
                 {
                     switch (parameter.field)
@@ -41,9 +42,9 @@ namespace CourseDesign.API.Services
                             exp = (x) => x.Name.Contains(parameter.search);
                             break;
                         default:
-                            return new APIResponseInner(APIStatusCode.Select__Wrong_filed, "该字段无法使用包含查询");
+                            return new APIResponseInner(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
                     }
-                    return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
+                    return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
                 }
             }
         }
@@ -53,7 +54,7 @@ namespace CourseDesign.API.Services
         {
             Expression<Func<TDoll, bool>> exp;
             if (string.IsNullOrWhiteSpace(parameter.field))  // Field参数为空，按分页全条件查询
-                return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
+                return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
             else
             {
                 switch (parameter.field)
@@ -70,7 +71,7 @@ namespace CourseDesign.API.Services
                     default:
                         return new APIResponseInner(APIStatusCode.Select_Wrong_Equal, "该字段无法使用匹配查询");
                 }
-                return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index, parameter.page_size == 0 ? 100 : parameter.page_size);
+                return await tDollDB.GetExpressionAllPagedAsync(exp, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
             }
         }
         #endregion

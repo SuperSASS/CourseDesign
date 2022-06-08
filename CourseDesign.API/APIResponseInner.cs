@@ -1,6 +1,6 @@
 ﻿using CourseDesign.Shared;
 
-namespace CourseDesign.API.Services.Response
+namespace CourseDesign.API
 {
     /// <summary>
     /// 在API层内部定义的返回结果
