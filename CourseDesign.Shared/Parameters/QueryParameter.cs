@@ -14,7 +14,7 @@
         /// </summary>
         public string search { get; set; }
         /// <summary>
-        /// 查询的字段，该属性不会为空
+        /// 查询的字段（若为null，代表全查询）
         /// </summary>
         public string field { get; set; }  // 【数据库里不分字段属性，所以这里叫字段，但实际上在C#里是属性
         /// <summary>

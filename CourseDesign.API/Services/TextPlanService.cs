@@ -43,7 +43,7 @@ namespace CourseDesign.API.Services
         public async Task<APIResponseInner> GetParamForUserAsync(GETParameter parameter)
         {
             Expression<Func<TextPlan, bool>> exp;
-            if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表全条件查询
+            if (string.IsNullOrWhiteSpace(parameter.search) || string.IsNullOrWhiteSpace(parameter.field))  // search或field参数为空，代表全条件查询
                 exp = (x) => x.UserID == parameter.user_id;
             else
                 switch (parameter.field)
@@ -54,9 +54,9 @@ namespace CourseDesign.API.Services
                     case "Content": // 按内容查询
                         exp = (x) => x.UserID == parameter.user_id && x.Content.Contains(parameter.search);
                         break;
-                    case "Status": // 按内容查询
-                        exp = (x) => x.UserID == parameter.user_id && x.Status.ToString() == parameter.search;
-                        break;
+                    //case "Status": // 按状态查询【注：状态查询在客户端处实现
+                        //exp = (x) => x.UserID == parameter.user_id && x.Status.ToString() == parameter.search;
+                        //break;
                     default:
                         return new APIResponseInner(APIStatusCode.Select_Wrong_filed, "该字段无法使用包含查询");
                 }

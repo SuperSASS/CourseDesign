@@ -49,7 +49,7 @@ namespace CourseDesign.API.Services
                 foreach (var userTDoll in (userTDolls.Result as PagedList<TDollObtain>).Items)
                 {
                     Expression<Func<TDoll, bool>> exp_param; // 条件查询表达式
-                    if (string.IsNullOrWhiteSpace(parameter.search))  // search或参数为空，代表按分页对该用户全条件查询，因此直接返回user_tDoll
+                    if (string.IsNullOrWhiteSpace(parameter.search)|| string.IsNullOrWhiteSpace(parameter.field))  // search或field为空，代表按分页对该用户全条件查询，因此直接返回user_tDoll
                         exp_param = (x) => x.ID == userTDoll.FK_TDollID;
                     else
                         switch (parameter.field)
@@ -74,7 +74,7 @@ namespace CourseDesign.API.Services
             else
             {
                 Expression<Func<TDoll, bool>> exp;
-                if (string.IsNullOrWhiteSpace(parameter.search))  // Search参数为空，代表按分页全条件查询
+                if (string.IsNullOrWhiteSpace(parameter.search) || string.IsNullOrWhiteSpace(parameter.field))  // search或field参数为空，代表按分页全条件查询
                     return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
                 else
                 {
@@ -136,7 +136,7 @@ namespace CourseDesign.API.Services
             else
             {
                 Expression<Func<TDoll, bool>> exp;
-                if (string.IsNullOrWhiteSpace(parameter.field))  // Field参数为空，按分页全条件查询
+                if (string.IsNullOrWhiteSpace(parameter.search) || string.IsNullOrWhiteSpace(parameter.field))  // search或field参数为空，按分页全条件查询
                     return await tDollDB.GetExpressionAllPagedAsync(exp = (x) => true, parameter.page_index ?? PageConst.PageIndex, parameter.page_size ?? PageConst.PageSize);
                 else
                 {

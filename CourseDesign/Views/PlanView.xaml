@@ -62,18 +62,36 @@
                     </Grid.RowDefinitions>
 
                     <!--  上方操作栏  -->
-                    <DockPanel Grid.Row="0">
-                        <!--  搜索栏  -->
+                    <DockPanel Grid.Row="0" LastChildFill="False">
                         <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
+                        <!--  筛选字段下拉栏  -->
+                        <ComboBox
+                            Margin="10,0"
+                            materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
+                            materialDesign:TextFieldAssist.HasClearButton="True"
+                            materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
+                            FontSize="16"
+                            SelectedValue="{Binding SearchFieldText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource MaterialDesignFloatingHintComboBox}">
+                            <ComboBoxItem Content="计划标题" />
+                            <ComboBoxItem Content="计划内容" />
+                            <materialDesign:HintAssist.Hint>
+                                <StackPanel Margin="0" Orientation="Horizontal">
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
+                                    <TextBlock Margin="5,0" Text="筛选" />
+                                </StackPanel>
+                            </materialDesign:HintAssist.Hint>
+                        </ComboBox>
+
+                        <!--  搜索栏  -->
                         <TextBox
-                            MinWidth="200"
-                            MaxWidth="400"
+                            MinWidth="100"
+                            MaxWidth="200"
                             Margin="10,0"
                             VerticalAlignment="Center"
-                            materialDesign:TextFieldAssist.HasClearButton="True"
                             FontSize="16"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding SearchContentText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding
                                     Key="Enter"
@@ -88,8 +106,7 @@
                             </materialDesign:HintAssist.Hint>
                         </TextBox>
 
-                        <!--  筛选栏  -->
-                        <!--  TODO: 1- 还未实现  -->
+                        <!--  计划状态筛选下拉栏  -->
                         <ComboBox
                             MinWidth="128"
                             Margin="10,0"
@@ -97,33 +114,52 @@
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
                             FontSize="16"
+                            SelectedIndex="1"
+                            SelectedValue="{Binding SearchStatus, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                             <ComboBoxItem Content="已完成" />
                             <ComboBoxItem Content="未完成" />
                             <materialDesign:HintAssist.Hint>
                                 <StackPanel Margin="0" Orientation="Horizontal">
                                     <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
-                                    <TextBlock Margin="5,0" Text="筛选" />
+                                    <TextBlock Margin="5,0" Text="计划状态" />
                                 </StackPanel>
                             </materialDesign:HintAssist.Hint>
                         </ComboBox>
 
-                        <!--  添加计划按钮  -->
-                        <!--  TODO: 2 - 这里默认添加的是文字类  -->
+                        <!--  添加图片计划按钮  -->
+                        <materialDesign:Badged
+                            Margin="10,0"
+                            VerticalAlignment="Bottom"
+                            Badge="{materialDesign:PackIcon CardTextOutline}"
+                            BadgeColorZoneMode="SecondaryMid"
+                            DockPanel.Dock="Right">
+                            <Button
+                                materialDesign:ButtonAssist.CornerRadius="5"
+                                Command="{Binding EditOfAddPlanCommand}"
+                                CommandParameter="Image"
+                                Content="添加人形获得计划"
+                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                Style="{StaticResource MaterialDesignRaisedLightButton}"
+                                ToolTip="添加人形获得计划到计划列表" />
+                        </materialDesign:Badged>
+
+                        <!--  添加文字计划按钮  -->
                         <materialDesign:Badged
                             Margin="10,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
                             Badge="{materialDesign:PackIcon Plus}"
-                            BadgeColorZoneMode="SecondaryMid">
+                            BadgeColorZoneMode="SecondaryMid"
+                            DockPanel.Dock="Right">
                             <Button
                                 materialDesign:ButtonAssist.CornerRadius="5"
                                 Command="{Binding EditOfAddPlanCommand}"
                                 CommandParameter="Text"
-                                Content="添加计划"
+                                Content="添加常规计划"
                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                ToolTip="添加计划到计划列表" />
+                                ToolTip="添加常规计划到计划列表" />
                         </materialDesign:Badged>
                     </DockPanel>
 
@@ -154,7 +190,6 @@
                                             materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                             Style="{StaticResource MaterialDesignCardFlipper}">
                                             <!--  卡片前方 - 图片(16:9)x计划目标  -->
-                                            <!--  TODO: 到时候改为点击卡片触发翻面，点按钮是修改  -->
                                             <materialDesign:Flipper.FrontContent>
                                                 <Grid x:Name="flipper_front" Width="300">
                                                     <Grid.RowDefinitions>
@@ -265,7 +300,7 @@
                                                                 <StackPanel>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.CompletePlanCommand, Source={x:Reference items_control}}"
+                                                                        Command="{Binding DataContext.CompleteForImagePlanCommand, Source={x:Reference items_control}}"
                                                                         CommandParameter="{Binding}"
                                                                         IsEnabled="True"
                                                                         ToolTip="完成这条计划">
@@ -375,8 +410,9 @@
                                                         <!--  完成切换栏  -->
                                                         <ToggleButton
                                                             Margin="10"
-                                                            Command="{Binding DataContext.CompletePlanCommand, Source={x:Reference items_control}}"
+                                                            Command="{Binding DataContext.ChangeCompleteForTextPlanCommand, Source={x:Reference items_control}}"
                                                             CommandParameter="{Binding}"
+                                                            IsChecked="{Binding Status}"
                                                             Style="{StaticResource MaterialDesignSwitchToggleButton}"
                                                             ToolTip="点击按钮以完成计划">
                                                             <materialDesign:PackIcon Kind="Pin" RenderTransformOrigin=".5,.5">
@@ -481,9 +517,8 @@
             </Grid>
         </Grid>
 
-        <!--  右侧弹窗的编辑页  -->
+        <!--  右侧弹窗 - 文字编辑页  -->
         <materialDesign:DialogHost>
-            <!--  文字编辑页  -->
             <materialDesign:DrawerHost x:Name="text_editor" IsRightDrawerOpen="{Binding IsRightTextEditorOpen}">
                 <materialDesign:DrawerHost.RightDrawerContent>
                     <DockPanel Width="300" LastChildFill="False">
@@ -536,8 +571,8 @@
                 </materialDesign:DrawerHost.RightDrawerContent>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
+        <!--  右侧弹窗 - 图片编辑页  -->
         <materialDesign:DialogHost>
-            <!--  图片编辑页  -->
             <materialDesign:DrawerHost x:Name="image_editor" IsRightDrawerOpen="{Binding IsRightImageEditorOpen}">
                 <materialDesign:DrawerHost.RightDrawerContent>
                     <DockPanel Width="300" LastChildFill="False">
