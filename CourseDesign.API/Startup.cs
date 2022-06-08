@@ -27,27 +27,25 @@ namespace CourseDesign.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // ³õÊ¼»¯ - Éú³ÉÊı¾İ¿âÇ¨ÒÆÎÄ¼ş¡¢Ìí¼Ó¹¤×÷µ¥ÔªºÍ²Ö´¢
+            // åˆå§‹åŒ– - ç”Ÿæˆæ•°æ®åº“è¿ç§»æ–‡ä»¶ã€æ·»åŠ å·¥ä½œå•å…ƒå’Œä»“å‚¨
             services.AddDbContext<CourseDesignContext>(option =>
             {
                 var connectionString = Configuration.GetConnectionString("CourseDesignConnection");
                 option.UseSqlite(connectionString);
             })
-            .AddUnitOfWork<CourseDesignContext>()                       // Ìí¼Ó¹¤×÷µ¥Ôª
-            .AddCustomRepository<TextPlan, TextPlanRepository>()        // Ìí¼ÓÎÄ±¾Àà¼Æ»®µÄ²Ö´¢
-            .AddCustomRepository<ImagePlan, ImagePlanRepository>()      // Ìí¼ÓÍ¼Æ¬Àà¼Æ»®µÄ²Ö´¢
-            .AddCustomRepository<User, UserRepository>()                // Ìí¼ÓÓÃ»§µÄ²Ö´¢
-            .AddCustomRepository<TDoll, TDollRepository>()              // Ìí¼ÓÕ½ÊõÈËĞÎµÄ²Ö´¢
-            .AddCustomRepository<TDollObtain, TDollObtainRepository>(); // Ìí¼ÓÓÃ»§ÓµÓĞÕ½ÊõÈËĞÎµÄ²Ö´¢
-            // ÒÀÀµ×¢Èë - Ìí¼Ó·şÎñ
-            services.AddTransient<IImagePlanService, ImagePlanService>(); // Í¼ÏñÀà¼Æ»®µÄ·şÎñ
-            services.AddTransient<ITextPlanService, TextPlanService>();   // ÎÄ×ÖÀà¼Æ»®µÄ·şÎñ
-            services.AddTransient<ILoginService, LoginService>();         // µÇÂ¼µÄ·şÎñ
-            services.AddTransient<ITDollService, TDollService>();         // Õ½ÊõÈËĞÎµÄ·şÎñ
-            // ÒÀÀµ×¢Èë - Ìí¼Ó¼ì²é
-            //services.AddTransient<ITDollObtainCheck, TDollObtainCheck>();
-            // TODO: 2 - API»¹Ã»ÊµÏÖÈËÎïÍ¼¼ø£¡
-            // ×¢²áAutoMapperÓ³Éä·şÎñ£¬²¢Ìí¼ÓAutoMapperÅäÖÃ
+            .AddUnitOfWork<CourseDesignContext>()                       // æ·»åŠ å·¥ä½œå•å…ƒ
+            .AddCustomRepository<TextPlan, TextPlanRepository>()        // æ·»åŠ æ–‡æœ¬ç±»è®¡åˆ’çš„ä»“å‚¨
+            .AddCustomRepository<ImagePlan, ImagePlanRepository>()      // æ·»åŠ å›¾ç‰‡ç±»è®¡åˆ’çš„ä»“å‚¨
+            .AddCustomRepository<User, UserRepository>()                // æ·»åŠ ç”¨æˆ·çš„ä»“å‚¨
+            .AddCustomRepository<TDoll, TDollRepository>()              // æ·»åŠ æˆ˜æœ¯äººå½¢çš„ä»“å‚¨
+            .AddCustomRepository<TDollObtain, TDollObtainRepository>(); // æ·»åŠ ç”¨æˆ·æ‹¥æœ‰æˆ˜æœ¯äººå½¢çš„ä»“å‚¨
+            // ä¾èµ–æ³¨å…¥ - æ·»åŠ æœåŠ¡
+            services.AddTransient<IImagePlanService, ImagePlanService>();     // å›¾åƒç±»è®¡åˆ’çš„æœåŠ¡
+            services.AddTransient<ITextPlanService, TextPlanService>();       // æ–‡å­—ç±»è®¡åˆ’çš„æœåŠ¡
+            services.AddTransient<ILoginService, LoginService>();             // ç™»å½•çš„æœåŠ¡
+            services.AddTransient<ITDollService, TDollService>();             // æˆ˜æœ¯äººå½¢çš„æœåŠ¡
+            services.AddTransient<ITDollObtainService, TDollObtainService>(); // ç”¨æˆ·æ‰€æ‹¥æœ‰çš„æˆ˜æœ¯äººå½¢çš„æœåŠ¡
+            // æ³¨å†ŒAutoMapperæ˜ å°„æœåŠ¡ï¼Œå¹¶æ·»åŠ AutoMapperé…ç½®
             var automapperConfig = new MapperConfiguration(config =>
             {
                 config.AddProfile(new AutoMapperProfile());
