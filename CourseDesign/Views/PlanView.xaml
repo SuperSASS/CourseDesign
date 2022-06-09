@@ -138,10 +138,9 @@
                                 materialDesign:ButtonAssist.CornerRadius="5"
                                 Command="{Binding EditOfAddPlanCommand}"
                                 CommandParameter="Image"
-                                Content="添加人形获得计划"
-                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
+                                Content="添加人形获取计划"
                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
-                                ToolTip="添加人形获得计划到计划列表" />
+                                ToolTip="添加人形获取计划到计划列表" />
                         </materialDesign:Badged>
 
                         <!--  添加文字计划按钮  -->
@@ -149,7 +148,7 @@
                             Margin="10,0"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Bottom"
-                            Badge="{materialDesign:PackIcon Plus}"
+                            Badge="{materialDesign:PackIcon PencilOutline}"
                             BadgeColorZoneMode="SecondaryMid"
                             DockPanel.Dock="Right">
                             <Button
@@ -157,7 +156,6 @@
                                 Command="{Binding EditOfAddPlanCommand}"
                                 CommandParameter="Text"
                                 Content="添加常规计划"
-                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}"
                                 Style="{StaticResource MaterialDesignRaisedLightButton}"
                                 ToolTip="添加常规计划到计划列表" />
                         </materialDesign:Badged>
@@ -174,13 +172,14 @@
                         <ItemsControl
                             x:Name="items_control"
                             MaxHeight="{Binding ActualHeight, ElementName=task_list}"
-                            ItemsSource="{Binding Plans}">
+                            ItemsSource="{Binding PlansShow}">
                             <!--  卡片资源模板（分为图片类和文字类）  -->
                             <!--  规定：每个卡片宽度统一为300  -->
                             <ItemsControl.Resources>
                                 <!--  图片类卡片  -->
                                 <DataTemplate x:Key="imageCard">
                                     <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变【注：这是主题自带的bug，无法修复  -->
+                                    <!--  TODO: 3 - 动画有点丑陋，建议改为一起淡出  -->
                                     <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromRight}" OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.1}">
                                         <materialDesign:Flipper
                                             Grid.Row="15"
@@ -220,7 +219,7 @@
                                                                 HorizontalAlignment="Left"
                                                                 Opacity="0.8"
                                                                 Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="战术人形打捞计划：" />
+                                                                Text="战术人形获取计划：" />
                                                             <TextBlock
                                                                 Grid.Row="1"
                                                                 HorizontalAlignment="Center"
@@ -339,13 +338,15 @@
                                                     <!--  文本内容  -->
                                                     <Grid
                                                         Grid.Row="1"
+                                                        Height="220"
                                                         Margin="15,0"
                                                         HorizontalAlignment="Left"
                                                         VerticalAlignment="Top">
                                                         <Grid.RowDefinitions>
-                                                            <RowDefinition />
+                                                            <RowDefinition Height="auto" />
                                                             <RowDefinition />
                                                         </Grid.RowDefinitions>
+                                                        <!--  人形名称  -->
                                                         <StackPanel Grid.Row="0" Margin="0,10">
                                                             <TextBlock
                                                                 Opacity="0.6"
@@ -356,29 +357,28 @@
                                                                 Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                                                                 Text="{Binding TDoll.Name}" />
                                                         </StackPanel>
-                                                        <!--  打捞地点  -->
+                                                        <!--  获取方式  -->
+                                                        <!--  TODO: 3 - 人形获取方式滚动支持不是很好  -->
                                                         <StackPanel Grid.Row="1" Margin="0,10">
                                                             <TextBlock
                                                                 Opacity="0.6"
                                                                 Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
-                                                                Text="打捞地点" />
-                                                            <!--  TODO: 实现fish_list  -->
-                                                            <ScrollViewer x:Name="fish_list" Style="{StaticResource for_scrollviewer}">
-                                                                <ListBox
-                                                                    x:Name="fish_list_son"
-                                                                    HorizontalContentAlignment="Stretch"
-                                                                    ItemsSource="{Binding FishLists}">
-                                                                    <ListBox.ItemTemplate>
-                                                                        <DataTemplate>
-                                                                            <TextBlock
-                                                                                Margin="10,5"
-                                                                                FontWeight="Bold"
-                                                                                Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                                                                Text="{Binding Title}" />
-                                                                        </DataTemplate>
-                                                                    </ListBox.ItemTemplate>
-                                                                </ListBox>
-                                                            </ScrollViewer>
+                                                                Text="获取方式" />
+                                                            <ListBox
+                                                                MaxHeight="200"
+                                                                HorizontalContentAlignment="Stretch"
+                                                                materialDesign:ListBoxItemAssist.ShowSelection="False"
+                                                                ItemsSource="{Binding TDoll.ObtainMethod}"
+                                                                ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                                <ListBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock
+                                                                            Margin="10,0"
+                                                                            Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                                            Text="{Binding}" />
+                                                                    </DataTemplate>
+                                                                </ListBox.ItemTemplate>
+                                                            </ListBox>
                                                         </StackPanel>
                                                     </Grid>
                                                 </Grid>

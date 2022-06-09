@@ -11,7 +11,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <materialDesign:BundledTheme
-                    BaseTheme="Light"
+                    BaseTheme="Dark"
                     ColorAdjustment="{materialDesign:ColorAdjustment}"
                     PrimaryColor="Blue"
                     SecondaryColor="Teal" />

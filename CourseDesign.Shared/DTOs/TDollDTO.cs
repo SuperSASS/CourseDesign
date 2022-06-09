@@ -10,8 +10,8 @@
         private string name;
         private int rarity;
         private TDollType type;
-        private string artworkPath;
-        private string obtainMethod;
+        private string artworkPath; // 路径目前统一为“/Assets/T-Dolls/T-Doll-x.png”
+        private string obtainMethod; // 用斜线"/"分割每种获取方式
 
         public string Name
         {

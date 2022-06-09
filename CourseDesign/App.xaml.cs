@@ -1,4 +1,5 @@
-﻿using CourseDesign.Services;
+﻿using CourseDesign.Common;
+using CourseDesign.Services;
 using CourseDesign.Services.Interfaces;
 using CourseDesign.Services.ViewModelServices;
 using CourseDesign.ViewModels;
@@ -21,6 +22,17 @@ namespace CourseDesign
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
+        }
+
+        /// <summary>
+        /// 重写初始化函数，使得可以加载MainWindow的默认配置（configureService.Configure()）
+        /// </summary>
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            var configureService = App.Current.MainWindow.DataContext as IConfigureService;
+            if (configureService != null)
+                configureService.Configure();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)

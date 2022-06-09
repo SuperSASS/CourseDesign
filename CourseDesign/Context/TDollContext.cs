@@ -43,7 +43,8 @@ namespace CourseDesign.Context
             {
                 foreach (var item in tDollResult.Result.Items)
                 {
-                    AllTDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath));
+                    string[] methods = item.ObtainMethod.Split(new char[] { '/' }); // 处理ObtainMethod，按/分割
+                    AllTDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath, methods));
                     MaxTDoll_ID = MaxTDoll_ID < item.ID ? item.ID : MaxTDoll_ID;
                 }
             }

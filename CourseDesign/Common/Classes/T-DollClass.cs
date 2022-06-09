@@ -1,4 +1,6 @@
-﻿namespace CourseDesign.Common.Classes
+﻿using System.Collections.Generic;
+
+namespace CourseDesign.Common.Classes
 {
     /// <summary>
     /// 战术人形类
@@ -20,6 +22,7 @@
         private int rarity;
         private TDollType type;
         private string artworkPath;
+        private string[] obtainMethod;
 
         public int ID
         {
@@ -50,6 +53,11 @@
         {
             get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_16x9.png"; }
         }
+        public string[] ObtainMethod
+        {
+            get { return obtainMethod; }
+            set { obtainMethod = value; }
+        }
 
         /// <summary>
         /// 战术人形的构造函数
@@ -59,13 +67,14 @@
         /// <param name="rarity">人形稀有度</param>
         /// <param name="type">人形种类</param>
         /// <param name="artwork">人形立绘</param>
-        public TDollClass(int id, string name, int rarity, TDollType type, string artworkPath)
+        public TDollClass(int id, string name, int rarity, TDollType type, string artworkPath, string[] obtainMethod)
         {
             ID = id;
             Name = name;
             Rarity = rarity;
             Type = type;
             ArtworkPath = artworkPath;
+            ObtainMethod = obtainMethod;
         }
     }
 }

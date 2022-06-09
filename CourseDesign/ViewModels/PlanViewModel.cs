@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 
 namespace CourseDesign.ViewModels
 {
@@ -49,11 +50,12 @@ namespace CourseDesign.ViewModels
         public DelegateCommand<string> ExecCommand { get; private set; } // 执行无参数命令（有参数的因为CommandParameter要绑定参数，无法绑定命令，只能用另一种）
         public DelegateCommand SearchPlanCommand { get; private set; } // 查找命令
         public DelegateCommand UpdatePlanCommand { get; private set; } // 上传更新命令
+
         // 外部访问属性
         /// <summary>
-        /// 所有的计划列表
+        /// 所展示的计划列表
         /// </summary>
-        public ObservableCollection<PlanBase> Plans { get { return plansShow; } private set { plansShow = value; RaisePropertyChanged(); } }
+        public ObservableCollection<PlanBase> PlansShow { get { return plansShow; } private set { plansShow = value; RaisePropertyChanged(); } }
         /// <summary>
         /// 右侧编辑栏的标题
         /// </summary>
@@ -74,24 +76,25 @@ namespace CourseDesign.ViewModels
         /// 搜索文本，单向到源绑定
         /// </summary>
         public string SearchContentText { get { return searchContentText; } set { searchContentText = value; } }
+
+        private bool isFirstCreate_SFT = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
         /// <summary>
         /// 搜索字段，单项绑定到源
         /// </summary>
-        private bool isFirstCreate_SearchFieldText = true; // 加这个临时字段，防止第一次加载数据被重复读取
         public ComboBoxItem SearchFieldText
         {
             get { return searchFieldText; }
-            set { searchFieldText = value; if (isFirstCreate_SearchFieldText) isFirstCreate_SearchFieldText = false; else SearchPlan(); }
+            set { searchFieldText = value; if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
         }
 
-        private bool isFirstCreate_SearchStatus = true; // 加这个临时字段，防止第一次加载数据被重复读取
+        private bool isFirstCreate_SS = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
         /// <summary>
         /// 筛选的状态，单向绑定到源
         /// </summary>
         public ComboBoxItem SearchStatus
         {
             get { return searchStatus; }
-            set { searchStatus = value; if (isFirstCreate_SearchStatus) isFirstCreate_SearchStatus = false; else SearchPlan(); }
+            set { searchStatus = value; if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
         }
         /// <summary>
         /// 所选择的将要进行修改的计划，双向绑定，展示到文本栏同步更改
@@ -199,7 +202,7 @@ namespace CourseDesign.ViewModels
 
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status == APIStatusCode.Success)
-                { plansInner.Remove(deletePlan); Plans.Remove(deletePlan); }
+                { plansInner.Remove(deletePlan); PlansShow.Remove(deletePlan); }
                 else
                     throw new Exception("删除出错啦，肯定不是服务器的问题qwq！……");
             }
@@ -291,7 +294,7 @@ namespace CourseDesign.ViewModels
             {
                 Loading(true);
                 plansInner.Clear();
-                Plans.Clear();
+                PlansShow.Clear();
                 // 生成plansInner
                 if (string.IsNullOrWhiteSpace(SearchContentText))
                     GetAllPlansForUserAndCreateShowAsyna();
@@ -341,15 +344,15 @@ namespace CourseDesign.ViewModels
                     if (updateResponseStatus == APIStatusCode.Success)
                     {
                         if (isAddOrModify) // 代表新增
-                        { plansInner.Add(textPlan); Plans.Add(textPlan); }
+                        { plansInner.Add(textPlan); PlansShow.Add(textPlan); }
                         else
                         {
                             int index;
-                            for (index = 0; index <= Plans.Count; index++)
-                                if (Plans[index] is TextPlanClass && Plans[index].ID == textPlan.ID) // 通过遍历ID找到所修改的数据
+                            for (index = 0; index <= PlansShow.Count; index++)
+                                if (PlansShow[index] is TextPlanClass && PlansShow[index].ID == textPlan.ID) // 通过遍历ID找到所修改的数据
                                     break;
-                            if (index <= Plans.Count)
-                                Plans[index] = textPlan;
+                            if (index <= PlansShow.Count)
+                                PlansShow[index] = textPlan;
                             else
                                 throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
                         }
@@ -363,11 +366,11 @@ namespace CourseDesign.ViewModels
                     if (imagePlan.TDoll_ID < 0 || imagePlan.TDoll_ID > TDollsContext.MaxTDoll_ID) // 人形计划的人形ID不满足范围
                         throw new Exception("输入的战术人形ID不存在啦，请检查一下呢……"); // 返回错误提示
                     Loading(true);
-                    APIStatusCode updateResponseStatus = isAddOrModify ? (await ImageService.Add(imagePlan.ConvertDTO(imagePlan, 1))).Status : (await ImageService.Update(imagePlan.ConvertDTO(imagePlan, 1))).Status;
-                    if (updateResponseStatus == APIStatusCode.Success)
+                    APIResponse<ImagePlanDTO> updateResponse = isAddOrModify ? await ImageService.Add(imagePlan.ConvertDTO(imagePlan, 1)) : await ImageService.Update(imagePlan.ConvertDTO(imagePlan, 1));
+                    if (updateResponse.Status == APIStatusCode.Success)
                     {
-                        if (isAddOrModify) // 代表新增
-                        { plansInner.Add(imagePlan); Plans.Add(imagePlan); }
+                        if (isAddOrModify) // 代表新增【Fix：新增上传后，要把服务器里的ID加到imagePlan里，否则在立刻删除时会因为没有ID而报错……
+                        { imagePlan.ID = updateResponse.Result.ID; plansInner.Add(imagePlan); PlansShow.Add(imagePlan); }
                         else
                         {
                             int index;
@@ -375,7 +378,7 @@ namespace CourseDesign.ViewModels
                                 if (plansInner[index] is ImagePlanClass && plansInner[index].ID == imagePlan.ID) // 通过遍历ID找到所修改的数据
                                     break;
                             if (index <= plansInner.Count) // 代表修改
-                                { plansInner[index] = imagePlan;CreateShowPlans(); } // 由于不知道为什么直接修改不会通知更新，所以这里只能先删后加来更新了orz…… //Plans[index] = imagePlan;
+                            { plansInner[index] = imagePlan; CreateShowPlans(); } // 由于不知道为什么直接修改不会通知更新，所以这里只能先删后加来更新了orz…… //Plans[index] = imagePlan;
                             else
                                 throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
                         }
@@ -458,12 +461,12 @@ namespace CourseDesign.ViewModels
         /// </summary>
         void CreateShowPlans()
         {
-            Plans.Clear();
+            PlansShow.Clear();
             foreach (PlanBase item in plansInner)
                 if (SearchStatus == null
                     || (SearchStatus.Content.Equals("未完成") && item.Status == false)
                     || (SearchStatus.Content.Equals("已完成") && item.Status == true))
-                    Plans.Add(item);
+                    PlansShow.Add(item);
         }
 
         /// <summary>

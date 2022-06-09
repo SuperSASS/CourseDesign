@@ -43,7 +43,7 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public void TEST_CreateInfoBlocks()
         {
-            InfoBlocks.Add(new infoBlock("PercentCircle", "收集情况", "100%", "跳转到图鉴页面", ""));
+            InfoBlocks.Add(new infoBlock("PercentCircleOutline", "收集情况", "100%", "跳转到图鉴页面", ""));
             InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "计划完成情况", "50%", "跳转到计划列表页面", ""));
         }
 

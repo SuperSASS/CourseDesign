@@ -1,4 +1,5 @@
-﻿using CourseDesign.Common.Classes;
+﻿using CourseDesign.Common;
+using CourseDesign.Common.Classes;
 using CourseDesign.Common.Modules;
 using CourseDesign.Context;
 using CourseDesign.Extensions;
@@ -10,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace CourseDesign.ViewModels
 {
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : BindableBase, IConfigureService
     {
         private ObservableCollection<MeauBar> meauBars; // 主菜单列表
         private int selectIndex;                        // 所选择的主菜单哪一项
@@ -33,7 +34,6 @@ namespace CourseDesign.ViewModels
         public MainWindowViewModel(IRegionManager regionManager, ITDollService tDollService)
         {
             MeauBars = new ObservableCollection<MeauBar>();
-            CreateMeauBars();
             this.regionManager = regionManager;
             // 命令接口实现
             NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
@@ -98,6 +98,15 @@ namespace CourseDesign.ViewModels
             MeauBars.Add(new MeauBar("CheckboxMultipleMarkedCircleOutline", "计划列表", "PlanView"));
             MeauBars.Add(new MeauBar("BadgeAccount", "图鉴", "ListView"));
             MeauBars.Add(new MeauBar("Cog", "设置", "SettingView"));
+        }
+
+        /// <summary>
+        /// 主窗口的默认配置
+        /// </summary>
+        public void Configure()
+        {
+            CreateMeauBars(); //创建菜单栏
+            GoIndex(); // 设置默认首页为IndexView
         }
     }
 }

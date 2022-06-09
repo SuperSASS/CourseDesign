@@ -1,6 +1,8 @@
-﻿using CourseDesign.Context;
+﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
+using CourseDesign.Context;
 using CourseDesign.Shared.DTOs;
 using Prism.Commands;
+using System.Collections.Generic;
 
 namespace CourseDesign.Common.Classes
 {
@@ -16,9 +18,14 @@ namespace CourseDesign.Common.Classes
     public class ImagePlanClass : PlanBase
     {
         private int? tDoll_ID;
+        private TDollClass tDoll;
 
         public int? TDoll_ID { get { return tDoll_ID; } set { tDoll_ID = value; } }
-        public TDollClass TDoll { get; set; } // 根据ID找到的人形类
+
+        /// <summary>
+        /// 根据ID找到的这条计划的人形类用于展示各种信息
+        /// </summary>
+        public TDollClass TDoll { get { return tDoll; } set { tDoll = value; } }
 
         /// <summary>
         /// 图片计划类的构造函数，计划种类Type在这里传image给基类
