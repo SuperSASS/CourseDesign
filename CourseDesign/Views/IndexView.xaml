@@ -21,10 +21,20 @@
             </Border.Background>
         </Border>
 
+        <Image
+            x:Name="griffin_image"
+            Height="300"
+            Margin="0,0,100,30"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Opacity="0.6"
+            Source="\Assets\Images\Griffin.png" />
+
         <!--  副官展示  -->
         <Canvas x:Name="adjutant_image" Margin="30">
             <Image
                 Height="1000"
+                Margin="-70,0,0,0"
                 Source="/Assets/T-Dolls/T-Doll-1.png"
                 Stretch="Uniform" />
         </Canvas>
@@ -136,11 +146,11 @@
                             Width="50"
                             Height="50"
                             VerticalAlignment="Top"
-                            Command="{Binding ExecuteCommand}"
-                            CommandParameter="新增待办"
+                            Command="{Binding ExecCommand}"
+                            CommandParameter="新增常规计划"
                             DockPanel.Dock="Right"
                             Style="{StaticResource MaterialDesignFloatingActionAccentButton}"
-                            ToolTip="新增代办">
+                            ToolTip="新增常规计划">
                             <materialDesign:PackIcon Kind="Add" />
                         </Button>
                     </DockPanel>

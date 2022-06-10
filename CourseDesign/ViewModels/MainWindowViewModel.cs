@@ -31,19 +31,17 @@ namespace CourseDesign.ViewModels
         /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
         /// </summary>
         /// <param name="regionManager"> 区域管理器 </param>
-        public MainWindowViewModel(IRegionManager regionManager, ITDollService tDollService)
+        public MainWindowViewModel(IRegionManager regionManager,ITextPlanService textPlanService, IImagePlanService imagePlanService,  ITDollService tDollService)
         {
             MeauBars = new ObservableCollection<MeauBar>();
             this.regionManager = regionManager;
             // 命令接口实现
             NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
-            GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoINdex
-            // TODO: 实现默认启动IndexView，但不能像下面那样简单的实现。
-            SelectIndex = -1;
-            // regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate("IndexView");
-            // 创建人形上下文
-            new TDollsContext(tDollService);
+            GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoIndex
+            // 创建上下文
+            new LoginUserContext(1, imagePlanService, textPlanService, tDollService); // 创建用户上下文
+            new TDollsContext(tDollService); // 创建人形上下文
         }
 
         /// <summary>

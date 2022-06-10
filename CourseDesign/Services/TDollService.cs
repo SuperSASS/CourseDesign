@@ -16,14 +16,23 @@ namespace CourseDesign.Services
     {
         public TDollService(HttpRestClient client) : base(client, "TDoll") { }
 
+        public async Task<APIResponse<TDollDTO>> AddUserObtain(TDollObtainDTO entity)
+        {
+            BaseRequest request = new BaseRequest();
+            request.Method = RestSharp.Method.POST;
+            request.Route = $"api/{ServiceName}/AddUserObtain";
+            request.Parameter = entity;
+            return await Client.ExecuteAsync<TDollDTO>(request);
+        }
+
         // 参数包含查询
         // 注意！这里必须用PagedList类型，不能自作主张用成List！……
         // 依次参数要用?x=y的形式。
-        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamContain(GETParameter param)
+        public async Task<APIResponse<PagedList<TDollDTO>>> GetUserAndParamContain(GETParameter param)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
-            request.Route = $"api/{ServiceName}/GetParamContain"
+            request.Route = $"api/{ServiceName}/GetUserAndParamContain"
                 + $"?user_id={param.user_id}"
                 + $"&search={param.search}"
                 + $"&field={param.field}"
@@ -33,11 +42,11 @@ namespace CourseDesign.Services
         }
 
         // 参数匹配查询
-        public async Task<APIResponse<PagedList<TDollDTO>>> GetParamEqual(GETParameter param)
+        public async Task<APIResponse<PagedList<TDollDTO>>> GetUserAndParamEqual(GETParameter param)
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
-            request.Route = $"api/{ServiceName}/GetParamContain"
+            request.Route = $"api/{ServiceName}/GetUserAndParamEqual"
                 + $"?user_id={param.user_id}"
                 + $"&search={param.search}"
                 + $"&field={param.field}"

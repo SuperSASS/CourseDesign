@@ -14,7 +14,9 @@ using System.Windows.Input;
 using System.Windows;
 using System.Collections.Generic;
 using System.Windows.Controls;
-using Arch.EntityFrameworkCore.UnitOfWork.Collections;
+using CourseDesign.Services;
+using System.Linq.Expressions;
+using static CourseDesign.Context.LoginUserContext;
 
 namespace CourseDesign.ViewModels
 {
@@ -24,16 +26,17 @@ namespace CourseDesign.ViewModels
         // API服务
         private readonly IImagePlanService ImageService;
         private readonly ITextPlanService TextService;
+        private readonly ITDollService TDollService;
         // 属性内部字段
-        private List<PlanBase> plansInner; // 所存储的所有计划内容，在状态筛选之后的
         private ObservableCollection<PlanBase> plansShow; // 要展示的计划表
+        private ObservableCollection<AddImagePlanSourceClass> addImagePlanSource; // 能增加的图片类计划源
         private string rightEditorTitle; // 右侧编辑栏的标题（主要用来区别是新增还是修改）
         private string rightEditorButton; // 右侧编辑栏的按钮
         private bool isRightTextEditorOpen; // 右侧编辑窗弹出情况 - 文本编辑页
         private bool isRightImageEditorOpen; // 右侧编辑窗弹出情况 - 图像编辑页
         private string searchContentText; // 所搜索的文本，单向到源绑定
-        private ComboBoxItem searchFieldText; // 所搜索的字段，单向绑定到源
-        private ComboBoxItem searchStatus; // 所选择展示的计划状态，单项绑定到源
+        private int searchFieldIndex; // 筛选字段的选项Index，只用来初始化用
+        private int searchStatusIndex; // 选择计划状态的选项Index
         private PlanBase currentEditPlan; // 当前在编辑栏中编辑的对象，双向绑定
         // 本地字段
         private bool isAddOrModify; // 0 为 Add, 1 为 Modify
@@ -57,6 +60,10 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public ObservableCollection<PlanBase> PlansShow { get { return plansShow; } private set { plansShow = value; RaisePropertyChanged(); } }
         /// <summary>
+        /// 在添加人形获取计划中，所能展示的人形列表
+        /// </summary>
+        public ObservableCollection<AddImagePlanSourceClass> AddImagePlanSource { get { return addImagePlanSource; } private set { addImagePlanSource = value; RaisePropertyChanged(); } }
+        /// <summary>
         /// 右侧编辑栏的标题
         /// </summary>
         public string RightEditorTitle { get { return rightEditorTitle; } private set { rightEditorTitle = value; RaisePropertyChanged(); } }
@@ -77,24 +84,25 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public string SearchContentText { get { return searchContentText; } set { searchContentText = value; } }
 
+
         private bool isFirstCreate_SFT = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
+        private bool isFirstCreate_SS = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
+
         /// <summary>
         /// 搜索字段，单项绑定到源
         /// </summary>
-        public ComboBoxItem SearchFieldText
+        public int SearchFieldIndex
         {
-            get { return searchFieldText; }
-            set { searchFieldText = value; if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
+            get { return searchFieldIndex; }
+            set { searchFieldIndex = value; if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
         }
-
-        private bool isFirstCreate_SS = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
         /// <summary>
         /// 筛选的状态，单向绑定到源
         /// </summary>
-        public ComboBoxItem SearchStatus
+        public int SearchStatusIndex
         {
-            get { return searchStatus; }
-            set { searchStatus = value; if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
+            get { return searchStatusIndex; }
+            set { searchStatusIndex = value; if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
         }
         /// <summary>
         /// 所选择的将要进行修改的计划，双向绑定，展示到文本栏同步更改
@@ -103,22 +111,25 @@ namespace CourseDesign.ViewModels
         #endregion
 
         /// <summary>
+        /// 恒为真的<see cref="Func{PlanBase, bool}"/>类型的函数式，简化表达式用
+        /// </summary>
+        static readonly Func<PlanBase, bool> trueFunc = (x) => true;
+
+        /// <summary>
         /// Init - 构造函数，只执行一次
         /// </summary>
         /// <param name="imageService">图片类计划的服务</param>
         /// <param name="textService">文本类计划的服务</param>
         /// <param name="containerProvider">该页面容器</param>
-        public PlanViewModel(IImagePlanService imageService, ITextPlanService textService, IContainerProvider containerProvider) : base(containerProvider)
+        public PlanViewModel(IImagePlanService imageService, ITextPlanService textService, ITDollService tDollService, IContainerProvider containerProvider) : base(containerProvider)
         {
             // 内部服务初始化
             ImageService = imageService;
             TextService = textService;
+            TDollService = tDollService;
             // 部分初始展示属性初始化
-            plansInner = new List<PlanBase>();
             plansShow = new ObservableCollection<PlanBase>();
-            IsRightTextEditorOpen = false;
-            IsRightImageEditorOpen = false;
-            searchContentText = null;
+            AddImagePlanSource = new ObservableCollection<AddImagePlanSourceClass>();
             // 各种命令的初始化
             EditOfAddPlanCommand = new DelegateCommand<string>(EditOfAddPlan);
             EditOfModifyPlanCommand = new DelegateCommand<PlanBase>(EditOfModifyPlan);
@@ -149,10 +160,11 @@ namespace CourseDesign.ViewModels
             }
             else // 选中的图片类消息
             {
+                CreateImagePlanSource(); // 生成用于图片编辑页的数据源
                 IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
                 RightEditorTitle = "人形计划添加";
                 RightEditorButton = "确认添加";
-                CurrentEditPlan = new ImagePlanClass(0, false, null);
+                //CurrentEditPlan = new ImagePlanClass(0, false, -1); // 对于图片类构造方式不一样，因此不用生成
             }
             Loading(false);
         }
@@ -162,7 +174,8 @@ namespace CourseDesign.ViewModels
         /// 修改计划（会赋值给右侧编辑栏的用于相应属性SelectUpdatePlan，用于更改）
         /// </summary>
         /// <param name="obj">修改计划的基类</param>
-        public void EditOfModifyPlan(PlanBase obj) // TODO: 0 - obj传来的是什么需要确认
+        /// TODO: 2 - 在修改完右侧图片编辑栏的显示方法后，需要被修改
+        private void EditOfModifyPlan(PlanBase obj)
         {
             Loading(true);
             isAddOrModify = false; // 操作是修改
@@ -175,14 +188,15 @@ namespace CourseDesign.ViewModels
                 TextPlanClass t = (TextPlanClass)obj;
                 CurrentEditPlan = new TextPlanClass(t.ID, t.Status, t.Title, t.Content);
             }
-            else // 选中的图片类消息
-            {
-                IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
-                RightEditorTitle = "人形计划修改";
-                RightEditorButton = "确认修改";
-                ImagePlanClass t = (ImagePlanClass)obj;
-                CurrentEditPlan = new ImagePlanClass(t.ID, t.Status, t.TDoll_ID);
-            }
+            //else // 选中的图片类消息【不再让图片计划修改【因为重添加难度并不高
+            //{
+            //    CreateImagePlanSource();
+            //    IsRightImageEditorOpen = true; // 窗口为“图片编辑状态”
+            //    RightEditorTitle = "人形计划修改";
+            //    RightEditorButton = "确认修改";
+            //    ImagePlanClass t = (ImagePlanClass)obj;
+            //    CurrentEditPlan = new ImagePlanClass(t.ID, t.Status, t.TDoll_ID);
+            //}
             Loading(false);
         }
 
@@ -191,7 +205,7 @@ namespace CourseDesign.ViewModels
         /// 删除计划
         /// </summary>
         /// <param name="deletePlan">所删除计划的基类</param>
-        public async void DeletePlan(PlanBase deletePlan)
+        private async void DeletePlan(PlanBase deletePlan)
         {
             try
             {
@@ -202,7 +216,7 @@ namespace CourseDesign.ViewModels
 
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status == APIStatusCode.Success)
-                { plansInner.Remove(deletePlan); PlansShow.Remove(deletePlan); }
+                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); }
                 else
                     throw new Exception("删除出错啦，肯定不是服务器的问题qwq！……");
             }
@@ -217,20 +231,20 @@ namespace CourseDesign.ViewModels
         /// 对文字类计划，切换任务完成状态的命令
         /// </summary>
         /// <param name="textPlan">所完成的任务，传的为基类</param>
-        public async void ChangeCompleteForTextPlan(TextPlanClass textPlan)
+        private async void ChangeCompleteForTextPlan(TextPlanClass textPlan)
         {
             APIStatusCode APIResponseStatus;
             try
             {
                 Loading(true);
-                TextPlanClass plan = (TextPlanClass)textPlan;
+                TextPlanClass plan = textPlan;
                 plan.Status = textPlan.Status;
-                APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, 1))).Status;
+                APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
                 if (APIResponseStatus == APIStatusCode.Success)
-                    textPlan.Status = textPlan.Status; // 将本地的状态也更改
+                    GetPlan(textPlan.ID).Status = plan.Status; // 将本地的状态也更改
                 else
                     throw new Exception("诶，好像改不了这个任务的状态，待会再试试呢【……");
-                CreateShowPlans(); // 重新生成显示内容
+                SearchPlan(); // 重新生成显示内容【这边应该执行SearchPlan，因为可能此时带有一些搜索条件
             }
             finally
             {
@@ -238,23 +252,28 @@ namespace CourseDesign.ViewModels
             }
         }
 
+        // TODO: 1 - 当图片类计划完成后，自然要上传数据库表示得到了该人形
         /// <summary>
         /// 对图片类计划，只能完成任务的命令
         /// </summary>
-        public async void CompleteForImagePlan(ImagePlanClass imagePlan)
+        private async void CompleteForImagePlan(ImagePlanClass imagePlan)
         {
             APIStatusCode APIResponseStatus;
             try
             {
                 Loading(true);
-                ImagePlanClass plan = (ImagePlanClass)imagePlan;
+                ImagePlanClass plan = imagePlan;
                 plan.Status = true; // 对于图片类计划，只能完成，所以要单独提出来orz……
-                APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, 1))).Status;
+                APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
                 if (APIResponseStatus == APIStatusCode.Success)
-                    imagePlan.Status = imagePlan.Status; // 将本地的状态也更改
+                    GetPlan(imagePlan.ID).Status = plan.Status; // 将本地的状态也更改
                 else
                     throw new Exception("诶，好像改不了这个任务的状态，待会再试试呢【……");
-                CreateShowPlans(); // 重新生成显示内容
+                APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUserID, TDollID = (int)imagePlan.TDoll_ID })).Status;
+                if (APIResponseStatus != APIStatusCode.Success)
+                    throw new Exception("内部错误 - 用户那里添加不了获取的人形……");
+                UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文
+                SearchPlan(); // 重新生成显示内容
             }
             finally
             {
@@ -288,41 +307,31 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 查询该用户包含条件的计划，目前只支持文字类计划的标题包含搜索
         /// </summary>
-        private async void SearchPlan()
+        private void SearchPlan()
         {
-            try
+            Func<PlanBase, bool> exp_Status;
+            /* 生成有关状态筛选的表达式 */
+            switch (SearchStatusIndex)
             {
-                Loading(true);
-                plansInner.Clear();
-                PlansShow.Clear();
-                // 生成plansInner
-                if (string.IsNullOrWhiteSpace(SearchContentText))
-                    GetAllPlansForUserAndCreateShowAsyna();
-                else
+                case 0: exp_Status = (x) => x.Status == true; break;
+                case 1: exp_Status = (x) => x.Status == false; break;
+                default: exp_Status = trueFunc; break;
+            }
+            /* 生成有关字段筛选的表达式 */
+            Func<PlanBase, bool> exp_Field;
+            if (string.IsNullOrWhiteSpace(SearchContentText) || SearchFieldIndex == -1)
+                exp_Field = trueFunc;
+            else
+            {
+                switch (SearchFieldIndex)
                 {
-                    GETParameter t = new GETParameter()
-                    {
-                        user_id = 1,
-                        search = SearchContentText,
-                        field = ConvertComboBoxItemToField(SearchFieldText)
-                    };
-                    var textPlanResult = await TextService.GetParamContainForUser(new GETParameter()
-                    {
-                        user_id = 1,
-                        search = SearchContentText,
-                        field = ConvertComboBoxItemToField(SearchFieldText)
-                    }); // TODO: 2 - 这里选的是查标题
-                    if (textPlanResult.Status != APIStatusCode.Success)
-                        throw new Exception("服务器查询出错了，是不是被铁血打进来了呢x……");
-                    foreach (var textItem in textPlanResult.Result.Items)
-                        plansInner.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
-                    CreateShowPlans();
+                    case 0: exp_Field = (x) => x is TextPlanClass && (x as TextPlanClass).Title.Contains(SearchContentText); break;
+                    case 1: exp_Field = (x) => x is TextPlanClass && (x as TextPlanClass).Content.Contains(SearchContentText); break;
+                    default: exp_Field = trueFunc; break;
                 }
             }
-            finally
-            {
-                Loading(false);
-            }
+            CreateShowPlans(exp_Status, exp_Field);
+            Loading(false);
         }
 
         // 已验证√
@@ -340,59 +349,64 @@ namespace CourseDesign.ViewModels
                     if (string.IsNullOrWhiteSpace(textPlan.Title) || string.IsNullOrWhiteSpace(textPlan.Content)) // 计划的标题或内容为空
                         throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
                     Loading(true);
-                    APIStatusCode updateResponseStatus = isAddOrModify ? (await TextService.Add(textPlan.ConvertDTO(textPlan, 1))).Status : (await TextService.Update(textPlan.ConvertDTO(textPlan, 1))).Status;
+                    APIStatusCode updateResponseStatus = isAddOrModify ? (await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID))).Status : (await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUserID))).Status;
                     if (updateResponseStatus == APIStatusCode.Success)
                     {
                         if (isAddOrModify) // 代表新增
-                        { plansInner.Add(textPlan); PlansShow.Add(textPlan); }
+                        { UserPlans.Add(textPlan); PlansShow.Add(textPlan); }
                         else
                         {
-                            int index;
-                            for (index = 0; index <= PlansShow.Count; index++)
-                                if (PlansShow[index] is TextPlanClass && PlansShow[index].ID == textPlan.ID) // 通过遍历ID找到所修改的数据
+                            // 由于ObservableCollection没有FindIndex方法，所以只能手动模拟了……
+                            int indexPlansShow, indexUserPlans = UserPlans.FindIndex((x) => x.ID == textPlan.ID);
+                            for (indexPlansShow = 0; indexPlansShow <= PlansShow.Count; indexPlansShow++)
+                                if (PlansShow[indexPlansShow] is TextPlanClass && PlansShow[indexPlansShow].ID == textPlan.ID) // 通过遍历ID找到所修改的数据
                                     break;
-                            if (index <= PlansShow.Count)
-                                PlansShow[index] = textPlan;
+                            if (indexUserPlans != -1 && indexPlansShow < PlansShow.Count)
+                            { UserPlans[indexUserPlans] = textPlan; PlansShow[indexPlansShow] = textPlan; }
                             else
                                 throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
                         }
                     }
-                    IsRightTextEditorOpen = false; // 关闭编辑页
                 }
                 else
                 {
-                    ImagePlanClass imagePlan = (ImagePlanClass)CurrentEditPlan;
-                    imagePlan.TDoll = TDollsContext.GetTDoll((int)imagePlan.TDoll_ID); // 要得到这个计划的人形信息，用于添加后展示
-                    if (imagePlan.TDoll_ID < 0 || imagePlan.TDoll_ID > TDollsContext.MaxTDoll_ID) // 人形计划的人形ID不满足范围
-                        throw new Exception("输入的战术人形ID不存在啦，请检查一下呢……"); // 返回错误提示
+                    //if (imagePlan.TDoll_ID < 0 || imagePlan.TDoll_ID > TDollsContext.MaxTDoll_ID) // 人形计划的人形ID不满足范围【由于只展示人形列表的人形，不存在越界问题
+                    //    throw new Exception("输入的战术人形ID不存在啦，请检查一下呢……"); // 返回错误提示
                     Loading(true);
-                    APIResponse<ImagePlanDTO> updateResponse = isAddOrModify ? await ImageService.Add(imagePlan.ConvertDTO(imagePlan, 1)) : await ImageService.Update(imagePlan.ConvertDTO(imagePlan, 1));
-                    if (updateResponse.Status == APIStatusCode.Success)
-                    {
-                        if (isAddOrModify) // 代表新增【Fix：新增上传后，要把服务器里的ID加到imagePlan里，否则在立刻删除时会因为没有ID而报错……
-                        { imagePlan.ID = updateResponse.Result.ID; plansInner.Add(imagePlan); PlansShow.Add(imagePlan); }
-                        else
+                    foreach (var item in AddImagePlanSource)
+                        if (item.IsChecked && item.IsDefaultEnabled) // 被选了，并且默认是启动的，代表是用户选的，上传添加
                         {
-                            int index;
-                            for (index = 0; index <= plansInner.Count; index++)
-                                if (plansInner[index] is ImagePlanClass && plansInner[index].ID == imagePlan.ID) // 通过遍历ID找到所修改的数据
-                                    break;
-                            if (index <= plansInner.Count) // 代表修改
-                            { plansInner[index] = imagePlan; CreateShowPlans(); } // 由于不知道为什么直接修改不会通知更新，所以这里只能先删后加来更新了orz…… //Plans[index] = imagePlan;
+                            ImagePlanClass imagePlan = new ImagePlanClass(0, false, item.TDoll.ID);
+                            APIResponse<ImagePlanDTO> updateResponse = await ImageService.Add(imagePlan.ConvertDTO(imagePlan, LoginUserID)); // 图片类只能被添加
+                            if (updateResponse.Status == APIStatusCode.Success) // 成功上传，添加到UserPlans和PlansShow
+                            {
+                                imagePlan.ID = updateResponse.Result.ID;
+                                UserPlans.Add(imagePlan);
+                                PlansShow.Add(imagePlan);
+                                //if (isAddOrModify) // 代表新增【Fix：新增上传后，要把服务器里的ID加到imagePlan里，否则在立刻删除时会因为没有ID而报错……
+                                //{ imagePlan.ID = updateResponse.Result.ID; UserPlans.Add(imagePlan); PlansShow.Add(imagePlan); }
+                                //else
+                                //{
+                                //    int indexUserPlans = UserPlans.FindIndex((x) => x.ID == imagePlan.ID);
+                                //    if (indexUserPlans != -1)
+                                //    {
+                                //        UserPlans[indexUserPlans] = imagePlan;
+                                //        SearchPlan(); // 由于不知道为什么直接修改不会通知更新，所以这里只能先删后加来更新了orz【同样也是通过SearchPlan保留搜索条件
+                                //    }
+                                //    else
+                                //        throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
+                                //}
+                            }
                             else
-                                throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
+                                throw new Exception("内部错误 - 无法上传新建计划到服务器……");
                         }
-                    }
-                    IsRightImageEditorOpen = false; // 关闭编辑页
                 }
-            }
-            catch (Exception ex)
-            {
-                // TODO: 2 - 这里增加弹窗报错
             }
             finally
             {
                 Loading(false);
+                IsRightTextEditorOpen = false;
+                IsRightImageEditorOpen = false; // 关闭编辑页
             }
         }
 
@@ -403,89 +417,90 @@ namespace CourseDesign.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
-            GetAllPlansForUserAndCreateShowAsyna(); // 来到该页面时，默认重新读取用户所有的数据
+            IsRightTextEditorOpen = false;
+            IsRightImageEditorOpen = false;
+            SearchFieldIndex = -1;
+            SearchStatusIndex = 1; // 每次来到页面：默认跳回选择“未完成”状态筛选
+            searchContentText = null;
+            SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
         }
 
         #region 内部方法
-
         /// <summary>
-        /// 先查询该用户所有计划，放到plans_inner里；再根据选择的任务状态进行筛选展示
+        /// 根据状态和字段的筛选，生成用于展示的计划
         /// </summary>
-        async void GetAllPlansForUserAndCreateShowAsyna()
-        {
-            try
-            {
-                Loading(true); // 弹出等待会话
-                plansInner.Clear();
-
-                // 生成读取的所有计划（不考虑完成状态）
-                // TODO: 2 - 警告，这里给的用户id指定为给1
-                // TODO: 3 - 这里可以只改成加载一次，用flag标记
-                var imagePlanResult = await ImageService.GetAllForUser(1); // 通过服务，查询数据库ImagePlan中所有元组。
-                var textPlanResult = await TextService.GetAllForUser(1);
-                // 以下按照创建时间降序展现
-                if (imagePlanResult.Status != APIStatusCode.Success)
-                    throw new Exception("嘘！服务器在睡觉，不要打扰她啦……");
-                if (imagePlanResult != null)
-                {
-                    int imageIndex = 0, textIndex = 0;
-                    while (imageIndex < imagePlanResult.Result.Items.Count && textIndex < textPlanResult.Result.Items.Count)
-                    {
-                        var imageItem = imagePlanResult.Result.Items[imageIndex];
-                        var textItem = textPlanResult.Result.Items[textIndex];
-                        if (imageItem.CreateDate > textItem.CreateDate)
-                        { plansInner.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID)); imageIndex++; }
-                        else
-                        { plansInner.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content)); textIndex++; }
-                    }
-                    for (; imageIndex < imagePlanResult.Result.Items.Count; imageIndex++)
-                    {
-                        var imageItem = imagePlanResult.Result.Items[imageIndex]; plansInner.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID));
-                    }
-                    for (; textIndex < textPlanResult.Result.Items.Count; textIndex++)
-                    {
-                        var textItem = textPlanResult.Result.Items[textIndex]; plansInner.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
-                    }
-                }
-                CreateShowPlans();
-
-            }
-            finally
-            {
-                Loading(false);
-            }
-        }
-
-        /// <summary>
-        /// 生成用于展示的计划
-        /// </summary>
-        void CreateShowPlans()
+        private void CreateShowPlans(Func<PlanBase, bool> exp_Status, Func<PlanBase, bool> exp_Field)
         {
             PlansShow.Clear();
-            foreach (PlanBase item in plansInner)
-                if (SearchStatus == null
-                    || (SearchStatus.Content.Equals("未完成") && item.Status == false)
-                    || (SearchStatus.Content.Equals("已完成") && item.Status == true))
+            foreach (PlanBase item in LoginUserContext.UserPlans)
+                if (exp_Status(item) && exp_Field(item))
                     PlansShow.Add(item);
         }
 
         /// <summary>
-        /// 用于将view中筛选栏的选项，转换为DTO总的Field
+        /// 生成用于在“添加人形获取计划”列表中展示的数据源
         /// </summary>
-        /// <param name="item">筛选栏的选项</param>
-        /// <returns>DTO中的Field</returns>
-        string ConvertComboBoxItemToField(ComboBoxItem item)
+        private void CreateImagePlanSource()
         {
-            if (item == null)
-                return null;
-            switch (item.Content.ToString())
-            {
-                case "计划标题": return "Title";
-                case "计划内容": return "Content";
-                default: return null;
-            }
+            AddImagePlanSource.Clear();
+            foreach (TDollClass item in TDollsContext.AllTDolls)
+                AddImagePlanSource.Add(new AddImagePlanSourceClass(item, UserTDolls.Contains(item.ID))); // 先筛选一遍用户没有的（并全部加到数据源中）
+            foreach (PlanBase plan in UserPlans)
+                if (plan is ImagePlanClass && plan.Status == false) // 再筛用户未完成图片计划里的
+                {
+                    int index = 0;
+                    foreach (var item in AddImagePlanSource)
+                    {
+                        if (item.TDoll.ID == (plan as ImagePlanClass).TDoll_ID)
+                            break;
+                        index++;
+                    }
+                    AddImagePlanSource[index].IsChecked = true;
+                    AddImagePlanSource[index].IsDefaultEnabled = false;
+                }
+        }
+        #endregion
+    }
+
+    /// <summary>
+    /// 用于在“添加人形获取计划”列表中展示的类
+    /// </summary>
+    /// 其实跟得到用户所拥有的人形区别在于：这个还要考虑是否在计划里，在计划里的也不能选！
+    public class AddImagePlanSourceClass
+    {
+        private TDollClass tDoll;
+        private bool isChecked;
+        private bool isDefaultEnabled; // 需要把选项是否默认启用给单列出来，用来判断用户的选择是先定的还是后选的
+
+        /// <summary>
+        /// 直接用TDoll代表该人形所有信息
+        /// </summary>
+        public TDollClass TDoll
+        {
+            get { return tDoll; }
+            private set { tDoll = value; }
+        }
+        /// <summary>
+        /// 判断是否拥有，然后确定是否默认选中（选中后IsEnabled要改为false）
+        /// </summary>
+        public bool IsChecked
+        {
+            get { return isChecked; }
+            set { isChecked = value; }
         }
 
-        #endregion
+        public bool IsDefaultEnabled { get { return isDefaultEnabled; } set { isDefaultEnabled = value; } } // 如果默认被选中，那么默认不可再选
+
+        /// <summary>
+        /// 展示在“添加人形获取计划”页面中的可选择的人形数据源
+        /// </summary>
+        /// <param name="tDoll">对应的<see cref="TDollClass"/>类型人形数据</param>
+        /// <param name="isDefaultChecked">是否默认被勾选，根据用户是否已经拥有该人形决定</param>
+        public AddImagePlanSourceClass(TDollClass tDoll, bool isDefaultChecked)
+        {
+            TDoll = tDoll;
+            IsChecked = isDefaultChecked;
+            IsDefaultEnabled = !isDefaultChecked; // 在构造函数指定默认是否可选，如果刚开始勾选了则默认不可选。
+        }
     }
 }

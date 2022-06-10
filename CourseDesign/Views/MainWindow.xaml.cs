@@ -13,7 +13,6 @@ namespace CourseDesign.Views
         public MainWindow(IEventAggregator aggregator)
         {
             InitializeComponent();
-            navigationBars.SelectedIndex = 3; // 初始化导航栏的所选项为不存在的ID，使得为空
 
             aggregator.Register(arg => // 注册Dialog会话 - 弹窗等待
             {

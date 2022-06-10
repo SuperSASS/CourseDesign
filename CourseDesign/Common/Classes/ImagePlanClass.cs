@@ -17,10 +17,10 @@ namespace CourseDesign.Common.Classes
     /// </list>
     public class ImagePlanClass : PlanBase
     {
-        private int? tDoll_ID;
+        private int tDoll_ID;
         private TDollClass tDoll;
 
-        public int? TDoll_ID { get { return tDoll_ID; } set { tDoll_ID = value; } }
+        public int TDoll_ID { get { return tDoll_ID; } set { tDoll_ID = value; } }
 
         /// <summary>
         /// 根据ID找到的这条计划的人形类用于展示各种信息
@@ -33,7 +33,7 @@ namespace CourseDesign.Common.Classes
         /// <param name="id">计划ID（基类的属性）</param>
         /// <param name="status">计划状态（0表示未完成，1表示已完成）（基类的属性）</param>
         /// <param name="tDoll_ID">计划打捞战术人形的ID</param>
-        public ImagePlanClass(int id, bool status, int? tDoll_ID) : base(id, PlanType.Image, status)
+        public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, PlanType.Image, status)
         {
             TDoll_ID = tDoll_ID;
             if (tDoll_ID != null) TDoll = TDollsContext.GetTDoll((int)tDoll_ID);

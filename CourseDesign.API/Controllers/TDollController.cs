@@ -54,7 +54,7 @@ namespace CourseDesign.API.Controllers
         /// </list>
         /// </returns>
         [HttpGet]
-        public async Task<APIResponseInner> GetParamContain([FromQuery] GETParameter parameter) => await Service.GetUserAndParamContainAsync(parameter);
+        public async Task<APIResponseInner> GetUserAndParamContain([FromQuery] GETParameter parameter) => await Service.GetUserAndParamContainAsync(parameter);
 
         /// <summary>
         /// 得到满足<see cref="GETParameter"/>条件的战术人形元组。
@@ -68,6 +68,6 @@ namespace CourseDesign.API.Controllers
         /// </list>
         /// </returns>
         [HttpGet]
-        public async Task<APIResponseInner> GetParamEqual([FromQuery] GETParameter parameter) => await Service.GetUserAndParamEqualAsync(parameter);
+        public async Task<APIResponseInner> GetUserAndParamEqual([FromQuery] GETParameter parameter) => await Service.GetUserAndParamEqualAsync(parameter);
     }
 }

@@ -27,18 +27,18 @@ namespace CourseDesign.Context
         {
             AllTDolls = new List<TDollClass>();
             TDollService = tDollService;
-            FirstLoadTDollsAsync();
+            FirstLoadTDollsContext();
         }
 
         /// <summary>
-        /// 读取所有数据库中的人形数据到本地
+        /// 第一次加载所有数据库中的人形数据到本地
         /// </summary>
-        async void FirstLoadTDollsAsync()
+        async void FirstLoadTDollsContext()
         {
             AllTDolls.Clear();
             MaxTDoll_ID = 0;
 
-            var tDollResult = await TDollService.GetParamContain(new GETParameter()); // 读取所有人形
+            var tDollResult = await TDollService.GetUserAndParamContain(new GETParameter()); // 读取所有人形
             if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
             {
                 foreach (var item in tDollResult.Result.Items)

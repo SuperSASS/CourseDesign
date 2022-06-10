@@ -3,7 +3,7 @@
 namespace CourseDesign.Common.Classes
 {
     /// <summary>
-    /// 战术人形类
+    /// 战术人形类基本信息
     /// <para>从数据库中导入</para>
     /// </summary>
     /// <list type="number">
@@ -52,6 +52,10 @@ namespace CourseDesign.Common.Classes
         public string ArtworkPath_16x9 // 16比9的图片路径
         {
             get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_16x9.png"; }
+        }
+        public string ArtworkPath_1x1 // 16比9的图片路径
+        {
+            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_1x1.png"; }
         }
         public string[] ObtainMethod
         {

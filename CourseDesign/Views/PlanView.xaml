@@ -23,6 +23,15 @@
                 </Border.Background>
             </Border>
 
+            <!--  背景装饰  -->
+            <Image
+                Height="300"
+                Margin="0,0,30,30"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Opacity="0.6"
+                Source="\Assets\Images\16Lab.png" />
+
             <!--  真的页面  -->
             <Grid x:Name="page">
                 <Grid.RowDefinitions>
@@ -66,12 +75,13 @@
                         <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
                         <!--  筛选字段下拉栏  -->
                         <ComboBox
+                            x:Name="combobox_field"
                             Margin="10,0"
                             materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
                             FontSize="16"
-                            SelectedValue="{Binding SearchFieldText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedIndex="{Binding SearchFieldIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                             <ComboBoxItem Content="计划标题" />
                             <ComboBoxItem Content="计划内容" />
@@ -108,14 +118,14 @@
 
                         <!--  计划状态筛选下拉栏  -->
                         <ComboBox
+                            x:Name="combobox_status"
                             MinWidth="128"
                             Margin="10,0"
                             materialDesign:HintAssist.Foreground="{DynamicResource SecondaryHueMidBrush}"
                             materialDesign:TextFieldAssist.HasClearButton="True"
                             materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
                             FontSize="16"
-                            SelectedIndex="1"
-                            SelectedValue="{Binding SearchStatus, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                            SelectedIndex="{Binding SearchStatusIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                             Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                             <ComboBoxItem Content="已完成" />
                             <ComboBoxItem Content="未完成" />
@@ -170,7 +180,7 @@
                         Style="{StaticResource for_scrollviewer}">
                         <!--  计划卡片展示区  -->
                         <ItemsControl
-                            x:Name="items_control"
+                            x:Name="items_control__card"
                             MaxHeight="{Binding ActualHeight, ElementName=task_list}"
                             ItemsSource="{Binding PlansShow}">
                             <!--  卡片资源模板（分为图片类和文字类）  -->
@@ -180,7 +190,7 @@
                                 <DataTemplate x:Key="imageCard">
                                     <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变【注：这是主题自带的bug，无法修复  -->
                                     <!--  TODO: 3 - 动画有点丑陋，建议改为一起淡出  -->
-                                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromRight}" OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.1}">
+                                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
                                         <materialDesign:Flipper
                                             Grid.Row="15"
                                             Width="300"
@@ -299,7 +309,7 @@
                                                                 <StackPanel>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.CompleteForImagePlanCommand, Source={x:Reference items_control}}"
+                                                                        Command="{Binding DataContext.CompleteForImagePlanCommand, Source={x:Reference items_control__card}}"
                                                                         CommandParameter="{Binding}"
                                                                         IsEnabled="True"
                                                                         ToolTip="完成这条计划">
@@ -311,18 +321,7 @@
                                                                     </Button>
                                                                     <Button
                                                                         Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.EditOfModifyPlanCommand, Source={x:Reference items_control}}"
-                                                                        CommandParameter="{Binding}"
-                                                                        ToolTip="编辑这条计划">
-                                                                        <materialDesign:PackIcon
-                                                                            Width="21"
-                                                                            Height="21"
-                                                                            Foreground="White"
-                                                                            Kind="PencilOutline" />
-                                                                    </Button>
-                                                                    <Button
-                                                                        Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                        Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control}}"
+                                                                        Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control__card}}"
                                                                         CommandParameter="{Binding}"
                                                                         ToolTip="删除这条计划">
                                                                         <materialDesign:PackIcon
@@ -388,7 +387,7 @@
                                 </DataTemplate>
                                 <!--  文字类卡片  -->
                                 <DataTemplate x:Key="textCard">
-                                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=SlideInFromRight}" OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.1}">
+                                    <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
                                         <materialDesign:Card
                                             Grid.Row="15"
                                             Width="300"
@@ -410,7 +409,7 @@
                                                         <!--  完成切换栏  -->
                                                         <ToggleButton
                                                             Margin="10"
-                                                            Command="{Binding DataContext.ChangeCompleteForTextPlanCommand, Source={x:Reference items_control}}"
+                                                            Command="{Binding DataContext.ChangeCompleteForTextPlanCommand, Source={x:Reference items_control__card}}"
                                                             CommandParameter="{Binding}"
                                                             IsChecked="{Binding Status}"
                                                             Style="{StaticResource MaterialDesignSwitchToggleButton}"
@@ -458,7 +457,7 @@
                                                             <StackPanel>
                                                                 <Button
                                                                     Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                    Command="{Binding DataContext.EditOfModifyPlanCommand, Source={x:Reference items_control}}"
+                                                                    Command="{Binding DataContext.EditOfModifyPlanCommand, Source={x:Reference items_control__card}}"
                                                                     CommandParameter="{Binding}"
                                                                     ToolTip="编辑这条计划">
                                                                     <materialDesign:PackIcon
@@ -469,7 +468,7 @@
                                                                 </Button>
                                                                 <Button
                                                                     Background="{DynamicResource SecondaryHueLightBrush}"
-                                                                    Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control}}"
+                                                                    Command="{Binding DataContext.DeletePlanCommand, Source={x:Reference items_control__card}}"
                                                                     CommandParameter="{Binding}"
                                                                     ToolTip="删除这条计划">
                                                                     <materialDesign:PackIcon
@@ -575,46 +574,85 @@
         <materialDesign:DialogHost>
             <materialDesign:DrawerHost x:Name="image_editor" IsRightDrawerOpen="{Binding IsRightImageEditorOpen}">
                 <materialDesign:DrawerHost.RightDrawerContent>
-                    <DockPanel Width="300" LastChildFill="False">
-                        <TextBlock
-                            Padding="15"
-                            DockPanel.Dock="Top"
-                            FontWeight="Bold"
-                            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                            Text="{Binding RightEditorTitle}" />
-                        <Border
-                            Width="180"
-                            Margin="10,5,10,10"
-                            HorizontalAlignment="Left"
-                            BorderBrush="{DynamicResource MaterialDesignDivider}"
-                            BorderThickness="0,0,0,2"
-                            DockPanel.Dock="Top" />
-                        <StackPanel
-                            Margin="20,0"
-                            DockPanel.Dock="Top"
-                            Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" Text="状态：" />
-                            <ComboBox SelectedIndex="{Binding CurrentEditPlan.Status}">
-                                <ComboBoxItem Content="未完成" DockPanel.Dock="Top" />
-                                <ComboBoxItem Content="已完成" DockPanel.Dock="Top" />
-                            </ComboBox>
+                    <Grid Width="300">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto" />
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="auto" />
+                        </Grid.RowDefinitions>
+                        <!--  注:不允许在编辑页修改人形获取计划的状态  -->
+                        <StackPanel>
+                            <TextBlock
+                                Grid.Row="0"
+                                Padding="15"
+                                DockPanel.Dock="Top"
+                                FontWeight="Bold"
+                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                Text="{Binding RightEditorTitle}" />
+                            <Border
+                                Grid.Row="0"
+                                Width="180"
+                                Margin="10,0,10,10"
+                                HorizontalAlignment="Left"
+                                BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                BorderThickness="0,0,0,2"
+                                DockPanel.Dock="Top" />
                         </StackPanel>
-                        <TextBox
-                            MinHeight="100"
-                            MaxHeight="300"
-                            Margin="20,10"
-                            materialDesign:HintAssist.Hint="战术人形编号"
-                            DockPanel.Dock="Top"
-                            Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding CurrentEditPlan.TDoll_ID}"
-                            TextWrapping="Wrap" />
+                        <!--  人形添加计划选项  -->
+                        <ScrollViewer Grid.Row="1" Style="{StaticResource for_scrollviewer}">
+                            <ItemsControl
+                                x:Name="item_control__editor"
+                                DockPanel.Dock="Top"
+                                Grid.IsSharedSizeScope="True"
+                                ItemsSource="{Binding AddImagePlanSource}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border
+                                            x:Name="Border"
+                                            Padding="8"
+                                            BorderBrush="{DynamicResource MaterialDesignDivider}"
+                                            BorderThickness="0,0,0,1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition SharedSizeGroup="Checkerz" />
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <ToggleButton
+                                                    Width="50"
+                                                    Height="50"
+                                                    VerticalAlignment="Center"
+                                                    IsChecked="{Binding IsChecked}"
+                                                    IsEnabled="{Binding IsDefaultEnabled}"
+                                                    Style="{StaticResource MaterialDesignActionLightToggleButton}">
+                                                    <Image Source="{Binding TDoll.ArtworkPath_1x1}" />
+                                                </ToggleButton>
+                                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                                    <TextBlock
+                                                        FontWeight="Bold"
+                                                        Style="{StaticResource MaterialDesignSubtitle1TextBlock}"
+                                                        Text="{Binding TDoll.Name}" />
+                                                    <TextBlock Margin="0,10,0,0" Text="{Binding TDoll.Type}" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                        <DataTemplate.Triggers>
+                                            <DataTrigger Binding="{Binding IsDefaultChecked}" Value="True">
+                                                <Setter TargetName="Border" Property="Background" Value="{DynamicResource MaterialDesignSelection}" />
+                                            </DataTrigger>
+                                        </DataTemplate.Triggers>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                         <Button
-                            Margin="30"
+                            Grid.Row="2"
+                            Margin="15"
                             HorizontalAlignment="Right"
+                            VerticalContentAlignment="Bottom"
                             Command="{Binding UpdatePlanCommand}"
                             Content="{Binding RightEditorButton}"
-                            DockPanel.Dock="Top" />
-                    </DockPanel>
+                            DockPanel.Dock="Bottom" />
+                    </Grid>
                 </materialDesign:DrawerHost.RightDrawerContent>
             </materialDesign:DrawerHost>
         </materialDesign:DialogHost>
