@@ -1,23 +1,31 @@
 ﻿using CourseDesign.Common.Events;
+using CourseDesign.Services.Dialog;
 using Prism.Events;
+using Prism.Services.Dialogs;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseDesign.Extensions
 {
     public static class DialogExtension
     {
-        // 询问窗口
-        public static async Task<IDialogResult> ShowQuestion(this IDialogHostService dialogHost, string title, string content, string dialogHostName = "RootDialog")
+        /// <summary>
+        /// 展开询问窗口
+        /// </summary>
+        /// <param name="dialogHost">指定的Dialog主机（服务），</param>
+        /// <param name="title">询问窗口的标题</param>
+        /// <param name="content">询问窗口的内容</param>
+        /// <param name="dialogHostName">Dialog主机所展现的位置（默认为RootDialog，为全局对话）</param>
+        /// <returns></returns>
+        public static async Task<IDialogResult> ShowQueryDialog(this IDialogHostService dialogHost, string title, string content, string dialogHostName = "RootDialog")
         {
-            DialogParameters parameters= new();
-            parameters.Add("Title",title);
-            parameters.Add("Content",content);
-            parameters.Add("dialogHostName",dialogHostName);
-            return await dialogHost.ShowDialog("MessageView", parameters, dialogHostName);
+            DialogParameters parameters = new() // 构造传递给Dialog的参数
+            {
+                { "Title", title },
+                { "Content", content },
+                { "dialogHostName", dialogHostName }
+            };
+            return await dialogHost.ShowDialog("QueryView", parameters, dialogHostName);
         }
 
         /// <summary>

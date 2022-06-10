@@ -1,13 +1,13 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 using CourseDesign.Common.Classes;
-using CourseDesign.Services.Interfaces;
-using CourseDesign.Services.Requests;
+using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Services.API.Requests;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services.ViewModelServices
+namespace CourseDesign.Services.API.ClassServices
 {
     public class TextPlanService : BaseHTTPService<TextPlanDTO>, ITextPlanService
     {

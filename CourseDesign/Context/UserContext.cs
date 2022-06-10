@@ -1,5 +1,4 @@
 ﻿using CourseDesign.Common.Classes;
-using CourseDesign.Services.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CourseDesign.ViewModels;
+using CourseDesign.Services.API.Interfaces;
 
 namespace CourseDesign.Context
 {

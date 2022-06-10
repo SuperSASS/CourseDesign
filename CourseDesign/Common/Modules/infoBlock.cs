@@ -6,7 +6,7 @@ namespace CourseDesign.Common.Module
     /// 首页信息类：
     /// <para>用于在首页展现个人信息。</para>
     /// </summary>
-    public class infoBlock : BindableBase
+    public class InfoBlock : BindableBase
     {
         private string icon; // 信息栏图标
         private string title; // 信息栏标题
@@ -28,7 +28,7 @@ namespace CourseDesign.Common.Module
         /// <param name="content"> 内容 </param>
         /// <param name="toolTip"> 悬浮提示 </param>
         /// <param name="target"> 跳转视图（对应视图名 </param>
-        public infoBlock(string icon, string title, string content, string toolTip, string target)
+        public InfoBlock(string icon, string title, string content, string toolTip, string target)
         {
             Icon = icon;
             Title = title;

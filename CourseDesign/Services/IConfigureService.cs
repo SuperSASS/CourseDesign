@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Common
+namespace CourseDesign.Services
 {
     /// <summary>
     /// 程序启动后首页初始化配置服务

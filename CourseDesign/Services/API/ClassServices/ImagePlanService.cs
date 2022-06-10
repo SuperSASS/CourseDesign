@@ -1,13 +1,13 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
 using CourseDesign.Common.Classes;
-using CourseDesign.Services.Interfaces;
-using CourseDesign.Services.Requests;
+using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Services.API.Requests;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services.ViewModelServices
+namespace CourseDesign.Services.API.ClassServices
 {
     /// <summary>
     /// 这里实现，增删改都在基本的服务BaseService里实现的，所以直接继承即可。
@@ -25,7 +25,7 @@ namespace CourseDesign.Services.ViewModelServices
         {
             BaseRequest request = new BaseRequest();
             request.Method = RestSharp.Method.GET;
-            request.Route = $"api/{ServiceName}/GetAllForUser?user_id="+ user_id; // 用户user_id直接加载路由里
+            request.Route = $"api/{ServiceName}/GetAllForUser?user_id=" + user_id; // 用户user_id直接加载路由里
             return await Client.ExecuteAsync<PagedList<ImagePlanDTO>>(request);
         }
     }

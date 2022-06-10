@@ -1,6 +1,6 @@
 ﻿using RestSharp;
 
-namespace CourseDesign.Services.Requests
+namespace CourseDesign.Services.API.Requests
 {
     /// <summary>
     /// 请求方式

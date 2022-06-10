@@ -5,7 +5,7 @@ using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services.Interfaces
+namespace CourseDesign.Services.API.Interfaces
 {
     public interface IImagePlanService : IBaseService<ImagePlanDTO>
     {

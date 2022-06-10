@@ -3,7 +3,7 @@ using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services.Interfaces
+namespace CourseDesign.Services.API.Interfaces
 {
     /// <summary>
     /// 这个是作为一个基类来继承，可以避免其他类重复写Add、Delete、GetID和Update操作。

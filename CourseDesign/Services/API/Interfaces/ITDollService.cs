@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services.Interfaces
+namespace CourseDesign.Services.API.Interfaces
 {
     public interface ITDollService : IBaseService<TDollDTO>
     {
@@ -20,6 +20,7 @@ namespace CourseDesign.Services.Interfaces
         //public new Task<APIResponse<ImagePlanDTO>> Update(ImagePlanDTO imagePlanDTO);
         #endregion
 
+        #region 额外的方法
         /// <summary>
         /// [POST]增加某用户拥有的战术人形
         /// </summary>
@@ -61,5 +62,6 @@ namespace CourseDesign.Services.Interfaces
         /// </list>
         /// </returns>
         public Task<APIResponse<PagedList<TDollDTO>>> GetUserAndParamEqual(GETParameter praram);
+        #endregion
     }
 }

@@ -1,6 +1,6 @@
 ﻿using CourseDesign.Common.Classes;
 using CourseDesign.Services;
-using CourseDesign.Services.Interfaces;
+using CourseDesign.Services.API.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using CourseDesign.Views;

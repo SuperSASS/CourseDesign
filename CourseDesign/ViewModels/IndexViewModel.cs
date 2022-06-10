@@ -1,5 +1,6 @@
 ﻿using CourseDesign.Common.Classes;
 using CourseDesign.Common.Module;
+using CourseDesign.Services.Dialog;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Services.Dialogs;
@@ -11,10 +12,16 @@ namespace CourseDesign.ViewModels
 {
     internal class IndexViewModel : BindableBase
     {
-        private ObservableCollection<infoBlock> infoBlocks;
-        private ObservableCollection<PlanBase> planLists; // TODO: 这里没有处理多态情况，因为要等数据库api接口实现
+        #region 字段
+        // 服务字段
+        private readonly IDialogHostService DialogService; // 弹窗服务
+        // 属性字段
+        private ObservableCollection<InfoBlock> infoBlocks;
+        private ObservableCollection<PlanBase> planLists;
+        #endregion
 
-        public ObservableCollection<infoBlock> InfoBlocks
+        #region 属性
+        public ObservableCollection<InfoBlock> InfoBlocks
         {
             get { return infoBlocks; }
             set { infoBlocks = value; RaisePropertyChanged(); }
@@ -24,9 +31,11 @@ namespace CourseDesign.ViewModels
             get { return planLists; }
             set { planLists = value; }
         }
+        /// <summary>
+        /// 首页的执行命令的总方法
+        /// </summary>
         public DelegateCommand<string> ExecCommand { get; private set; }
-
-        private readonly IDialogHostService DialogService; // 弹窗服务
+        #endregion
 
 
         /// <summary>
@@ -38,7 +47,7 @@ namespace CourseDesign.ViewModels
             // 注入弹窗服务
             DialogService = dialogService;
             // 初始化可视数据模块
-            InfoBlocks = new ObservableCollection<infoBlock>();
+            InfoBlocks = new ObservableCollection<InfoBlock>();
             PlanLists = new ObservableCollection<PlanBase>();
             // 初始化命令模块
             ExecCommand = new DelegateCommand<string>(Exec);
@@ -58,8 +67,8 @@ namespace CourseDesign.ViewModels
         /// </summary>
         //public void TEST_CreateInfoBlocks()
         //{
-        //    InfoBlocks.Add(new infoBlock("PercentCircleOutline", "收集情况", "100%", "跳转到图鉴页面", ""));
-        //    InfoBlocks.Add(new infoBlock("CheckboxMarkedCirclePlusOutline", "计划完成情况", "50%", "跳转到计划列表页面", ""));
+        //    InfoBlocks.Add(new InfoBlock("PercentCircleOutline", "收集情况", "100%", "跳转到图鉴页面", ""));
+        //    InfoBlocks.Add(new InfoBlock("CheckboxMarkedCirclePlusOutline", "计划完成情况", "50%", "跳转到计划列表页面", ""));
         //}
 
         /// <summary>

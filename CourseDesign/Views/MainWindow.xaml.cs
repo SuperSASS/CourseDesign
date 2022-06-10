@@ -1,4 +1,5 @@
 ﻿using CourseDesign.Extensions;
+using CourseDesign.Services.Dialog;
 using CourseDesign.Views.Dialogs;
 using Prism.Events;
 using System.Windows;
@@ -10,7 +11,7 @@ namespace CourseDesign.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(IEventAggregator aggregator)
+        public MainWindow(IEventAggregator aggregator, IDialogHostService dialogHostService)
         {
             InitializeComponent();
 
@@ -29,7 +30,12 @@ namespace CourseDesign.Views
                 else
                     this.WindowState = WindowState.Normal;
             };
-            btn_close.Click += (s, e) => { this.Close(); }; // 菜单栏 - 窗口关闭按钮
+            btn_close.Click += async (s, e) =>
+            {
+                var dialogResult = await dialogHostService.ShowQueryDialog("退出系统", "确认要退出系统吗？");
+                if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.Yes) return;
+                this.Close();
+            }; // 菜单栏 - 窗口关闭按钮
 
             titleBar.MouseLeftButtonDown += (s, e) => // 菜单栏 - 窗口拖动
             {

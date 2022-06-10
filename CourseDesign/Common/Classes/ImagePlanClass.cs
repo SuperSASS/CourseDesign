@@ -36,7 +36,7 @@ namespace CourseDesign.Common.Classes
         public ImagePlanClass(int id, bool status, int tDoll_ID) : base(id, PlanType.Image, status)
         {
             TDoll_ID = tDoll_ID;
-            if (tDoll_ID != null) TDoll = TDollsContext.GetTDoll((int)tDoll_ID);
+            TDoll = TDollsContext.GetTDoll((int)tDoll_ID);
         }
 
         /// <summary>

@@ -1,5 +1,4 @@
 ﻿using CourseDesign.Common.Classes;
-using CourseDesign.Services.Interfaces;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
@@ -17,6 +16,9 @@ using System.Windows.Controls;
 using CourseDesign.Services;
 using System.Linq.Expressions;
 using static CourseDesign.Context.LoginUserContext;
+using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Services.Dialog;
+using CourseDesign.Extensions;
 
 namespace CourseDesign.ViewModels
 {
@@ -27,6 +29,8 @@ namespace CourseDesign.ViewModels
         private readonly IImagePlanService ImageService;
         private readonly ITextPlanService TextService;
         private readonly ITDollService TDollService;
+        // 对话服务
+        private readonly IDialogHostService DialogService;
         // 属性内部字段
         private ObservableCollection<PlanBase> plansShow; // 要展示的计划表
         private ObservableCollection<AddImagePlanSourceClass> addImagePlanSource; // 能增加的图片类计划源
@@ -127,6 +131,7 @@ namespace CourseDesign.ViewModels
             ImageService = imageService;
             TextService = textService;
             TDollService = tDollService;
+            DialogService = containerProvider.Resolve<IDialogHostService>();
             // 部分初始展示属性初始化
             plansShow = new ObservableCollection<PlanBase>();
             AddImagePlanSource = new ObservableCollection<AddImagePlanSourceClass>();
@@ -209,9 +214,10 @@ namespace CourseDesign.ViewModels
         {
             try
             {
-                // TODO: 3 - 添加温馨提示
-                //var dialogResult = await dialogHost.Question("温馨提示", $"确认删除待办事项:{obj.Title} ?");
-                //if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.OK) return;
+                var dialogResult = await DialogService.ShowQueryDialog("确认删除计划",$"确认要删除该计划吗？");
+                if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.Yes) // 没有确认
+                    return;
+
                 Loading(true);
 
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);

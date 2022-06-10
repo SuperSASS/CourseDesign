@@ -13,18 +13,6 @@ namespace CourseDesign.Extensions
         private ScrollViewer Scroll;
 
         /// <summary>
-        /// 将ScrollViewer鼠标滚动事件，响应为可以水平滚动。
-        /// <para>使用方法：在构造函数中写入<c>AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(*), true);</c>，其中*为传入的参数</para>
-        /// </summary>
-        /// <param name="scroll">需要调整的ScrollViewer控件</param>
-        /// <returns></returns>
-        public Delegate HorizontalWheelHandler(ScrollViewer scroll)
-        {
-            Scroll = scroll;
-            return new MouseWheelEventHandler(ListBox_HorizontalMouseWheel);
-        }
-
-        /// <summary>
         /// 将ListBox的滚动事件与ScrollView的滚动关联，使得鼠标放在内部元素上也能滚轮滚动。
         /// <para>参考自：https://blog.csdn.net/weixin_53370274/article/details/124538587</para>
         /// </summary>
@@ -38,6 +26,18 @@ namespace CourseDesign.Extensions
                 eventArg.Source = sender;
                 fElement.RaiseEvent(eventArg);
             };
+        }
+
+        /// <summary>
+        /// 将ScrollViewer鼠标滚动事件，响应为可以水平滚动。
+        /// <para>使用方法：在构造函数中写入<c>AddHandler(MouseWheelEvent, new ScrollViewerExtension().HorizontalWheelHandler(*), true);</c>，其中*为传入的参数</para>
+        /// </summary>
+        /// <param name="scroll">需要调整的ScrollViewer控件</param>
+        /// <returns></returns>
+        public Delegate HorizontalWheelHandler(ScrollViewer scroll)
+        {
+            Scroll = scroll;
+            return new MouseWheelEventHandler(ListBox_HorizontalMouseWheel);
         }
 
         /// <summary>

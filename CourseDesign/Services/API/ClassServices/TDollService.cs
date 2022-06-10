@@ -1,21 +1,19 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using CourseDesign.Services.Interfaces;
-using CourseDesign.Services.Requests;
+using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Services.API.Requests;
 using CourseDesign.Shared;
 using CourseDesign.Shared.DTOs;
 using CourseDesign.Shared.Parameters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services
+namespace CourseDesign.Services.API.ClassServices
 {
     public class TDollService : BaseHTTPService<TDollDTO>, ITDollService
     {
+        // 通过依赖注入传入所拥有的HTTP客户端client
         public TDollService(HttpRestClient client) : base(client, "TDoll") { }
 
+        // 增添用户拥有人形
         public async Task<APIResponse<TDollDTO>> AddUserObtain(TDollObtainDTO entity)
         {
             BaseRequest request = new BaseRequest();

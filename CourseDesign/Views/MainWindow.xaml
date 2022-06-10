@@ -27,11 +27,11 @@
         </WindowChrome>
     </Window.Resources>
 
+    <!--  这个是消息弹窗（Dialog对话）展示的地方  -->
     <materialDesign:DialogHost
         x:Name="DialogHost"
         DialogTheme="Inherit"
         Identifier="RootDialog">
-        <!--  这个应该是消息弹窗（对话）  -->
 
         <materialDesign:DrawerHost x:Name="meauBars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
 

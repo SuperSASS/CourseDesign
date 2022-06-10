@@ -1,9 +1,9 @@
-﻿using CourseDesign.Common;
-using CourseDesign.Common.Classes;
+﻿using CourseDesign.Common.Classes;
 using CourseDesign.Common.Modules;
 using CourseDesign.Context;
 using CourseDesign.Extensions;
-using CourseDesign.Services.Interfaces;
+using CourseDesign.Services;
+using CourseDesign.Services.API.Interfaces;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
@@ -13,6 +13,10 @@ namespace CourseDesign.ViewModels
 {
     public class MainWindowViewModel : BindableBase, IConfigureService
     {
+        private readonly IRegionManager regionManager; // 区域控制器
+        private IRegionNavigationJournal journal; // 区域导航日志
+
+        // 导航栏部分
         private ObservableCollection<MeauBar> meauBars; // 主菜单列表
         private int selectIndex;                        // 所选择的主菜单哪一项
         public ObservableCollection<MeauBar> MeauBars { get { return meauBars; } set { meauBars = value; } }
@@ -22,9 +26,6 @@ namespace CourseDesign.ViewModels
         public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递MeauBars到这个导航命令
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
         public DelegateCommand GoHomeCommand { get; private set; } // 返回主页命令
-
-        private readonly IRegionManager regionManager; // 区域控制器
-        private IRegionNavigationJournal journal; // 区域导航日志
 
         /// <summary>
         /// MainWindow VM 的构造函数：

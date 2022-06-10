@@ -1,20 +1,20 @@
 ﻿using Arch.EntityFrameworkCore.UnitOfWork.Collections;
-using CourseDesign.Services.Interfaces;
-using CourseDesign.Services.Requests;
+using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Services.API.Requests;
 using CourseDesign.Shared;
 using CourseDesign.Shared.Parameters;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 
-namespace CourseDesign.Services
+namespace CourseDesign.Services.API
 {
     /// <summary>
-    /// 通用的服务层，估计作用就是拿来给其他服务重用的
+    /// 通用的服务层，作用就是拿来给其他各子服务重用的
     /// </summary>
     public class BaseHTTPService<DTOEntity> : IBaseService<DTOEntity> where DTOEntity : class
     {
-        public readonly HttpRestClient Client;
-        public readonly string ServiceName;
+        public readonly HttpRestClient Client; // 向API发送请求的客户端，这里可认为只有RestClient这一个
+        public readonly string ServiceName;    // 子服务名称
 
         /// <summary>
         /// 基本服务基类的构造函数
