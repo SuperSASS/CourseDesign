@@ -8,6 +8,7 @@
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
+
     <Grid>
         <StackPanel>
             <ProgressBar
@@ -18,4 +19,5 @@
                 Style="{StaticResource MaterialDesignCircularProgressBar}" />
         </StackPanel>
     </Grid>
+
 </UserControl>

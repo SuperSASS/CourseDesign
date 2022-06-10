@@ -33,7 +33,7 @@ namespace CourseDesign
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            var configureService = App.Current.MainWindow.DataContext as IConfigureService;
+            IConfigureService configureService = Current.MainWindow.DataContext as IConfigureService;
             if (configureService != null)
                 configureService.Configure();
         }

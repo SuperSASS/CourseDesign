@@ -47,9 +47,7 @@ namespace CourseDesign.Services.Dialog
                     aware.OnDialogOpen(parameters);
                 e.Session.UpdateContent(context);
             };
-            var WATCH = (IDialogResult)await DialogHost.Show(dialogContext, viewModel.DialogHostName, eventHandler);
-            return WATCH;
-            //return (IDialogResult)await DialogHost.Show(dialogContext, viewModel.DialogHostName, eventHandler);
+            return (IDialogResult)await DialogHost.Show(dialogContext, viewModel.DialogHostName, eventHandler);
         }
     }
 }

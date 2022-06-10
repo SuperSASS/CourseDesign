@@ -1,8 +1,8 @@
-﻿using CourseDesign.Common.Classes;
-using CourseDesign.Extensions;
+﻿using CourseDesign.Extensions;
 using System.Windows;
 using System.Windows.Controls;
 using CourseDesign.ViewModels;
+using CourseDesign.Common.Classes.Bases;
 
 namespace CourseDesign.Views
 {

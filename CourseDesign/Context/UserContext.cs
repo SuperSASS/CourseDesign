@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CourseDesign.ViewModels;
 using CourseDesign.Services.API.Interfaces;
+using CourseDesign.Common.Classes.Bases;
 
 namespace CourseDesign.Context
 {
@@ -16,14 +17,17 @@ namespace CourseDesign.Context
     /// </summary>
     public class LoginUserContext
     {
+        #region 字段
         private static int loginUserID;
         private static List<PlanBase> userPlans;
         private static List<int> userTDolls;
+        private static List<Task> waitTasks;
 
         // API服务
         private readonly IImagePlanService ImageService;
         private readonly ITextPlanService TextService;
         private readonly ITDollService TDollService;
+        #endregion
 
         #region 属性
         /// <summary>
@@ -48,13 +52,19 @@ namespace CourseDesign.Context
         public static List<int> UserTDolls
         {
             get { return userTDolls; }
-            set { userTDolls = value; }
+            private set { userTDolls = value; }
+        }
+        /// <summary>
+        /// 所需要等待的任务组
+        /// </summary>
+        public static List<Task> WaitTasks
+        {
+            get { return waitTasks; }
+            set { waitTasks = value; }
         }
         #endregion
 
         #region 方法
-
-
         public LoginUserContext(int loginUserID, IImagePlanService imagePlanService, ITextPlanService textPlanService, ITDollService tDollService)
         {
             LoginUserID = loginUserID;
@@ -62,34 +72,42 @@ namespace CourseDesign.Context
             TextService = textPlanService;
             TDollService = tDollService;
 
-            UserPlans = new List<PlanBase>();
-            UserTDolls = new List<int>();
-            FirstLoadUserContext();
+            UserPlans = new();
+            UserTDolls = new();
+            WaitTasks = new();
+            Initialize();
+        }
+
+        async void Initialize()
+        {
+            WaitTasks.Add(FirstLoadUserContext());
+            foreach (var waitTask in WaitTasks)
+                await waitTask;
         }
 
         /// <summary>
         /// 第一次加载该用户的各项数据
         /// </summary>
-        async void FirstLoadUserContext()
+        async Task FirstLoadUserContext()
         {
             UserTDolls.Clear();
             UserPlans.Clear();
-
             try
             {
                 /* 加载用户所拥有人形 */
                 var tDollsResult = await TDollService.GetUserAndParamContain(new GETParameter() { user_id = LoginUserID });
-                if (tDollsResult == null || tDollsResult.Status != APIStatusCode.Success)
-                    throw new Exception("嘘！服务器在睡觉，不要打扰她啦……");
+                if (tDollsResult.Status != APIStatusCode.Success)
+                    throw new Exception(tDollsResult.Message);
                 foreach (var item in tDollsResult.Result.Items)
                     UserTDolls.Add(item.ID);
                 /* 加载用户所制定的计划 */
                 var imagePlanResult = await ImageService.GetAllForUser(LoginUserID); // 通过服务，查询数据库ImagePlan中所有元组。
+                if (imagePlanResult.Status != APIStatusCode.Success)
+                    throw new Exception(imagePlanResult.Message);
                 var textPlanResult = await TextService.GetAllForUser(LoginUserID);
-                // 以下按照创建时间降序展现
-                if (imagePlanResult == null || textPlanResult == null || imagePlanResult.Status != APIStatusCode.Success || textPlanResult.Status != APIStatusCode.Success)
-                    throw new Exception("嘘！服务器在睡觉，不要打扰她啦……");
-
+                if (textPlanResult.Status != APIStatusCode.Success)
+                    throw new Exception(textPlanResult.Message);
+                /* 完成对API的访问，以下按照创建时间降序展现 */
                 int imageIndex = 0, textIndex = 0;
                 while (imageIndex < imagePlanResult.Result.Items.Count && textIndex < textPlanResult.Result.Items.Count)
                 {
@@ -111,7 +129,10 @@ namespace CourseDesign.Context
                     UserPlans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
                 }
             }
-            catch
+            catch (Exception ex)
+            {
+            }
+            finally
             {
             }
         }

@@ -41,12 +41,13 @@ namespace CourseDesign.ViewModels
             GoBackCommand = new DelegateCommand(GoBack);
             GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoIndex
             // 创建上下文
-            new LoginUserContext(1, imagePlanService, textPlanService, tDollService); // 创建用户上下文
-            new TDollsContext(tDollService); // 创建人形上下文
+            _ = new LoginUserContext(1, imagePlanService, textPlanService, tDollService); // 创建用户上下文
+            _ = new TDollsContext(tDollService); // 创建人形上下文
         }
 
         /// <summary>
-        /// 在进行上一页和返回主页操作后，用来更新NavagationBar（菜单栏导航卡）中所选择的导航项的index，从而更新所选择的项。否则操作后导航项不会更新
+        /// 在进行上一页和返回主页操作后，用来更新NavagationBar（菜单栏导航卡）中所选择的导航项的index，从而更新所选择的项。
+        /// 否则操作后导航项不会更新
         /// </summary>
         private void UpdateSelectIndex()
         {
@@ -105,7 +106,7 @@ namespace CourseDesign.ViewModels
         public void Configure()
         {
             CreateMeauBars(); //创建菜单栏
-            GoIndex(); // 设置默认首页为IndexView
+            //GoIndex(); // 设置默认首页为IndexView【注：由于SelectIndex默认为0，当创建第一个MeauBars选项后，便会导致进入首页
         }
     }
 }

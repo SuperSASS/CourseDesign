@@ -19,6 +19,8 @@ using static CourseDesign.Context.LoginUserContext;
 using CourseDesign.Services.API.Interfaces;
 using CourseDesign.Services.Dialog;
 using CourseDesign.Extensions;
+using CourseDesign.Common.Classes.Bases;
+using CourseDesign.ViewModels.Bases;
 
 namespace CourseDesign.ViewModels
 {
@@ -146,6 +148,21 @@ namespace CourseDesign.ViewModels
             UpdatePlanCommand = new DelegateCommand(UpdatePlan);
         }
 
+        /// <summary>
+        /// 重写导航加载到该页面的方法，每次来到该页面都会执行一次
+        /// </summary>
+        /// <param name="navigationContext"></param>
+        public override void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            base.OnNavigatedTo(navigationContext);
+            IsRightTextEditorOpen = false;
+            IsRightImageEditorOpen = false;
+            SearchFieldIndex = -1;
+            SearchStatusIndex = 1; // 每次来到页面：默认跳回选择“未完成”状态筛选
+            searchContentText = null;
+            SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
+        }
+
         // 已验证√
         /// <summary>
         /// 增加计划
@@ -153,7 +170,7 @@ namespace CourseDesign.ViewModels
         /// <param name="type">传的参数，用"Text"表示增加的文本类，"Image"表示增加的图片类</param>
         private void EditOfAddPlan(string type)
         {
-            Loading(true);
+            ShowLoadingDialog(true);
             isAddOrModify = true; // 记录操作是增加
 
             if (type.Equals("Text")) // 选中的文本类消息
@@ -171,7 +188,7 @@ namespace CourseDesign.ViewModels
                 RightEditorButton = "确认添加";
                 //CurrentEditPlan = new ImagePlanClass(0, false, -1); // 对于图片类构造方式不一样，因此不用生成
             }
-            Loading(false);
+            ShowLoadingDialog(false);
         }
 
         // 已验证√
@@ -182,7 +199,7 @@ namespace CourseDesign.ViewModels
         /// TODO: 2 - 在修改完右侧图片编辑栏的显示方法后，需要被修改
         private void EditOfModifyPlan(PlanBase obj)
         {
-            Loading(true);
+            ShowLoadingDialog(true);
             isAddOrModify = false; // 操作是修改
 
             if (obj is TextPlanClass) // 选中的文本类消息
@@ -202,7 +219,7 @@ namespace CourseDesign.ViewModels
             //    ImagePlanClass t = (ImagePlanClass)obj;
             //    CurrentEditPlan = new ImagePlanClass(t.ID, t.Status, t.TDoll_ID);
             //}
-            Loading(false);
+            ShowLoadingDialog(false);
         }
 
         // 已验证√
@@ -218,7 +235,7 @@ namespace CourseDesign.ViewModels
                 if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.Yes) // 没有确认
                     return;
 
-                Loading(true);
+                ShowLoadingDialog(true);
 
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status == APIStatusCode.Success)
@@ -228,7 +245,7 @@ namespace CourseDesign.ViewModels
             }
             finally
             {
-                Loading(false);
+                ShowLoadingDialog(false);
             }
         }
 
@@ -242,7 +259,7 @@ namespace CourseDesign.ViewModels
             APIStatusCode APIResponseStatus;
             try
             {
-                Loading(true);
+                ShowLoadingDialog(true);
                 TextPlanClass plan = textPlan;
                 plan.Status = textPlan.Status;
                 APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
@@ -254,7 +271,7 @@ namespace CourseDesign.ViewModels
             }
             finally
             {
-                Loading(false);
+                ShowLoadingDialog(false);
             }
         }
 
@@ -267,7 +284,7 @@ namespace CourseDesign.ViewModels
             APIStatusCode APIResponseStatus;
             try
             {
-                Loading(true);
+                ShowLoadingDialog(true);
                 ImagePlanClass plan = imagePlan;
                 plan.Status = true; // 对于图片类计划，只能完成，所以要单独提出来orz……
                 APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
@@ -283,7 +300,7 @@ namespace CourseDesign.ViewModels
             }
             finally
             {
-                Loading(false);
+                ShowLoadingDialog(false);
             }
         }
 
@@ -337,7 +354,6 @@ namespace CourseDesign.ViewModels
                 }
             }
             CreateShowPlans(exp_Status, exp_Field);
-            Loading(false);
         }
 
         // 已验证√
@@ -354,7 +370,7 @@ namespace CourseDesign.ViewModels
                     TextPlanClass textPlan = (TextPlanClass)CurrentEditPlan;
                     if (string.IsNullOrWhiteSpace(textPlan.Title) || string.IsNullOrWhiteSpace(textPlan.Content)) // 计划的标题或内容为空
                         throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
-                    Loading(true);
+                    ShowLoadingDialog(true);
                     APIStatusCode updateResponseStatus = isAddOrModify ? (await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID))).Status : (await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUserID))).Status;
                     if (updateResponseStatus == APIStatusCode.Success)
                     {
@@ -378,7 +394,7 @@ namespace CourseDesign.ViewModels
                 {
                     //if (imagePlan.TDoll_ID < 0 || imagePlan.TDoll_ID > TDollsContext.MaxTDoll_ID) // 人形计划的人形ID不满足范围【由于只展示人形列表的人形，不存在越界问题
                     //    throw new Exception("输入的战术人形ID不存在啦，请检查一下呢……"); // 返回错误提示
-                    Loading(true);
+                    ShowLoadingDialog(true);
                     foreach (var item in AddImagePlanSource)
                         if (item.IsChecked && item.IsDefaultEnabled) // 被选了，并且默认是启动的，代表是用户选的，上传添加
                         {
@@ -410,25 +426,10 @@ namespace CourseDesign.ViewModels
             }
             finally
             {
-                Loading(false);
+                ShowLoadingDialog(false);
                 IsRightTextEditorOpen = false;
                 IsRightImageEditorOpen = false; // 关闭编辑页
             }
-        }
-
-        /// <summary>
-        /// 重写导航加载到该页面的方法
-        /// </summary>
-        /// <param name="navigationContext"></param>
-        public override void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            base.OnNavigatedTo(navigationContext);
-            IsRightTextEditorOpen = false;
-            IsRightImageEditorOpen = false;
-            SearchFieldIndex = -1;
-            SearchStatusIndex = 1; // 每次来到页面：默认跳回选择“未完成”状态筛选
-            searchContentText = null;
-            SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
         }
 
         #region 内部方法
@@ -438,7 +439,7 @@ namespace CourseDesign.ViewModels
         private void CreateShowPlans(Func<PlanBase, bool> exp_Status, Func<PlanBase, bool> exp_Field)
         {
             PlansShow.Clear();
-            foreach (PlanBase item in LoginUserContext.UserPlans)
+            foreach (PlanBase item in UserPlans)
                 if (exp_Status(item) && exp_Field(item))
                     PlansShow.Add(item);
         }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CourseDesign.ViewModels
+namespace CourseDesign.ViewModels.Bases
 {
     /// <summary>
     /// 导航所用类的基类，
@@ -44,9 +44,9 @@ namespace CourseDesign.ViewModels
         /// 展开等待窗口
         /// </summary>
         /// <param name="IsOpen"></param>
-        public void Loading(bool IsOpen)
+        public void ShowLoadingDialog(bool IsOpen)
         {
-            aggregator.Loading(new Common.Events.LoadingModel()
+            aggregator.ShowLoadingDialog(new Common.Events.LoadingModel()
             {
                 IsOpen = IsOpen
             });

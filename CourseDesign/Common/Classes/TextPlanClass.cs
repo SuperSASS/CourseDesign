@@ -1,4 +1,5 @@
-﻿using CourseDesign.Shared.DTOs;
+﻿using CourseDesign.Common.Classes.Bases;
+using CourseDesign.Shared.DTOs;
 
 namespace CourseDesign.Common.Classes
 {
