@@ -12,6 +12,8 @@ namespace CourseDesign.Extensions.Dialog
     /// </summary>
     public interface IDialogHostService : IDialogService
     {
-        Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName="root");
+        // 可以看到这里的基本服务只有ShowDialog
+        // name - 展示的Dialog窗口的名称（如""）
+        Task<IDialogResult> ShowDialog(string name, IDialogParameters parameters, string dialogHostName="RootDialog");
     }
 }

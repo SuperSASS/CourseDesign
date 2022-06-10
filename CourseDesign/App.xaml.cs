@@ -48,14 +48,16 @@ namespace CourseDesign
             containerRegistry.RegisterForNavigation<SkinSettingView, SkinSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
             containerRegistry.RegisterForNavigation<OtherSettingView, OtherSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
             containerRegistry.RegisterForNavigation<AboutSettingView, AboutSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
-            // 注册依赖 - 弹窗(Dialog)
-            containerRegistry.RegisterDialog<AddTextPlanView, AddTextPlanViewModel>();
             // 注册依赖 - API相关【不是很理解，先写下来
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl")); // 先给构造函数设置一个默认名称
             containerRegistry.GetContainer().RegisterInstance(@"http://localhost:2333/", serviceKey: "webUrl"); // 注册服务地址
-            containerRegistry.Register<IImagePlanService, ImagePlanService>(); // 注册ImagePlan的服务（接口，实现）
-            containerRegistry.Register<ITextPlanService, TextPlanService>(); // 注册ImagePlan的服务（接口，实现）
-            containerRegistry.Register<ITDollService, TDollService>(); // 注册ImagePlan的服务（接口，实现）
+            containerRegistry.Register<IImagePlanService, ImagePlanService>(); // 注册ImagePlan的服务
+            containerRegistry.Register<ITextPlanService, TextPlanService>(); // 注册TextPlan的服务
+            containerRegistry.Register<ITDollService, TDollService>(); // 注册TDoll的服务
+            // 注册依赖 - Dialog弹窗服务
+            containerRegistry.Register<IDialogHostService, DialogHostService>(); // Dialog弹窗服务
+            // 注册依赖 - 弹窗(Dialog)[由于不再使用Prism本身的，而是我们扩展的，所以改成容器注入
+            containerRegistry.RegisterForNavigation<AddTextPlanView, AddTextPlanViewModel>();
 
         }
     }

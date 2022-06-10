@@ -17,5 +17,4 @@ namespace CourseDesign.Common.Events
     internal class LoadingEvent : PubSubEvent<LoadingModel>
     {
     }
-
 }

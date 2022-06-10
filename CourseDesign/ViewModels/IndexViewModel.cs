@@ -26,34 +26,31 @@ namespace CourseDesign.ViewModels
         }
         public DelegateCommand<string> ExecCommand { get; private set; }
 
-        private readonly IDialogService DialogService;
+        private readonly IDialogHostService DialogService; // 弹窗服务
 
 
         /// <summary>
         /// IndexView VM 的构造函数：
         /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
         /// </summary>
-        public IndexViewModel(IDialogService dialogService)
+        public IndexViewModel(IDialogHostService dialogService)
         {
+            // 注入弹窗服务
+            DialogService = dialogService;
+            // 初始化可视数据模块
             InfoBlocks = new ObservableCollection<infoBlock>();
             PlanLists = new ObservableCollection<PlanBase>();
+            // 初始化命令模块
             ExecCommand = new DelegateCommand<string>(Exec);
-            DialogService = dialogService;
         }
 
         public void Exec(string cmd)
         {
             switch (cmd)
             {
-                case "新增常规计划": AddTextPlan(); break;
-                default:
-                    break;
+                case "新增常规计划": DialogService.ShowDialog("AddTextPlanView", null); break;
+                default: break;
             }
-        }
-
-        private void AddTextPlan()
-        {
-            DialogService.ShowDialog("AddTextPlanView");
         }
 
         /// <summary>

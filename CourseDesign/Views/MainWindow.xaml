@@ -96,6 +96,7 @@
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
 
+            <!-- 整个页面，但只有标题栏，页面Reigon由各个页面呈现 -->
             <DockPanel>
                 <!--  标题栏  -->
                 <materialDesign:ColorZone

@@ -7,20 +7,31 @@ using System.Threading.Tasks;
 
 namespace CourseDesign.ViewModels.Dialogs
 {
-    internal class AddTextPlanViewModel : IDialogAware
+    internal class AddTextPlanViewModel : IDialogHostAware
     {
-        public string Title { get; set; }
+        public string DialogHostName { get; set; }
+        public DelegateCommand SaveCommand {get; set;}
+        public DelegateCommand CancelCommand { get; set;}
 
-        public event Action<IDialogResult> RequestClose;
-
-        public bool CanCloseDialog() { return true; }
-
-        public void OnDialogClosed()
+        public AddTextPlanViewModel()
         {
+            SaveCommand = new DelegateCommand(Save);
+            CancelCommand = new DelegateCommand(Cancel);
         }
 
-        public void OnDialogOpened(IDialogParameters parameters)
+        private void Save()
         {
+            if (DialogHost.IsDialogOpen(DialogHostName))
+            {
+                DialogParameters parameters = new DialogParameters();
+                DialogHost.Close(DialogHostName, new DialogResult(ButtonResult.OK, parameters));
+            }
+        }
+
+        private void Cancel()
+        {
+            if (DialogHost.IsDialogOpen(DialogHostName))
+                DialogHost.Close(DialogHostName);
         }
     }
 }
