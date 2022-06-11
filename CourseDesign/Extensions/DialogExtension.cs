@@ -31,29 +31,38 @@ namespace CourseDesign.Extensions
             return await dialogService.ShowDialog("QueryView", parameters, dialogHostName);
         }
 
+        #region 等待Loading弹窗
         /// <summary>
-        /// 发送消息，展开等待窗口
+        /// 注册等待消息
         /// </summary>
-        /// <param name="aggregator"></param>
-        /// <param name="model"></param>
+        public static void RegisterLoadingDialog(this IEventAggregator aggregator, Action<LoadingModel> action)
+        {
+            aggregator.GetEvent<LoadingEvent>().Subscribe(action);
+        }
+        /// <summary>
+        /// 发布消息，展开等待窗口
+        /// </summary>
         public static void ShowLoadingDialog(this IEventAggregator aggregator, LoadingModel model)
         {
             aggregator.GetEvent<LoadingEvent>().Publish(model);
         }
+        #endregion
 
+        #region 底部浮动提示消息Message弹窗
         /// <summary>
-        /// 注册等待消息
+        /// 注册底部浮动提示消息
         /// </summary>
-        /// <param name="aggregator"></param>
-        /// <param name="action"></param>
-        public static void Register(this IEventAggregator aggregator, Action<LoadingModel> action)
+        public static void RegisterMessageDialog(this IEventAggregator aggregator, Action<string> action)
         {
-            aggregator.GetEvent<LoadingEvent>().Subscribe(action);
+            aggregator.GetEvent<MessageEvent>().Subscribe(action);
         }
-
-        public static void Register(this IEventAggregator aggregator, Action<MessageModel> action)
+        /// <summary>
+        /// 发布消息，展开底部浮动提示消息弹窗
+        /// </summary>
+        public static void ShowMessageDialog(this IEventAggregator aggregator, string model)
         {
-            aggregator.GetEvent<MessageEvent>().Sb
+            aggregator.GetEvent<MessageEvent>().Publish(model);
         }
+        #endregion
     }
 }

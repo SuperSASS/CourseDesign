@@ -1,6 +1,7 @@
 ﻿using CourseDesign.Extensions;
 using CourseDesign.Services.Dialog;
 using CourseDesign.Views.Dialogs;
+using MaterialDesignThemes.Wpf;
 using Prism.Events;
 using System.Windows;
 
@@ -15,11 +16,15 @@ namespace CourseDesign.Views
         {
             InitializeComponent();
 
-            aggregator.Register(arg => // 注册Dialog会话 - 弹窗等待
+            aggregator.RegisterLoadingDialog(arg => // 注册Dialog会话 - 弹窗等待
             {
                 DialogHost.IsOpen = arg.IsOpen;
                 if (DialogHost.IsOpen)
                     DialogHost.DialogContent = new ProgressView(); // 弹窗等待条
+            });
+            aggregator.RegisterMessageDialog(arg => // 注册Dialog会话 - 提示消息
+            {
+                snack_bar.MessageQueue.Enqueue(arg);
             });
 
             btn_min.Click += (s, e) => { this.WindowState = WindowState.Minimized; }; // 菜单栏 - 窗口最小化按钮

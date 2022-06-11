@@ -131,6 +131,10 @@ namespace CourseDesign.ViewModels
             }
         }
 
+        /// <summary>
+        /// 在主页中完成了某计划
+        /// </summary>
+        /// <param name="plan">计划基类</param>
         private async void CompletePlan(PlanBase plan)
         {
             try
@@ -161,13 +165,13 @@ namespace CourseDesign.ViewModels
                 }
                 CreatePlanLists(); // 重新生成显示内容
                 CreateInfoBlocks(); // 重新更新信息块
+                aggregator.ShowMessageDialog("任务已完成！");
             }
             finally
             {
                 ShowLoadingDialog(false);
             }
         }
-
 
         /// <summary>
         /// 用于驱动页面的切换的实现方法
