@@ -69,6 +69,7 @@ namespace CourseDesign
             containerRegistry.Register<IImagePlanService, ImagePlanService>(); // 注册ImagePlan的服务
             containerRegistry.Register<ITextPlanService, TextPlanService>();   // 注册TextPlan的服务
             containerRegistry.Register<ITDollService, TDollService>();         // 注册TDoll的服务
+            containerRegistry.Register<ILoginService, LoginService>();         // 注册Login的服务
             // 注册依赖 - Dialog弹窗服务
             containerRegistry.Register<IDialogHostService, DialogHostService>();
             // 注册 - Prism的弹窗

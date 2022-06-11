@@ -12,7 +12,7 @@ namespace CourseDesign.API.Services.Interfaces
         /// 用户登录
         /// </summary>
         /// <param name="account">账号</param>
-        /// <param name="password">密码</param>
+        /// <param name="password">传来的MD5处理后的密码</param>
         /// <returns>API返回消息<see cref="APIResponseInner"/>
         /// <list type="bullet">
         /// <item>成功：只返回状态码为Success</item>

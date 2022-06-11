@@ -21,8 +21,8 @@ namespace CourseDesign.API.Controllers
         /// <param name="account">账号</param>
         /// <param name="password">密码</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
-        [HttpGet]
-        public async Task<APIResponseInner> Login(string account, string password) => await Service.LoginAsync(account, password);
+        [HttpPost]
+        public async Task<APIResponseInner> Login([FromBody] UserDTO dtoEntity) => await Service.LoginAsync(dtoEntity.Account, dtoEntity.Password);
 
         /// <summary>
         /// 用户注册的实现
