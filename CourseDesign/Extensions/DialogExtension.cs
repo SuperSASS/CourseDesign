@@ -36,7 +36,7 @@ namespace CourseDesign.Extensions
         /// </summary>
         /// <param name="aggregator"></param>
         /// <param name="model"></param>
-        public static void ShowLoadingDialog (this IEventAggregator aggregator, LoadingModel model)
+        public static void ShowLoadingDialog(this IEventAggregator aggregator, LoadingModel model)
         {
             aggregator.GetEvent<LoadingEvent>().Publish(model);
         }
@@ -49,6 +49,11 @@ namespace CourseDesign.Extensions
         public static void Register(this IEventAggregator aggregator, Action<LoadingModel> action)
         {
             aggregator.GetEvent<LoadingEvent>().Subscribe(action);
-       }
+        }
+
+        public static void Register(this IEventAggregator aggregator, Action<MessageModel> action)
+        {
+            aggregator.GetEvent<MessageEvent>().Sb
+        }
     }
 }

@@ -6,8 +6,8 @@
     xmlns:local="clr-namespace:CourseDesign.Views.Dialogs"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    Width="450"
+    Height="280"
     mc:Ignorable="d">
 
     <Grid>
@@ -18,25 +18,30 @@
         </Grid.RowDefinitions>
 
         <TextBlock
-            Padding="20,10"
-            FontSize="20"
+            Padding="20,15,0,10"
             FontWeight="Bold"
-            Text="添加常规类计划" />
+            Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+            Text="添加常规计划" />
+        <Border
+            x:Name="Border"
+            Margin="0,0,250,0"
+            BorderBrush="{DynamicResource MaterialDesignDivider}"
+            BorderThickness="0,0,0,1"
+            DockPanel.Dock="Top" />
 
         <DockPanel Grid.Row="1" LastChildFill="False">
             <TextBox
-                Margin="20,10"
+                Margin="40,15"
                 materialDesign:HintAssist.Hint="请输入计划标题"
                 DockPanel.Dock="Top"
-                Text="{Binding AddPlan.Title}" />
-
+                Text="{Binding AddTextPlan.Title}" />
             <TextBox
-                MinHeight="100"
-                Margin="20,10"
+                MinHeight="90"
+                Margin="40,10"
                 materialDesign:HintAssist.Hint="请输入计划内容"
                 AcceptsReturn="True"
                 DockPanel.Dock="Top"
-                Text="{Binding AddPlan.Content}"
+                Text="{Binding AddTextPlan.Content}"
                 TextWrapping="Wrap" />
         </DockPanel>
 

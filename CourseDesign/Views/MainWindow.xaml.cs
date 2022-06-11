@@ -51,7 +51,7 @@ namespace CourseDesign.Views
             };
             navigationBars.SelectionChanged += (s, e) => // 导航栏 - 更新左侧横条
             {
-                meauBars.IsLeftDrawerOpen = false;
+                menu_bars.IsLeftDrawerOpen = false;
             };
         }
     }

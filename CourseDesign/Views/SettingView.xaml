@@ -18,7 +18,7 @@
         <Border>
             <Border.Background>
                 <ImageBrush
-                    ImageSource="\Assets\Images\background_setting.jpg"
+                    ImageSource="\Assets\Images\Backgrounds\background_setting.jpg"
                     Opacity="0.6"
                     Stretch="UniformToFill" />
             </Border.Background>
@@ -63,7 +63,7 @@
                     <!--  设置选项  -->
                     <ListBox
                         x:Name="navigationBars"
-                        ItemContainerStyle="{StaticResource meauBarStyle}"
+                        ItemContainerStyle="{StaticResource menuBarStyle}"
                         ItemsSource="{Binding SettingBars}">
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">

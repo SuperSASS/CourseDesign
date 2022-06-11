@@ -17,13 +17,13 @@ namespace CourseDesign.ViewModels
         private IRegionNavigationJournal journal; // 区域导航日志
 
         // 导航栏部分
-        private ObservableCollection<MeauBar> meauBars; // 主菜单列表
+        private ObservableCollection<MenuBar> menuBars; // 主菜单列表
         private int selectIndex;                        // 所选择的主菜单哪一项
-        public ObservableCollection<MeauBar> MeauBars { get { return meauBars; } set { meauBars = value; } }
+        public ObservableCollection<MenuBar> MenuBars { get { return menuBars; } set { menuBars = value; } }
         public int SelectIndex { get { return selectIndex; } set { selectIndex = value; RaisePropertyChanged(); } }
 
         // 命令部分
-        public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递MeauBars到这个导航命令
+        public DelegateCommand<MenuBar> NavigationCommand { get; private set; } // 从UI层传递MenuBars到这个导航命令
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
         public DelegateCommand GoHomeCommand { get; private set; } // 返回主页命令
 
@@ -34,13 +34,13 @@ namespace CourseDesign.ViewModels
         /// <param name="regionManager"> 区域管理器 </param>
         public MainWindowViewModel(IRegionManager regionManager,ITextPlanService textPlanService, IImagePlanService imagePlanService,  ITDollService tDollService)
         {
-            MeauBars = new ObservableCollection<MeauBar>();
+            MenuBars = new ObservableCollection<MenuBar>();
             this.regionManager = regionManager;
             // 命令接口实现
-            NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
+            NavigationCommand = new DelegateCommand<MenuBar>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoIndex
-            // 创建上下文
+            // 创建全局静态上下文
             _ = new LoginUserContext(1, imagePlanService, textPlanService, tDollService); // 创建用户上下文
             _ = new TDollsContext(tDollService); // 创建人形上下文
         }
@@ -52,8 +52,8 @@ namespace CourseDesign.ViewModels
         private void UpdateSelectIndex()
         {
             int index = 0;
-            foreach (MeauBar nowMeauBar in MeauBars)
-                if (nowMeauBar.NameSpace == journal.CurrentEntry.Uri.ToString()) // journal中这个代表当前页面的uri（前面导航传进来的那个），因此可以遍历然后找到index
+            foreach (MenuBar nowMenuBar in MenuBars)
+                if (nowMenuBar.NameSpace == journal.CurrentEntry.Uri.ToString()) // journal中这个代表当前页面的uri（前面导航传进来的那个），因此可以遍历然后找到index
                     SelectIndex = index;
                 else
                     index++;
@@ -81,8 +81,8 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 用于驱动页面的切换的实现方法
         /// </summary>
-        /// <param name="obj">当注册的导航MeauBar响应后，自动调用该方法，并作为参数obj</param>
-        private void Navigate(MeauBar obj)
+        /// <param name="obj">当注册的导航MenuBar响应后，自动调用该方法，并作为参数obj</param>
+        private void Navigate(MenuBar obj)
         {
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Title))
                 regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.NameSpace, back => { journal = back.Context.NavigationService.Journal; });
@@ -92,12 +92,12 @@ namespace CourseDesign.ViewModels
         /// 创建主菜单列表
         /// <para>注意：Add的顺序需要与主菜单列表的一致！否则在上一页、返回主页时，NavigationBar的更新会混乱</para>
         /// </summary>
-        void CreateMeauBars()
+        void CreateMenuBars()
         {
-            MeauBars.Add(new MeauBar("Home", "首页", "IndexView"));
-            MeauBars.Add(new MeauBar("CheckboxMultipleMarkedCircleOutline", "计划列表", "PlanView"));
-            MeauBars.Add(new MeauBar("BadgeAccount", "图鉴", "ListView"));
-            MeauBars.Add(new MeauBar("Cog", "设置", "SettingView"));
+            MenuBars.Add(new MenuBar("Home", "首页", "IndexView"));
+            MenuBars.Add(new MenuBar("CheckboxMultipleMarkedCircleOutline", "计划列表", "PlanView"));
+            MenuBars.Add(new MenuBar("BadgeAccount", "图鉴", "ListView"));
+            MenuBars.Add(new MenuBar("Cog", "设置", "SettingView"));
         }
 
         /// <summary>
@@ -105,8 +105,8 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public void Configure()
         {
-            CreateMeauBars(); //创建菜单栏
-            //GoIndex(); // 设置默认首页为IndexView【注：由于SelectIndex默认为0，当创建第一个MeauBars选项后，便会导致进入首页
+            CreateMenuBars(); //创建菜单栏【注：由于Congigure在构造函数之后，构造函数里完成了对SelectionChanged的事件触发器构建，
+                              //此时再创建菜单栏会触发该触发器，导致换到默认的SelectedIndex=0的页面，即第一个MenuBar首页。
         }
     }
 }

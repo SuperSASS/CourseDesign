@@ -11,100 +11,91 @@
     <Page Remove="Command\**" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\Images\16Lab.png" />
-    <None Remove="Assets\Images\avatar.jpg" />
-    <None Remove="Assets\Images\background_index.jpg" />
-    <None Remove="Assets\Images\background_list.jpg" />
-    <None Remove="Assets\Images\background_setting.jpg" />
-    <None Remove="Assets\Images\background_task.jpg" />
-    <None Remove="Assets\Images\Griffin.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-10.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-10_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-10_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-11.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-11_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-11_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-12.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-12_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-12_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-1_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-1_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-2.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-2_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-2_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-3.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-3_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-3_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-4.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-4_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-4_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-5.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-5_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-5_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-6.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-6_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-6_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-7.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-7_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-7_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-8.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-8_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-8_1x1.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-9_16x9.png" />
-    <None Remove="Assets\T-Dolls\T-Doll-9_1x1.png" />
+    <None Remove="Assets\Icons\AR.png" />
+    <None Remove="Assets\Icons\HG.png" />
+    <None Remove="Assets\Icons\MG.png" />
+    <None Remove="Assets\Icons\RF.png" />
+    <None Remove="Assets\Icons\SG.png" />
+    <None Remove="Assets\Icons\SMG.png" />
+    <None Remove="Assets\Images\Rarity\2.png" />
+    <None Remove="Assets\Images\Rarity\3.png" />
+    <None Remove="Assets\Images\Rarity\4.png" />
+    <None Remove="Assets\Images\Rarity\5.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\Images\16Lab.png" />
+    <Resource Include="App.xaml" />
+    <Resource Include="Assets\Gifs\AllComplete.gif" />
+    <Resource Include="Assets\Gifs\NoComplete.gif" />
+    <Resource Include="Assets\Gifs\NoResult.gif" />
+    <Resource Include="Assets\Gifs\Nothing.gif" />
+    <Resource Include="Assets\Icons\AR.png" />
+    <Resource Include="Assets\Icons\HG.png" />
+    <Resource Include="Assets\Icons\MG.png" />
+    <Resource Include="Assets\Icons\RF.png" />
+    <Resource Include="Assets\Icons\SG.png" />
+    <Resource Include="Assets\Icons\SMG.png" />
+    <Resource Include="Assets\Images\Decorates\IOP_1.png" />
+    <Resource Include="Assets\Images\Decorates\IOP_2.png" />
+    <Resource Include="Assets\Images\Rarity\2.png" />
+    <Resource Include="Assets\Images\Rarity\3.png" />
+    <Resource Include="Assets\Images\Rarity\4.png" />
+    <Resource Include="Assets\Images\Rarity\5.png" />
+    <Resource Include="Assets\T-Dolls\3\T-Doll-3.png" />
+    <Resource Include="Assets\T-Dolls\3\T-Doll-3_16x9.png" />
+    <Resource Include="Assets\T-Dolls\3\T-Doll-3_1x1.png" />
+    <Resource Include="Assets\T-Dolls\4\T-Doll-4.png" />
+    <Resource Include="Assets\T-Dolls\4\T-Doll-4_16x9.png" />
+    <Resource Include="Assets\T-Dolls\4\T-Doll-4_1x1.png" />
+    <Resource Include="Assets\T-Dolls\5\T-Doll-5.png" />
+    <Resource Include="Assets\T-Dolls\5\T-Doll-5_16x9.png" />
+    <Resource Include="Assets\T-Dolls\5\T-Doll-5_1x1.png" />
+    <Resource Include="Assets\T-Dolls\6\T-Doll-6.png" />
+    <Resource Include="Assets\T-Dolls\6\T-Doll-6_16x9.png" />
+    <Resource Include="Assets\T-Dolls\6\T-Doll-6_1x1.png" />
+    <Resource Include="Assets\T-Dolls\7\T-Doll-7.png" />
+    <Resource Include="Assets\T-Dolls\7\T-Doll-7_16x9.png" />
+    <Resource Include="Assets\T-Dolls\7\T-Doll-7_1x1.png" />
+    <Resource Include="Assets\T-Dolls\8\T-Doll-8.png" />
+    <Resource Include="Assets\T-Dolls\8\T-Doll-8_16x9.png" />
+    <Resource Include="Assets\T-Dolls\8\T-Doll-8_1x1.png" />
+    <Resource Include="Assets\T-Dolls\9\T-Doll-9.png" />
+    <Resource Include="Assets\T-Dolls\9\T-Doll-9_16x9.png" />
+    <Resource Include="Assets\T-Dolls\9\T-Doll-9_1x1.png" />
+    <Resource Include="Assets\T-Dolls\10\T-Doll-10.png" />
+    <Resource Include="Assets\T-Dolls\10\T-Doll-10_16x9.png" />
+    <Resource Include="Assets\T-Dolls\10\T-Doll-10_1x1.png" />
+    <Resource Include="Assets\T-Dolls\11\T-Doll-11.png" />
+    <Resource Include="Assets\T-Dolls\11\T-Doll-11_16x9.png" />
+    <Resource Include="Assets\T-Dolls\11\T-Doll-11_1x1.png" />
+    <Resource Include="Assets\T-Dolls\12\T-Doll-12.png" />
+    <Resource Include="Assets\T-Dolls\12\T-Doll-12_16x9.png" />
+    <Resource Include="Assets\T-Dolls\12\T-Doll-12_1x1.png" />
+    <Resource Include="Assets\T-Dolls\1\T-Doll-1.png" />
+    <Resource Include="Assets\T-Dolls\1\T-Doll-1_16x9.png" />
+    <Resource Include="Assets\T-Dolls\1\T-Doll-1_1x1.png" />
+    <Resource Include="Assets\T-Dolls\2\T-Doll-2.png" />
+    <Resource Include="Assets\T-Dolls\2\T-Doll-2_16x9.png" />
+    <Resource Include="Assets\T-Dolls\2\T-Doll-2_1x1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Backgrounds\background_index.jpg" />
+    <Resource Include="Assets\Images\Backgrounds\background_list.jpg" />
+    <Resource Include="Assets\Images\Backgrounds\background_setting.jpg" />
+    <Resource Include="Assets\Images\Backgrounds\background_task.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Images\Decorates\16Lab.png" />
+    <Resource Include="Assets\Images\Decorates\Griffin.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Assets\Images\avatar.jpg" />
-    <Resource Include="Assets\Images\background_index.jpg" />
-    <Resource Include="Assets\Images\background_list.jpg" />
-    <Resource Include="Assets\Images\background_setting.jpg" />
-    <Resource Include="Assets\Images\background_task.jpg" />
-    <Resource Include="Assets\Images\Griffin.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-10.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-10_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-10_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-11.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-11_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-11_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-12.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-12_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-12_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-1_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-1_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-2.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-2_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-2_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-3.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-3_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-3_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-4.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-4_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-4_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-5.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-5_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-5_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-6.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-6_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-6_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-7.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-7_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-7_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-8.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-8_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-8_1x1.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-9_16x9.png" />
-    <Resource Include="Assets\T-Dolls\T-Doll-9_1x1.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Prism.DryIoc" Version="8.1.97" />
     <PackageReference Include="RestSharp" Version="106.15.0" />
+    <PackageReference Include="WpfAnimatedGif" Version="2.0.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CourseDesign.Shared\CourseDesign.Shared.csproj" />

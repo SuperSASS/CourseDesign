@@ -6,16 +6,17 @@
     xmlns:local="clr-namespace:CourseDesign.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:selector="clr-namespace:CourseDesign.Common.Selector"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
-    <Grid x:Name="main_content" Background="{Binding PrimaryHueMidForegroundBrush}">
+    <Grid x:Name="main_content">
         <!--  背景图  -->
         <Border>
             <Border.Background>
                 <ImageBrush
-                    ImageSource="\Assets\Images\background_index.jpg"
+                    ImageSource="\Assets\Images\Backgrounds\background_index.jpg"
                     Opacity="0.6"
                     Stretch="UniformToFill" />
             </Border.Background>
@@ -28,14 +29,14 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Opacity="0.6"
-            Source="\Assets\Images\Griffin.png" />
+            Source="\Assets\Images\Decorates\Griffin.png" />
 
         <!--  副官展示  -->
         <Canvas x:Name="adjutant_image" Margin="30">
             <Image
                 Height="1000"
                 Margin="-70,0,0,0"
-                Source="/Assets/T-Dolls/T-Doll-1.png"
+                Source="\Assets\T-Dolls\1\T-Doll-1.png"
                 Stretch="Uniform" />
         </Canvas>
 
@@ -61,7 +62,8 @@
                                 x:Name="info_button"
                                 Height="auto"
                                 materialDesign:ButtonAssist.CornerRadius="10"
-                                IsEnabled="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                Command="{Binding DataContext.NavigationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                CommandParameter="{Binding}"
                                 Opacity="0.8"
                                 Style="{DynamicResource MaterialDesignRaisedSecondaryButton}"
                                 ToolTip="{Binding ToolTip}" />
@@ -71,7 +73,7 @@
                             <Grid x:Name="info_content">
                                 <Grid.InputBindings>
                                     <MouseBinding
-                                        Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                        Command="{Binding DataContext.NavigationCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                         CommandParameter="{Binding}"
                                         MouseAction="LeftClick" />
                                 </Grid.InputBindings>
@@ -92,13 +94,45 @@
                                         Text="{Binding Title}" />
                                 </StackPanel>
 
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Margin="30,0"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
-                                    Style="{StaticResource MaterialDesignHeadline3TextBlock}"
-                                    Text="{Binding Content}" />
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                    <StackPanel Margin="5,0,30,-27" Orientation="Horizontal">
+                                        <TextBlock
+                                            Margin="0,0,0,15"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                            Text="{Binding Complete}" />
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                                            Text="/" />
+                                        <TextBlock
+                                            Margin="0,25,0,0"
+                                            VerticalAlignment="Center"
+                                            Style="{StaticResource MaterialDesignBody1TextBlock}"
+                                            Text="{Binding All}" />
+                                    </StackPanel>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignHeadline3TextBlock}"
+                                        Text="{Binding Ratio_Integer}" />
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="5,0,0,-20"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                        Text="{Binding Ratio_Decimal}" />
+                                    <materialDesign:PackIcon
+                                        Width="80"
+                                        Height="80"
+                                        Margin="0,0,20,0"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Kind="PercentOutline" />
+
+                                </StackPanel>
 
                                 <!--  信息条装饰  -->
                                 <Canvas Grid.Column="1" ClipToBounds="True">
@@ -126,7 +160,10 @@
             </ItemsControl>
 
             <!--  计划列表  -->
-            <Grid Grid.Row="1" Margin="0,10,0,10">
+            <Grid
+                x:Name="plan_list_container"
+                Grid.Row="1"
+                Margin="0,10,0,10">
                 <Border
                     Background="{DynamicResource PrimaryHueMidForegroundBrush}"
                     CornerRadius="10"
@@ -141,7 +178,6 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                             Text="计划列表" />
-                        <!--  TODO：这个功能还没实现  -->
                         <Button
                             Width="50"
                             Height="50"
@@ -156,19 +192,53 @@
                     </DockPanel>
 
                     <!--  计划列表内容  -->
-                    <ScrollViewer x:Name="task_list" Style="{StaticResource for_scrollviewer}">
+                    <ScrollViewer x:Name="plan_list" Style="{StaticResource for_scrollviewer}">
                         <ListBox
-                            x:Name="task_list_son"
+                            x:Name="plan_list_son"
                             HorizontalContentAlignment="Stretch"
                             ItemsSource="{Binding PlanLists}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel MaxHeight="80" LastChildFill="False">
+                            <ListBox.Resources>
+                                <!--  文字计划  -->
+                                <DataTemplate x:Key="text_plan">
+                                    <Grid MaxWidth="{Binding ActualWidth, ElementName=plan_list_container, Converter={StaticResource MathAddConverter}, ConverterParameter=-40}" Margin="0,0,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <!--  计划内容  -->
+                                        <Grid>
+                                            <Image
+                                                Width="80"
+                                                Height="80"
+                                                Margin="200,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.4"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                SnapsToDevicePixels="True"
+                                                Source="\Assets\Images\Decorates\IOP_1.png"
+                                                UseLayoutRounding="True" />
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock
+                                                    Margin="10"
+                                                    FontWeight="Bold"
+                                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                                    Text="{Binding Title}" />
+                                                <TextBlock
+                                                    Margin="10"
+                                                    Opacity="0.8"
+                                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                    Text="{Binding Content}"
+                                                    TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Grid>
                                         <!--  计划状态切换滑块  -->
                                         <ToggleButton
+                                            Grid.Column="1"
                                             Margin="10,0"
                                             materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="{DynamicResource MaterialDesignBody}"
-                                            Command="{Binding DataContext.ToDoCompltedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                            Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}"
                                             DockPanel.Dock="Right"
                                             IsChecked="{Binding Status}"
@@ -179,22 +249,67 @@
                                                 <materialDesign:PackIcon Kind="Check" />
                                             </materialDesign:ToggleButtonAssist.OnContent>
                                         </ToggleButton>
-                                        <!--  计划内容  -->
-                                        <StackPanel>
-                                            <TextBlock
-                                                Margin="10,5"
-                                                FontWeight="Bold"
-                                                Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                                Text="{Binding Title}" />
-                                            <TextBlock
-                                                Margin="10,5"
-                                                Opacity="0.8"
-                                                Style="{StaticResource MaterialDesignCaptionTextBlock}"
-                                                Text="{Binding Content}" />
-                                        </StackPanel>
-                                    </DockPanel>
+                                    </Grid>
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
+                                <!--  图片计划  -->
+                                <DataTemplate x:Key="image_plan">
+                                    <Grid
+                                        MaxWidth="{Binding ActualWidth, ElementName=plan_list_container, Converter={StaticResource MathAddConverter}, ConverterParameter=-40}"
+                                        MaxHeight="100"
+                                        Margin="0,0,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <!--  计划内容  -->
+                                        <Grid Height="100">
+                                            <Image
+                                                Width="315"
+                                                Height="560"
+                                                Margin="100,0"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Opacity="0.8"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                SnapsToDevicePixels="True"
+                                                Source="{Binding TDoll.ArtworkPath_16x9}"
+                                                UseLayoutRounding="True" />
+                                            <TextBlock
+                                                Margin="10"
+                                                FontWeight="Bold"
+                                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                                Text="{Binding TDoll.Name}" />
+                                            <TextBlock
+                                                Margin="10"
+                                                VerticalAlignment="Bottom"
+                                                Opacity="0.8"
+                                                Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                Text="人形获取计划" />
+                                        </Grid>
+                                        <!--  计划状态切换滑块  -->
+                                        <ToggleButton
+                                            Grid.Column="1"
+                                            Margin="10,0"
+                                            materialDesign:ToggleButtonAssist.SwitchTrackOffBackground="{DynamicResource MaterialDesignBody}"
+                                            Command="{Binding DataContext.CompletePlanCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            DockPanel.Dock="Right"
+                                            IsChecked="{Binding Status}"
+                                            Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
+                                            ToolTip="点击完成计划">
+                                            <materialDesign:PackIcon Kind="ChevronRight" RenderTransformOrigin=".5,.5" />
+                                            <materialDesign:ToggleButtonAssist.OnContent>
+                                                <materialDesign:PackIcon Kind="Check" />
+                                            </materialDesign:ToggleButtonAssist.OnContent>
+                                        </ToggleButton>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.Resources>
+
+                            <!--  展示数据选择器  -->
+                            <ListBox.ItemTemplateSelector>
+                                <selector:PlansDataSelector ImageTemplate="{StaticResource image_plan}" TextTemplate="{StaticResource text_plan}" />
+                            </ListBox.ItemTemplateSelector>
                         </ListBox>
                     </ScrollViewer>
                 </DockPanel>

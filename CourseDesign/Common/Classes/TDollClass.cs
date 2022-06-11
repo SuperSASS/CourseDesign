@@ -16,14 +16,16 @@ namespace CourseDesign.Common.Classes
     public class TDollClass
     {
         public enum TDollType { HG, SMG, RF, AR, MG, SG }; // 计划类型的枚举
-
+        #region 字段
         private int id;
         private string name;
         private int rarity;
         private TDollType type;
         private string artworkPath;
         private string[] obtainMethod;
+        #endregion
 
+        #region 属性
         public int ID
         {
             get { return id; }
@@ -49,19 +51,23 @@ namespace CourseDesign.Common.Classes
             get { return artworkPath; }
             set { artworkPath = value; }
         }
-        public string ArtworkPath_16x9 // 16比9的图片路径
-        {
-            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_16x9.png"; }
-        }
-        public string ArtworkPath_1x1 // 16比9的图片路径
-        {
-            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_1x1.png"; }
-        }
         public string[] ObtainMethod
         {
             get { return obtainMethod; }
             set { obtainMethod = value; }
         }
+        #endregion
+
+        #region 导出属性
+        public string ArtworkPath_16x9 // 16比9的图片路径
+        {
+            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_16x9.png"; }
+        }
+        public string ArtworkPath_1x1 // 1比1的图片路径
+        {
+            get { return ArtworkPath.Substring(0, ArtworkPath.Length - 4) + "_1x1.png"; }
+        }
+        #endregion
 
         /// <summary>
         /// 战术人形的构造函数

@@ -21,7 +21,6 @@ namespace CourseDesign.Context
     {
         private readonly ITDollService TDollService;
         public static List<TDollClass> AllTDolls; // 所有的战术人形上下文
-        public static int MaxTDoll_ID; // 最大的TDoll_ID
 
         public TDollsContext(ITDollService tDollService)
         {
@@ -36,7 +35,6 @@ namespace CourseDesign.Context
         async void FirstLoadTDollsContext()
         {
             AllTDolls.Clear();
-            MaxTDoll_ID = 0;
 
             var tDollResult = await TDollService.GetUserAndParamContain(new GETParameter()); // 读取所有人形
             if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
@@ -45,7 +43,6 @@ namespace CourseDesign.Context
                 {
                     string[] methods = item.ObtainMethod.Split(new char[] { '/' }); // 处理ObtainMethod，按/分割
                     AllTDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath, methods));
-                    MaxTDoll_ID = MaxTDoll_ID < item.ID ? item.ID : MaxTDoll_ID;
                 }
             }
         }

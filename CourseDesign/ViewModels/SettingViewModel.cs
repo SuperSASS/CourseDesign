@@ -9,11 +9,11 @@ namespace CourseDesign.ViewModels
 {
     public class SettingViewModel : BindableBase
     {
-        private ObservableCollection<MeauBar> settingBars;  // 设置页列表
-        public ObservableCollection<MeauBar> SettingBars { get { return settingBars; } set { settingBars = value; RaisePropertyChanged(); } }
+        private ObservableCollection<MenuBar> settingBars;  // 设置页列表
+        public ObservableCollection<MenuBar> SettingBars { get { return settingBars; } set { settingBars = value; RaisePropertyChanged(); } }
 
         // 命令部分
-        public DelegateCommand<MeauBar> NavigationCommand { get; private set; } // 从UI层传递SettingBars到这个导航命令
+        public DelegateCommand<MenuBar> NavigationCommand { get; private set; } // 从UI层传递SettingBars到这个导航命令
 
         private readonly IRegionManager regionManager; // 区域控制器
 
@@ -24,18 +24,18 @@ namespace CourseDesign.ViewModels
         /// <param name="regionManager"> 区域管理器 </param>
         public SettingViewModel(IRegionManager regionManager)
         {
-            SettingBars = new ObservableCollection<MeauBar>();
+            SettingBars = new ObservableCollection<MenuBar>();
             CreateSettingBars();
-            NavigationCommand = new DelegateCommand<MeauBar>(Navigate);
+            NavigationCommand = new DelegateCommand<MenuBar>(Navigate);
             this.regionManager = regionManager;
         }
 
         /// <summary>
         /// 用于驱动页面的切换的实现方法
         /// </summary>
-        /// <param name="obj">当注册的导航MeauBar响应后，自动调用该方法，并作为参数obj</param>
+        /// <param name="obj">当注册的导航menuBar响应后，自动调用该方法，并作为参数obj</param>
         /// 
-        private void Navigate(MeauBar obj)
+        private void Navigate(MenuBar obj)
         {
             if (obj != null && !string.IsNullOrWhiteSpace(obj.NameSpace))
                 regionManager.Regions[PrismManager.SettingViewRegionName].RequestNavigate(obj.NameSpace);
@@ -46,9 +46,9 @@ namespace CourseDesign.ViewModels
         /// </summary>
         private void CreateSettingBars()
         {
-            SettingBars.Add(new MeauBar("Palette", "主题", "SkinSettingView"));
-            SettingBars.Add(new MeauBar("WrenchOutline", "其他设置", "OtherSettingView"));
-            SettingBars.Add(new MeauBar("MessageReplyTextOutline", "关于", "AboutSettingView"));
+            SettingBars.Add(new MenuBar("Palette", "主题", "SkinSettingView"));
+            SettingBars.Add(new MenuBar("WrenchOutline", "其他设置", "OtherSettingView"));
+            SettingBars.Add(new MenuBar("MessageReplyTextOutline", "关于", "AboutSettingView"));
         }
     }
 }

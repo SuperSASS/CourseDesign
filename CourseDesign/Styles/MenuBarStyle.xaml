@@ -1,6 +1,6 @@
 ﻿<!--  菜单栏中导航选项的样式  -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Style x:Key="meauBarStyle" TargetType="ListBoxItem">
+    <Style x:Key="menuBarStyle" TargetType="ListBoxItem">
         <Setter Property="MinHeight" Value="40" />
         <Setter Property="Template">
             <Setter.Value>

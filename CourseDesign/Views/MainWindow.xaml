@@ -27,13 +27,13 @@
         </WindowChrome>
     </Window.Resources>
 
-    <!--  这个是消息弹窗（Dialog对话）展示的地方  -->
+    <!--  这个是消息弹窗（Dialog对话）展示的地方，即为全局覆盖  -->
     <materialDesign:DialogHost
         x:Name="DialogHost"
         DialogTheme="Inherit"
         Identifier="RootDialog">
 
-        <materialDesign:DrawerHost x:Name="meauBars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
+        <materialDesign:DrawerHost x:Name="menu_bars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
 
             <!--  对话：弹出菜单栏  -->
             <materialDesign:DrawerHost.LeftDrawerContent>
@@ -63,8 +63,8 @@
                     <!--  修复 - 按返回和主页时，菜单列表不变化：将SelectIndex与后端绑定，同步变化  -->
                     <ListBox
                         x:Name="navigationBars"
-                        ItemContainerStyle="{StaticResource meauBarStyle}"
-                        ItemsSource="{Binding MeauBars}"
+                        ItemContainerStyle="{StaticResource menuBarStyle}"
+                        ItemsSource="{Binding MenuBars}"
                         SelectedIndex="{Binding SelectIndex}">
                         <!--  行为触发器：当导航被选中时触发，用于切换页面  -->
                         <i:Interaction.Triggers>
@@ -96,7 +96,7 @@
                 </DockPanel>
             </materialDesign:DrawerHost.LeftDrawerContent>
 
-            <!-- 整个页面，但只有标题栏，页面Reigon由各个页面呈现 -->
+            <!--  整个页面，但只有标题栏，页面Reigon由各个页面呈现  -->
             <DockPanel>
                 <!--  标题栏  -->
                 <materialDesign:ColorZone

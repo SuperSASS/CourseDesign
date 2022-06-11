@@ -13,7 +13,7 @@ namespace CourseDesign.Views
         public IndexView()
         {
             InitializeComponent();
-            ScrollViewerExtension.PerfectScrolling(task_list_son); // 使ScrollViewer在内部控件上也可以滚动
+            ScrollViewerExtension.PerfectScrolling(plan_list_son); // 使ScrollViewer在内部控件上也可以滚动
         }
     }
 }

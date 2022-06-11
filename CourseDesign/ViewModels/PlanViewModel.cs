@@ -40,10 +40,14 @@ namespace CourseDesign.ViewModels
         private string rightEditorButton; // 右侧编辑栏的按钮
         private bool isRightTextEditorOpen; // 右侧编辑窗弹出情况 - 文本编辑页
         private bool isRightImageEditorOpen; // 右侧编辑窗弹出情况 - 图像编辑页
-        private string searchContentText; // 所搜索的文本，单向到源绑定
+        private string searchContentText; // 所搜索的文本
         private int searchFieldIndex; // 筛选字段的选项Index，只用来初始化用
-        private int searchStatusIndex; // 选择计划状态的选项Index
+        private int searchStatusIndex; // 选择计划状态的选项Index【0 - 已完成； 1 - 未完成（null？ - 全部）
         private PlanBase currentEditPlan; // 当前在编辑栏中编辑的对象，双向绑定
+        private bool isNothing; // 是否未添加计划
+        private bool isAllComplete; // 是否已完成所有计划（不包含未添加计划情况）
+        private bool isNoResult; // 该搜索条件下是否没有数据
+        private bool isNoComplete; // 是否没有完成的计划
         // 本地字段
         private bool isAddOrModify; // 0 为 Add, 1 为 Modify
         #endregion
@@ -64,7 +68,7 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 所展示的计划列表
         /// </summary>
-        public ObservableCollection<PlanBase> PlansShow { get { return plansShow; } private set { plansShow = value; RaisePropertyChanged(); } }
+        public ObservableCollection<PlanBase> PlansShow { get { return plansShow; } private set { plansShow = value; RaisePropertyChanged(); } } // 当展示计划更改时，会检查所有的Persentation属性
         /// <summary>
         /// 在添加人形获取计划中，所能展示的人形列表
         /// </summary>
@@ -88,8 +92,7 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 搜索文本，单向到源绑定
         /// </summary>
-        public string SearchContentText { get { return searchContentText; } set { searchContentText = value; } }
-
+        public string SearchContentText { get { return searchContentText; } set { searchContentText = value; RaisePropertyChanged(); } }
 
         private bool isFirstCreate_SFT = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
         private bool isFirstCreate_SS = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
@@ -100,7 +103,7 @@ namespace CourseDesign.ViewModels
         public int SearchFieldIndex
         {
             get { return searchFieldIndex; }
-            set { searchFieldIndex = value; if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
+            set { searchFieldIndex = value; RaisePropertyChanged(); if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
         }
         /// <summary>
         /// 筛选的状态，单向绑定到源
@@ -108,12 +111,28 @@ namespace CourseDesign.ViewModels
         public int SearchStatusIndex
         {
             get { return searchStatusIndex; }
-            set { searchStatusIndex = value; if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
+            set { searchStatusIndex = value; RaisePropertyChanged(); if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
         }
         /// <summary>
         /// 所选择的将要进行修改的计划，双向绑定，展示到文本栏同步更改
         /// </summary>
         public PlanBase CurrentEditPlan { get { return currentEditPlan; } set { currentEditPlan = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 该用户是否没有计划
+        /// </summary>
+        public bool IsNothing { get { return isNothing; } set { isNothing = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 该用户是否已完成所有计划（不包含没有计划情况）
+        /// </summary>
+        public bool IsAllComplete { get { return isAllComplete; } set { isAllComplete = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 搜索条件没有数据
+        /// </summary>
+        public bool IsNoResult { get { return isNoResult; } set { isNoResult = value; RaisePropertyChanged(); } }
+        /// <summary>
+        /// 是否没有完成的计划
+        /// </summary>
+        public bool IsNoComplete { get { return isNoComplete; } set { isNoComplete = value; RaisePropertyChanged(); } }
         #endregion
 
         /// <summary>
@@ -148,6 +167,7 @@ namespace CourseDesign.ViewModels
             UpdatePlanCommand = new DelegateCommand(UpdatePlan);
         }
 
+        #region 方法
         /// <summary>
         /// 重写导航加载到该页面的方法，每次来到该页面都会执行一次
         /// </summary>
@@ -159,8 +179,9 @@ namespace CourseDesign.ViewModels
             IsRightImageEditorOpen = false;
             SearchFieldIndex = -1;
             SearchStatusIndex = 1; // 每次来到页面：默认跳回选择“未完成”状态筛选
-            searchContentText = null;
+            SearchContentText = null;
             SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
+            CheckPresentation();
         }
 
         // 已验证√
@@ -231,7 +252,7 @@ namespace CourseDesign.ViewModels
         {
             try
             {
-                var dialogResult = await DialogService.ShowQueryDialog("确认删除计划",$"确认要删除该计划吗？");
+                var dialogResult = await DialogService.ShowQueryDialog("确认删除计划", $"确认要删除该计划吗？");
                 if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.Yes) // 没有确认
                     return;
 
@@ -239,12 +260,13 @@ namespace CourseDesign.ViewModels
 
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status == APIStatusCode.Success)
-                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); }
+                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); UserPlansComplete--; } // 删除的时候完成计划也要--
                 else
                     throw new Exception("删除出错啦，肯定不是服务器的问题qwq！……");
             }
             finally
             {
+                CheckPresentation();
                 ShowLoadingDialog(false);
             }
         }
@@ -267,6 +289,10 @@ namespace CourseDesign.ViewModels
                     GetPlan(textPlan.ID).Status = plan.Status; // 将本地的状态也更改
                 else
                     throw new Exception("诶，好像改不了这个任务的状态，待会再试试呢【……");
+                if (plan.Status == false) // 证明从完成改到未完成
+                    UserPlansComplete--;
+                else // 从未完成改到完成
+                    UserPlansComplete++;
                 SearchPlan(); // 重新生成显示内容【这边应该执行SearchPlan，因为可能此时带有一些搜索条件
             }
             finally
@@ -296,6 +322,7 @@ namespace CourseDesign.ViewModels
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("内部错误 - 用户那里添加不了获取的人形……");
                 UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文
+                UserPlansComplete++; // 完成计划数++
                 SearchPlan(); // 重新生成显示内容
             }
             finally
@@ -354,10 +381,10 @@ namespace CourseDesign.ViewModels
                 }
             }
             CreateShowPlans(exp_Status, exp_Field);
+            CheckPresentation();
         }
 
         // 已验证√
-        // TODO: 3 - 小问题：新增的在最后而不是最前
         /// <summary>
         /// 上传该用户所选择需要更新或新增的计划
         /// </summary>
@@ -375,7 +402,7 @@ namespace CourseDesign.ViewModels
                     if (updateResponseStatus == APIStatusCode.Success)
                     {
                         if (isAddOrModify) // 代表新增
-                        { UserPlans.Add(textPlan); PlansShow.Add(textPlan); }
+                        { UserPlans.Add(textPlan); PlansShow.Insert(0, textPlan); }
                         else
                         {
                             // 由于ObservableCollection没有FindIndex方法，所以只能手动模拟了……
@@ -404,20 +431,7 @@ namespace CourseDesign.ViewModels
                             {
                                 imagePlan.ID = updateResponse.Result.ID;
                                 UserPlans.Add(imagePlan);
-                                PlansShow.Add(imagePlan);
-                                //if (isAddOrModify) // 代表新增【Fix：新增上传后，要把服务器里的ID加到imagePlan里，否则在立刻删除时会因为没有ID而报错……
-                                //{ imagePlan.ID = updateResponse.Result.ID; UserPlans.Add(imagePlan); PlansShow.Add(imagePlan); }
-                                //else
-                                //{
-                                //    int indexUserPlans = UserPlans.FindIndex((x) => x.ID == imagePlan.ID);
-                                //    if (indexUserPlans != -1)
-                                //    {
-                                //        UserPlans[indexUserPlans] = imagePlan;
-                                //        SearchPlan(); // 由于不知道为什么直接修改不会通知更新，所以这里只能先删后加来更新了orz【同样也是通过SearchPlan保留搜索条件
-                                //    }
-                                //    else
-                                //        throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据……");
-                                //}
+                                PlansShow.Insert(0, imagePlan);
                             }
                             else
                                 throw new Exception("内部错误 - 无法上传新建计划到服务器……");
@@ -426,11 +440,13 @@ namespace CourseDesign.ViewModels
             }
             finally
             {
+                CheckPresentation();
                 ShowLoadingDialog(false);
                 IsRightTextEditorOpen = false;
                 IsRightImageEditorOpen = false; // 关闭编辑页
             }
         }
+        #endregion
 
         #region 内部方法
         /// <summary>
@@ -442,6 +458,17 @@ namespace CourseDesign.ViewModels
             foreach (PlanBase item in UserPlans)
                 if (exp_Status(item) && exp_Field(item))
                     PlansShow.Add(item);
+        }
+
+        /// <summary>
+        /// 更新是否无计划或全部完成的状态
+        /// </summary>
+        private void CheckPresentation()
+        {
+            IsNothing = UserPlans.Count == 0;
+            IsNoResult = !IsNothing && (!(string.IsNullOrWhiteSpace(SearchContentText) || SearchFieldIndex == -1) && PlansShow.Count == 0);
+            IsAllComplete = !IsNothing && !IsNoResult && SearchStatusIndex == 1 &&  UserPlans.Count == UserPlansComplete;
+            IsNoComplete = !IsNothing && !IsNoResult && SearchStatusIndex == 0 && UserPlansComplete == 0;
         }
 
         /// <summary>

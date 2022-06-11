@@ -6,6 +6,8 @@
     xmlns:local="clr-namespace:CourseDesign.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:presentation="clr-namespace:CourseDesign.Views.Presentations"
+    xmlns:selector="clr-namespace:CourseDesign.Common.Selector"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -17,7 +19,7 @@
             <Border>
                 <Border.Background>
                     <ImageBrush
-                        ImageSource="\Assets\Images\background_task.jpg"
+                        ImageSource="\Assets\Images\Backgrounds\background_task.jpg"
                         Opacity="0.6"
                         Stretch="UniformToFill" />
                 </Border.Background>
@@ -30,7 +32,7 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Opacity="0.6"
-                Source="\Assets\Images\16Lab.png" />
+                Source="\Assets\Images\Decorates\16Lab.png" />
 
             <!--  真的页面  -->
             <Grid x:Name="page">
@@ -60,6 +62,7 @@
                     </Grid>
                 </Grid>
 
+
                 <!--  页面内容  -->
                 <Grid
                     x:Name="main_content"
@@ -72,7 +75,7 @@
 
                     <!--  上方操作栏  -->
                     <DockPanel Grid.Row="0" LastChildFill="False">
-                        <!--  存在缺陷：清除按钮水平居中，与筛选栏不一致  -->
+                        <!--  TODO: 3 - 存在缺陷:清除按钮水平居中，与筛选栏不一致  -->
                         <!--  筛选字段下拉栏  -->
                         <ComboBox
                             x:Name="combobox_field"
@@ -92,7 +95,6 @@
                                 </StackPanel>
                             </materialDesign:HintAssist.Hint>
                         </ComboBox>
-
                         <!--  搜索栏  -->
                         <TextBox
                             MinWidth="100"
@@ -101,7 +103,7 @@
                             VerticalAlignment="Center"
                             FontSize="16"
                             Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                            Text="{Binding SearchContentText, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}">
+                            Text="{Binding SearchContentText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                             <TextBox.InputBindings>
                                 <KeyBinding
                                     Key="Enter"
@@ -115,7 +117,6 @@
                                 </StackPanel>
                             </materialDesign:HintAssist.Hint>
                         </TextBox>
-
                         <!--  计划状态筛选下拉栏  -->
                         <ComboBox
                             x:Name="combobox_status"
@@ -131,12 +132,12 @@
                             <ComboBoxItem Content="未完成" />
                             <materialDesign:HintAssist.Hint>
                                 <StackPanel Margin="0" Orientation="Horizontal">
-                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Filter" />
+                                    <materialDesign:PackIcon VerticalAlignment="Center" Kind="Flag" />
                                     <TextBlock Margin="5,0" Text="计划状态" />
                                 </StackPanel>
                             </materialDesign:HintAssist.Hint>
                         </ComboBox>
-
+                        
                         <!--  添加图片计划按钮  -->
                         <materialDesign:Badged
                             Margin="10,0"
@@ -170,6 +171,12 @@
                                 ToolTip="添加常规计划到计划列表" />
                         </materialDesign:Badged>
                     </DockPanel>
+
+                    <!--  各情况的展示页面  -->
+                    <presentation:Nothing Grid.Row="1" Visibility="{Binding IsNothing, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <presentation:NoComplete Grid.Row="1" Visibility="{Binding IsNoComplete, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <presentation:NoResult Grid.Row="1" Visibility="{Binding IsNoResult, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                    <presentation:AllComplete Grid.Row="1" Visibility="{Binding IsAllComplete, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
                     <!--  计划卡片（滚动条支持）  -->
                     <ScrollViewer
@@ -316,7 +323,6 @@
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
                                                                             Height="21"
-                                                                            Foreground="White"
                                                                             Kind="SourceBranchCheck" />
                                                                     </Button>
                                                                     <Button
@@ -327,7 +333,6 @@
                                                                         <materialDesign:PackIcon
                                                                             Width="21"
                                                                             Height="21"
-                                                                            Foreground="White"
                                                                             Kind="DeleteEmptyOutline" />
                                                                     </Button>
                                                                 </StackPanel>
@@ -508,7 +513,7 @@
 
                             <!--  展示数据选择器  -->
                             <ItemsControl.ItemTemplateSelector>
-                                <local:PlansDataTemplate ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
+                                <selector:PlansDataSelector ImageTemplate="{StaticResource imageCard}" TextTemplate="{StaticResource textCard}" />
                             </ItemsControl.ItemTemplateSelector>
                         </ItemsControl>
                     </ScrollViewer>
@@ -529,7 +534,7 @@
                             Text="{Binding RightEditorTitle}" />
                         <Border
                             Width="180"
-                            Margin="10,5,10,10"
+                            Margin="0,0,10,20"
                             HorizontalAlignment="Left"
                             BorderBrush="{DynamicResource MaterialDesignDivider}"
                             BorderThickness="0,0,0,2"
@@ -592,7 +597,7 @@
                             <Border
                                 Grid.Row="0"
                                 Width="180"
-                                Margin="10,0,10,10"
+                                Margin="0,0,10,20"
                                 HorizontalAlignment="Left"
                                 BorderBrush="{DynamicResource MaterialDesignDivider}"
                                 BorderThickness="0,0,0,2"

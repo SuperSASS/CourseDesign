@@ -1,7 +1,9 @@
-﻿using CourseDesign.ViewModels.Dialogs.Interfaces;
+﻿using CourseDesign.Common.Classes;
+using CourseDesign.ViewModels.Dialogs.Interfaces;
 using MaterialDesignThemes.Wpf;
 using Prism.Commands;
 using Prism.Services.Dialogs;
+using System;
 
 namespace CourseDesign.ViewModels.Dialogs
 {
@@ -9,8 +11,9 @@ namespace CourseDesign.ViewModels.Dialogs
     {
         #region 属性
         public string DialogHostName { get; set; }
-        public DelegateCommand SaveCommand {get; set;}
-        public DelegateCommand CancelCommand { get; set;}
+        public DelegateCommand SaveCommand { get; set; }
+        public DelegateCommand CancelCommand { get; set; }
+        public TextPlanClass AddTextPlan { get; set; }
         #endregion
 
         /// <summary>
@@ -30,8 +33,15 @@ namespace CourseDesign.ViewModels.Dialogs
         {
             if (DialogHost.IsDialogOpen(DialogHostName))
             {
-                DialogParameters parameters = new DialogParameters();
-                DialogHost.Close(DialogHostName, new DialogResult(ButtonResult.OK, parameters));
+                try
+                {
+                    if (string.IsNullOrWhiteSpace(AddTextPlan.Title) || string.IsNullOrWhiteSpace(AddTextPlan.Content)) // 计划的标题或内容为空
+                        throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
+                    DialogParameters parameters = new DialogParameters();
+                    parameters.Add("AddTextPlan", AddTextPlan); // 参数中添加
+                    DialogHost.Close(DialogHostName, new DialogResult(ButtonResult.Yes, parameters));
+                }
+                catch { }
             }
         }
 
@@ -44,8 +54,13 @@ namespace CourseDesign.ViewModels.Dialogs
                 DialogHost.Close(DialogHostName, new DialogResult(ButtonResult.Cancel));
         }
 
-        public void OnDialogOpen(IDialogParameters dialogParameters)
+        /// <summary>
+        /// 当刚打开这个对话时执行的操作【由于只是新增，直接生成AddTextPlan
+        /// </summary>
+        /// <param name="dialogParameters"></param>
+        public void OnDialogOpen(IDialogParameters dialogParameters)   
         {
+            AddTextPlan = new(0, false, null, null);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace CourseDesign.Common.Modules
     /// 菜单栏导航类：
     /// <para>用于在菜单栏创建导航。</para>
     /// </summary>
-    public class MeauBar : BindableBase
+    public class MenuBar : BindableBase
     {
         private string icon; // 导航图标
         private string title; // 导航名称
@@ -21,7 +21,7 @@ namespace CourseDesign.Common.Modules
         /// <param name="icon"> 图标 </param>
         /// <param name="title"> 标题 </param>
         /// <param name="nameSpace"> 命名空间（对应视图名） </param>
-        public MeauBar(string icon, string title, string nameSpace)
+        public MenuBar(string icon, string title, string nameSpace)
         {
             Icon = icon;
             Title = title;

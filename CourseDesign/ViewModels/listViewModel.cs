@@ -1,4 +1,5 @@
 ﻿using CourseDesign.Common.Classes;
+using CourseDesign.Common.Modules;
 using CourseDesign.Context;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
@@ -8,20 +9,19 @@ namespace CourseDesign.ViewModels
 {
     public class ListViewModel : BindableBase
     {
-        private ObservableCollection<TDollClass> tdolls;
+        private ObservableCollection<TDollList> tDollList;
 
-        public ObservableCollection<TDollClass> TDolls
+        public ObservableCollection<TDollList> TDollList
         {
-            get { return tdolls; }
-            set { tdolls = value; }
+            get { return tDollList; }
+            set { tDollList = value; }
         }
 
         public ListViewModel()
         {
-            TDolls = new ObservableCollection<TDollClass>();
+            TDollList = new ObservableCollection<TDollList>();
             foreach (var item in TDollsContext.AllTDolls) // 把API读取的加进来
-                tdolls.Add(item);
+                TDollList.Add(new TDollList(item));
         }
-
     }
 }

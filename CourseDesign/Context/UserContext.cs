@@ -22,6 +22,7 @@ namespace CourseDesign.Context
         private static List<PlanBase> userPlans;
         private static List<int> userTDolls;
         private static List<Task> waitTasks;
+        private static int userPlansComplete;
 
         // API服务
         private readonly IImagePlanService ImageService;
@@ -61,6 +62,14 @@ namespace CourseDesign.Context
         {
             get { return waitTasks; }
             set { waitTasks = value; }
+        }
+        /// <summary>
+        /// 用户计划完成数
+        /// </summary>
+        public static int UserPlansComplete
+        {
+            get { return userPlansComplete; }
+            set { userPlansComplete = value; }
         }
         #endregion
 
@@ -114,19 +123,29 @@ namespace CourseDesign.Context
                     var imageItem = imagePlanResult.Result.Items[imageIndex];
                     var textItem = textPlanResult.Result.Items[textIndex];
                     if (imageItem.CreateDate > textItem.CreateDate)
-                    { UserPlans.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID)); imageIndex++; }
+                    {
+                        UserPlans.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID));
+                        imageIndex++;
+                        if (imageItem.Status) UserPlansComplete++;
+                    }
                     else
-                    { UserPlans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content)); textIndex++; }
+                    {
+                        UserPlans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
+                        textIndex++;
+                        if (textItem.Status) UserPlansComplete++;
+                    }
                 }
                 for (; imageIndex < imagePlanResult.Result.Items.Count; imageIndex++)
                 {
                     var imageItem = imagePlanResult.Result.Items[imageIndex];
                     UserPlans.Add(new ImagePlanClass(imageItem.ID, imageItem.Status, imageItem.TDoll_ID));
+                    if (imageItem.Status) UserPlansComplete++;
                 }
                 for (; textIndex < textPlanResult.Result.Items.Count; textIndex++)
                 {
                     var textItem = textPlanResult.Result.Items[textIndex];
                     UserPlans.Add(new TextPlanClass(textItem.ID, textItem.Status, textItem.Title, textItem.Content));
+                    if (textItem.Status) UserPlansComplete++;
                 }
             }
             catch (Exception ex)
