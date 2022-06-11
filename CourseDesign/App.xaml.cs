@@ -12,6 +12,7 @@ using CourseDesign.Views.Settings;
 using DryIoc;
 using Prism.DryIoc;
 using Prism.Ioc;
+using Prism.Services.Dialogs;
 using System.Windows;
 
 namespace CourseDesign
@@ -22,6 +23,9 @@ namespace CourseDesign
     /// </summary>
     public partial class App : PrismApplication
     {
+        /// <summary>
+        /// 第一个启动的首页(Shell)
+        /// </summary>
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -32,10 +36,20 @@ namespace CourseDesign
         /// </summary>
         protected override void OnInitialized()
         {
-            base.OnInitialized();
-            IConfigureService configureService = Current.MainWindow.DataContext as IConfigureService;
-            if (configureService != null)
-                configureService.Configure();
+            var dialogService = Container.Resolve<IDialogService>();
+            // 先展示登陆弹窗
+            dialogService.ShowDialog("LoginView", callback =>
+            {
+                if (callback.Result != ButtonResult.OK)
+                {
+                    Current.Shutdown();
+                    return;
+                }
+                IConfigureService configureService = Current.MainWindow.DataContext as IConfigureService;
+                if (configureService != null)
+                    configureService.Configure();
+                base.OnInitialized(); // 这个是初始化MainWindow
+            });
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -57,6 +71,8 @@ namespace CourseDesign
             containerRegistry.Register<ITDollService, TDollService>();         // 注册TDoll的服务
             // 注册依赖 - Dialog弹窗服务
             containerRegistry.Register<IDialogHostService, DialogHostService>();
+            // 注册 - Prism的弹窗
+            containerRegistry.RegisterDialog<LoginView, LoginViewModel>(); // 登陆界面
             // 注册依赖 - 弹窗(Dialog)[由于不再使用Prism本身的，而是我们扩展的，所以改成容器注入
             containerRegistry.RegisterForNavigation<AddTextPlanView, AddTextPlanViewModel>();
             containerRegistry.RegisterForNavigation<QueryView, QueryViewModel>();
