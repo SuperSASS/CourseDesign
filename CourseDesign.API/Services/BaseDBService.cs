@@ -37,7 +37,7 @@ namespace CourseDesign.API.Services
                 dbEntity.ID = 0; // ID自增
                 dbEntity.CreateDate = dbEntity.UpdateDate = DateTime.Now; // 将创建日期、修改日期设为服务器当前日期
                 await Repo.InsertAsync(dbEntity);
-                if (await UnitOfWork.SaveChangesAsync() > 0) // 尝试保存插入操作
+                if (await UnitOfWork.SaveChangesAsync() > 0) // 尝试保存插入操作，成功会返回添加的数据
                     return new APIResponseInner(dbEntity);
                 else
                     return new APIResponseInner(APIStatusCode.Add_Failed, "数据添加失败啦qwq……"); // 感觉插入失败好像会直接抛异常，不会走到这来orz【下面的也一样……
@@ -159,8 +159,6 @@ namespace CourseDesign.API.Services
         //{
         //    try
         //    {
-        //        // TODO: 1! - 验证这样编写是否正确
-        //        // TODO: 3 - 支持不同种类排序
         //        var gets = await Repo.GetPagedListAsync(predicate: x => string.IsNullOrWhiteSpace(parameter.Search) ? true : // Search参数为空，代表全条件查询
         //            x.GetType().GetField(parameter.Field).GetValue(x).ToString().Contains(parameter.Search), // 查询满足搜索条件的元组
         //            pageSize: parameter.PageSize,   // 每页最多个数
@@ -180,8 +178,6 @@ namespace CourseDesign.API.Services
         //{
         //    try
         //    {
-        //        // TODO: 1! - 验证这样编写是否正确
-        //        // TODO: 3 - 支持不同种类排序
         //        //Expression<Func<DBEntity, bool>> exp = (x) =>
         //        //    string.IsNullOrWhiteSpace(parameter.Search) ? true : // Search参数为空，代表全条件查询
         //        //    x.GetType().GetProperty(parameter.Field).GetValue(x).ToString().Equals(parameter.Search); // 查询满足搜索条件的元组

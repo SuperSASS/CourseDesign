@@ -15,16 +15,17 @@ namespace CourseDesign.ViewModels.Bases
     /// 导航所用类的基类，
     /// 对基本的BindableBase进行扩展，使其能支持弹出会话(Dialog)
     /// </summary>
-    public class NavigationViewModel : BindableBase, INavigationAware
+    public class DialogNavigationViewModel : BindableBase, INavigationAware
     {
         private readonly IContainerProvider containerProvider;
         public readonly IEventAggregator aggregator; // 事件聚合器 - 通过这个可以调用各种方法，从而展开等待条等东西……
 
-        public NavigationViewModel(IContainerProvider containerProvider)
+        public DialogNavigationViewModel(IContainerProvider containerProvider)
         {
             this.containerProvider = containerProvider;
             aggregator = containerProvider.Resolve<IEventAggregator>();
         }
+
         /// <summary>
         /// 是否重用以前的窗口而非重新加载
         /// </summary>
@@ -32,24 +33,25 @@ namespace CourseDesign.ViewModels.Bases
         /// <returns>恒不重用</returns>
         public virtual bool IsNavigationTarget(NavigationContext navigationContext) { return true; }
 
-        public virtual void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-        }
+        public virtual void OnNavigatedFrom(NavigationContext navigationContext) { }
 
-        public virtual void OnNavigatedTo(NavigationContext navigationContext)
-        {
-        }
+        public virtual void OnNavigatedTo(NavigationContext navigationContext) { }
 
         /// <summary>
         /// 展开等待窗口
         /// </summary>
-        /// <param name="IsOpen"></param>
+        /// <param name="IsOpen">是否展开</param>
         public void ShowLoadingDialog(bool IsOpen)
         {
             aggregator.ShowLoadingDialog(new Common.Events.LoadingModel()
             {
                 IsOpen = IsOpen
             });
+        }
+
+        public void ShowMessageDialog(string msg, string filterName)
+        {
+            aggregator.ShowMessageDialog(msg, filterName);
         }
     }
 }

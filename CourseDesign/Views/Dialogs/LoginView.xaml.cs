@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CourseDesign.Extensions;
+using Prism.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,9 +22,14 @@ namespace CourseDesign.Views.Dialogs
     /// </summary>
     public partial class LoginView : UserControl
     {
-        public LoginView()
+        public LoginView(IEventAggregator aggregator)
         {
             InitializeComponent();
+
+            aggregator.RegisterMessageDialog(arg => // 注册Dialog会话 - 提示消息
+            {
+                snack_bar_login.MessageQueue.Enqueue(arg.Message); // 将传来的MessageModel的Message压入消息队列
+            }, "Login");
         }
     }
 }

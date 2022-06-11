@@ -24,8 +24,8 @@ namespace CourseDesign.Views
             });
             aggregator.RegisterMessageDialog(arg => // 注册Dialog会话 - 提示消息
             {
-                snack_bar.MessageQueue.Enqueue(arg);
-            });
+                snack_bar_main.MessageQueue.Enqueue(arg.Message); // 将传来的MessageModel的Message压入消息队列
+            }, "Main");
 
             btn_min.Click += (s, e) => { this.WindowState = WindowState.Minimized; }; // 菜单栏 - 窗口最小化按钮
             btn_max.Click += (s, e) => // 菜单栏 - 窗口最大化按钮

@@ -6,6 +6,7 @@
     xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:prism="http://prismlibrary.com/"
+    xmlns:user="clr-namespace:CourseDesign.Context"
     x:Name="window"
     Title="课程设计"
     Width="1350"
@@ -40,11 +41,15 @@
                 <DockPanel MinWidth="220">
                     <!--  个人信息  -->
                     <StackPanel Margin="0,10,0,10" DockPanel.Dock="Top">
+                        <!--  TODO: 3 - 头像写死了  -->
                         <Image
                             Width="100"
                             Height="100"
                             Margin="16,16"
-                            Source="/Assets/Images/avatar.jpg">
+                            RenderOptions.BitmapScalingMode="HighQuality"
+                            SnapsToDevicePixels="True"
+                            Source="/Assets/Images/avatar.jpg"
+                            UseLayoutRounding="True">
                             <Image.Clip>
                                 <EllipseGeometry
                                     Center="50, 50"
@@ -56,7 +61,7 @@
                             Margin="0,10"
                             HorizontalAlignment="Center"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
-                            Text="淺真" />
+                            Text="{Binding User.UserName}" />
                     </StackPanel>
 
                     <!--  菜单列表（导航选项）  -->
@@ -69,7 +74,8 @@
                         <!--  行为触发器：当导航被选中时触发，用于切换页面  -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <i:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding ElementName=navigationBars, Path=SelectedItem}" />
+                                <!--  注：这里的CommandParameter只能通过找父级来设置  -->
+                                <i:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
                         <ListBox.ItemTemplate>
@@ -105,7 +111,7 @@
 
                 <!--  Dialog: 提示消息弹窗  -->
                 <materialDesign:Snackbar
-                    x:Name="snack_bar"
+                    x:Name="snack_bar_main"
                     Grid.Row="1"
                     Panel.ZIndex="1"
                     MessageQueue="{materialDesign:MessageQueue}" />
@@ -156,18 +162,34 @@
 
                         <!--  标题栏右侧  -->
                         <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
-                            <Image
-                                Width="32"
-                                Height="32"
-                                Margin="16,0"
-                                Source="/Assets/Images/avatar.jpg">
-                                <Image.Clip>
-                                    <EllipseGeometry
-                                        Center="16, 16"
-                                        RadiusX="16"
-                                        RadiusY="16" />
-                                </Image.Clip>
-                            </Image>
+                            <!--  点击个人头像的弹出窗口  -->
+                            <materialDesign:PopupBox>
+                                <materialDesign:PopupBox.ToggleContent>
+                                    <!--  TODO: 2 - 头像写死了  -->
+                                    <Image
+                                        Width="32"
+                                        Height="32"
+                                        Margin="16,0"
+                                        RenderOptions.BitmapScalingMode="HighQuality"
+                                        SnapsToDevicePixels="True"
+                                        Source="/Assets/Images/avatar.jpg"
+                                        UseLayoutRounding="True">
+                                        <Image.Clip>
+                                            <EllipseGeometry
+                                                Center="16, 16"
+                                                RadiusX="16"
+                                                RadiusY="16" />
+                                        </Image.Clip>
+                                    </Image>
+                                </materialDesign:PopupBox.ToggleContent>
+
+                                <!--  弹出的按钮  -->
+                                <StackPanel>
+                                    <!--<Button Command="{Binding AppCenterCommand}" Content="个人中心"/>-->
+                                    <Button Command="{Binding LogoutCommand}" Content="退出登录" />
+                                </StackPanel>
+
+                            </materialDesign:PopupBox>
                             <Button x:Name="btn_min" Style="{StaticResource MaterialDesignFlatMidBgButton}">
                                 <materialDesign:PackIcon Kind="WindowMinimize" />
                             </Button>

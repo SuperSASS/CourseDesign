@@ -22,7 +22,7 @@ using CourseDesign.Extensions;
 // 首页的实现逻辑
 namespace CourseDesign.ViewModels
 {
-    internal class IndexViewModel : NavigationViewModel
+    internal class IndexViewModel : DialogNavigationViewModel
     {
         #region 字段
         private readonly IRegionManager regionManager; // 区域控制器
@@ -79,6 +79,8 @@ namespace CourseDesign.ViewModels
             NavigationCommand = new DelegateCommand<InfoBlock>(Navigate);
         }
 
+        #region 方法
+
         /// <summary>
         /// 当导航到该页面时执行的方法
         /// </summary>
@@ -122,9 +124,14 @@ namespace CourseDesign.ViewModels
                     UserPlans.Add(textPlan);
                     PlanLists.Insert(0, textPlan);
                 }
+                else
+                    throw new Exception(updateResponse.Message);
                 CreateInfoBlocks(); // 重新更新信息块
             }
-            catch { }
+            catch (Exception ex)
+            {
+                ShowMessageDialog(ex.Message, "Main");
+            }
             finally
             {
                 ShowLoadingDialog(false);
@@ -154,18 +161,23 @@ namespace CourseDesign.ViewModels
                 }
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("诶，好像改不了这个任务的状态，待会再试试呢【……");
+
                 GetPlan(plan.ID).Status = plan.Status; // 将本地的状态也更改
                 UserPlansComplete++; // 用户完成计划数++
                 if (plan is ImagePlanClass imagePlan) // 如果是图片类计划，还要额外获得人形
                 {
                     APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUserID, TDollID = imagePlan.TDoll_ID })).Status;
                     if (APIResponseStatus != APIStatusCode.Success)
-                        throw new Exception("内部错误 - 用户那里添加不了获取的人形……");
-                    UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文
+                        throw new Exception("内部错误(API) - 服务器那里添加不了获取的人形……");
+                    UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文，添加到本地用户所拥有的人形列表
                 }
                 CreatePlanLists(); // 重新生成显示内容
                 CreateInfoBlocks(); // 重新更新信息块
-                aggregator.ShowMessageDialog("任务已完成！");
+                ShowMessageDialog("任务已完成！", "Main");
+            }
+            catch (Exception ex)
+            {
+                ShowMessageDialog(ex.Message, "Main");
             }
             finally
             {
@@ -182,6 +194,7 @@ namespace CourseDesign.ViewModels
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Target))
                 regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.Target, back => { journal = back.Context.NavigationService.Journal; });
         }
+        #endregion
 
         #region 内部方法
         /// <summary>

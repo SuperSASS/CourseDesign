@@ -1,4 +1,5 @@
-﻿using CourseDesign.Services;
+﻿using CourseDesign.Common.Classes;
+using CourseDesign.Services;
 using CourseDesign.Services.API;
 using CourseDesign.Services.API.ClassServices;
 using CourseDesign.Services.API.Interfaces;
@@ -28,7 +29,7 @@ namespace CourseDesign
         /// </summary>
         protected override Window CreateShell()
         {
-            return Container.Resolve<MainWindow>();
+            return Container.Resolve<MainWindow>(); // 这里会调用MainWindowViewModel的构造函数，因此加载用户上下文不能放在构造函数
         }
 
         /// <summary>
@@ -45,9 +46,12 @@ namespace CourseDesign
                     Current.Shutdown();
                     return;
                 }
-                IConfigureService configureService = Current.MainWindow.DataContext as IConfigureService;
+                var configureService = Current.MainWindow.DataContext as ILoginedConfigureService;
                 if (configureService != null)
-                    configureService.Configure();
+                {
+                    IDialogParameters returnParam = callback.Parameters;
+                    configureService.ConfigureForUser(returnParam.GetValue<UserClass>("User")); // 登陆好后，将Dialog通过参数返回的UserID给初始化函数，再初始化MainWindow，故能加载用户上下文
+                }
                 base.OnInitialized(); // 这个是初始化MainWindow
             });
         }
@@ -73,11 +77,40 @@ namespace CourseDesign
             // 注册依赖 - Dialog弹窗服务
             containerRegistry.Register<IDialogHostService, DialogHostService>();
             // 注册 - Prism的弹窗
-            containerRegistry.RegisterDialog<LoginView, LoginViewModel>(); // 登陆界面
+            containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>(); // 登陆界面
             // 注册依赖 - 弹窗(Dialog)[由于不再使用Prism本身的，而是我们扩展的，所以改成容器注入
             containerRegistry.RegisterForNavigation<AddTextPlanView, AddTextPlanViewModel>();
             containerRegistry.RegisterForNavigation<QueryView, QueryViewModel>();
-
         }
+
+        #region 外部全局方法
+        /// <summary>
+        /// 用户退出登录的方法
+        /// </summary>
+        public static void Logout(IContainerProvider containerProvider)
+        {
+            // 方法跟OnInitialized()类似
+            Current.MainWindow.Hide(); // 隐藏主页面
+
+            var dialogService = containerProvider.Resolve<IDialogService>();
+            // 先展示登陆弹窗
+            dialogService.ShowDialog("LoginView", callback =>
+            {
+                if (callback.Result != ButtonResult.OK)
+                {
+                    Current.Shutdown();
+                    return;
+                }
+                var configureService = Current.MainWindow.DataContext as ILoginedConfigureService;
+                if (configureService != null)
+                {
+                    IDialogParameters returnParam = callback.Parameters;
+                    configureService.ConfigureForUser(returnParam.GetValue<UserClass>("User")); // 登陆好后，将Dialog通过参数返回的UserID给初始化函数，再初始化MainWindow，故能加载用户上下文
+                }
+            });
+
+            Current.MainWindow.Show(); // 重现主页面
+        }
+        #endregion
     }
 }

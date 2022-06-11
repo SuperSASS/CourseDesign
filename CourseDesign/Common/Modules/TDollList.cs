@@ -16,6 +16,7 @@ namespace CourseDesign.Common.Modules
         private bool[] stars;
         private string typeIconPath;
         private string rarityBackgroundPath;
+        private string nameBackgroundPath;
 
         /// <summary>
         /// 人形基本数据
@@ -42,14 +43,21 @@ namespace CourseDesign.Common.Modules
             set { typeIconPath = value; }
         }
         /// <summary>
-        /// 人形稀有度背景路径
+        /// 人形稀有度图片背景路径
         /// </summary>
         public string RarityBackgroundPath
         {
             get { return rarityBackgroundPath; }
             set { rarityBackgroundPath = value; }
         }
-
+        /// <summary>
+        /// 人形稀有度名字横条路径
+        /// </summary>
+        public string NameBackgroundPath
+        {
+            get { return nameBackgroundPath; }
+            set { nameBackgroundPath = value; }
+        }
 
         /// <summary>
         /// 构造函数
@@ -59,9 +67,9 @@ namespace CourseDesign.Common.Modules
         {
             TDoll = tDoll;
             Stars = new bool[TDoll.Rarity];
-            TypeIconPath = @"\Assets\Icons\" + TDoll.Type.ToString() + ".png";
-            RarityBackgroundPath = @"\Assets\Images\Rarity\" + TDoll.Rarity.ToString() + ".png";
+            TypeIconPath = @"\Assets\Icons\" + TDoll.Type.ToString() + @"\" + TDoll.Rarity + ".png";
+            RarityBackgroundPath = @"\Assets\Images\Rarity\ImageBackground\" + TDoll.Rarity.ToString() + ".png";
+            NameBackgroundPath = @"\Assets\Images\Rarity\NameBanner\" + TDoll.Rarity.ToString() + ".png";
         }
-
     }
 }

@@ -32,7 +32,7 @@
 
         <!--  浮动窗口提示框  -->
         <materialDesign:Snackbar
-            x:Name="LoginSnakeBar"
+            x:Name="snack_bar_login"
             Grid.ColumnSpan="2"
             Panel.ZIndex="1"
             MessageQueue="{materialDesign:MessageQueue}" />
@@ -75,11 +75,12 @@
                         Content="登录系统"
                         DockPanel.Dock="Top" />
 
+                    <!--  下方注册和忘记密码文本  -->
                     <DockPanel Margin="0,5" LastChildFill="False">
                         <TextBlock Text="注册账号">
                             <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                                    <i:InvokeCommandAction Command="{Binding ExecuteCommand}" CommandParameter="ResgiterPage" />
+                                    <i:InvokeCommandAction Command="{Binding ExecCommand}" CommandParameter="转到注册页面" />
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
                         </TextBlock>
@@ -94,35 +95,36 @@
                     <TextBlock
                         Margin="0,10"
                         DockPanel.Dock="Top"
-                        FontSize="220"
+                        FontSize="20"
                         FontWeight="Bold"
                         Text="注册账号" />
 
-                    <TextBox
-                        Margin="0,5"
-                        materialDesign:HintAssist.Hint="请输入用户名"
-                        DockPanel.Dock="Top"
-                        Text="{Binding UserDto.Account}" />
+                    <!--  唯一账号输入栏  -->
                     <TextBox
                         Margin="0,5"
                         materialDesign:HintAssist.Hint="请输入账号"
                         DockPanel.Dock="Top"
-                        Text="{Binding UserDto.UserName}" />
-
-                    <!--  密码框（不支持直接绑定，需要额外使用扩展）  -->
+                        Text="{Binding Account}" />
+                    <!--  用户名输入栏  -->
+                    <TextBox
+                        Margin="0,5"
+                        materialDesign:HintAssist.Hint="请输入用户名"
+                        DockPanel.Dock="Top"
+                        Text="{Binding UserName}" />
+                    <!--  第一次输入的密码栏  -->
                     <PasswordBox
                         Margin="0,5"
-                        ext:PasswordExtension.Password="{Binding UserDto.Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ext:PasswordExtension.Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         materialDesign:HintAssist.Hint="请输入密码"
                         DockPanel.Dock="Top">
                         <i:Interaction.Behaviors>
                             <ext:PasswordBehavior />
                         </i:Interaction.Behaviors>
                     </PasswordBox>
-
+                    <!--  重复输入的密码栏  -->
                     <PasswordBox
                         Margin="0,5"
-                        ext:PasswordExtension.Password="{Binding UserDto.NewPassWord, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        ext:PasswordExtension.Password="{Binding RepeatPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         materialDesign:HintAssist.Hint="请再次输入密码"
                         DockPanel.Dock="Top">
                         <i:Interaction.Behaviors>
@@ -131,15 +133,15 @@
                     </PasswordBox>
 
                     <Button
-                        Command="{Binding ExecuteCommand}"
-                        CommandParameter="Resgiter"
+                        Command="{Binding ExecCommand}"
+                        CommandParameter="注册"
                         Content="注册账号"
                         DockPanel.Dock="Top" />
 
                     <Button
                         Margin="0,10"
-                        Command="{Binding ExecuteCommand}"
-                        CommandParameter="Return"
+                        Command="{Binding ExecCommand}"
+                        CommandParameter="返回登陆页面"
                         Content="返回登录"
                         DockPanel.Dock="Top"
                         Style="{StaticResource MaterialDesignOutlinedButton}" />

@@ -13,21 +13,21 @@ using CourseDesign.Common.Classes.Bases;
 namespace CourseDesign.Context
 {
     /// <summary>
-    /// 有关用户的全局上下文
+    /// 有关用户的全局上下文，只需要ID便可确定所有数据
     /// </summary>
     public class LoginUserContext
     {
         #region 字段
+        // API服务
+        private readonly IImagePlanService ImageService;
+        private readonly ITextPlanService TextService;
+        private readonly ITDollService TDollService;
+        // 字段
         private static int loginUserID;
         private static List<PlanBase> userPlans;
         private static List<int> userTDolls;
         private static List<Task> waitTasks;
         private static int userPlansComplete;
-
-        // API服务
-        private readonly IImagePlanService ImageService;
-        private readonly ITextPlanService TextService;
-        private readonly ITDollService TDollService;
         #endregion
 
         #region 属性
@@ -76,18 +76,19 @@ namespace CourseDesign.Context
         #region 方法
         public LoginUserContext(int loginUserID, IImagePlanService imagePlanService, ITextPlanService textPlanService, ITDollService tDollService)
         {
+            // 字段和服务赋值
             LoginUserID = loginUserID;
             ImageService = imagePlanService;
             TextService = textPlanService;
             TDollService = tDollService;
-
+            // 用户上下文初始化
             UserPlans = new();
             UserTDolls = new();
             WaitTasks = new();
-            Initialize();
+            InitializeWaitTasks();
         }
 
-        async void Initialize()
+        async void InitializeWaitTasks()
         {
             WaitTasks.Add(FirstLoadUserContext());
             foreach (var waitTask in WaitTasks)
@@ -97,7 +98,7 @@ namespace CourseDesign.Context
         /// <summary>
         /// 第一次加载该用户的各项数据
         /// </summary>
-        async Task FirstLoadUserContext()
+        private async Task FirstLoadUserContext()
         {
             UserTDolls.Clear();
             UserPlans.Clear();

@@ -20,8 +20,8 @@ namespace CourseDesign.Services.API.ClassServices
             Client = client;
         }
 
-        // 登录
-        public async Task<APIResponse> Login(UserDTO entity)
+        // 登录，要返回登陆的用户UserDTO，以加载该用户数据
+        public async Task<APIResponse<UserDTO>> Login(UserDTO entity)
         {
             BaseRequest request = new()
             {
@@ -29,7 +29,7 @@ namespace CourseDesign.Services.API.ClassServices
                 Route = $"api/{ServiceName}/Login",
                 Parameter = entity
             };
-            return await Client.ExecuteAsync(request);
+            return await Client.ExecuteAsync<UserDTO>(request);
         }
 
         // 注册
@@ -38,7 +38,7 @@ namespace CourseDesign.Services.API.ClassServices
             BaseRequest request = new()
             {
                 Method = RestSharp.Method.POST,
-                Route = $"api/{ServiceName}//api/Login/Register",
+                Route = $"api/{ServiceName}/Register",
                 Parameter = entity
             };
             return await Client.ExecuteAsync(request);

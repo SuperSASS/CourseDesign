@@ -29,7 +29,7 @@ namespace CourseDesign.API.Services
             if (getUser.Result == null || ((User)getUser.Result).Password != passwordMD5)
                 return new APIResponseInner(APIStatusCode.Get_Wrong_Account_or_Password, "账号或密码错啦！检查一下呢……");
             else
-                return new APIResponseInner();
+                return new APIResponseInner(getUser.Result); // 成功，返回添加的用户实体
         }
 
         // 注册
@@ -43,7 +43,7 @@ namespace CourseDesign.API.Services
                 return new APIResponseInner(APIStatusCode.Get_Account_Haven, $"当前账号“{dbEntity.Account}”已被注册啦，再想想别的呢……");
             // 注册账号
             dbEntity.CreateDate = DateTime.Now;
-            dbEntity.Password = dbEntity.Password.GetMD5();
+            dbEntity.Password = dbEntity.Password;
             return await userDB.AddAsync(dbEntity); // 这里数据库的Add，ID是自增类型
         }
     }

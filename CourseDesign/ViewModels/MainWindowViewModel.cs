@@ -7,44 +7,77 @@ using CourseDesign.Services.API.Interfaces;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
+using static CourseDesign.Context.LoginUserContext;
 using System.Collections.ObjectModel;
+using Prism.Ioc;
 
 namespace CourseDesign.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, IConfigureService
+    public class MainWindowViewModel : BindableBase, ILoginedConfigureService
     {
+        #region 字段
+        private readonly IContainerProvider containerProvider; // 主容器
         private readonly IRegionManager regionManager; // 区域控制器
         private IRegionNavigationJournal journal; // 区域导航日志
-
+        // API服务
+        private readonly IImagePlanService ImageService;
+        private readonly ITextPlanService TextService;
+        private readonly ITDollService TDollService;
+        // 属性字段
+        private UserClass user;
+        private int selectIndex;                        // 所选择的主菜单哪一项
         // 导航栏部分
         private ObservableCollection<MenuBar> menuBars; // 主菜单列表
-        private int selectIndex;                        // 所选择的主菜单哪一项
-        public ObservableCollection<MenuBar> MenuBars { get { return menuBars; } set { menuBars = value; } }
-        public int SelectIndex { get { return selectIndex; } set { selectIndex = value; RaisePropertyChanged(); } }
+        #endregion
 
+        #region 属性
+        public int SelectIndex { get { return selectIndex; } set { selectIndex = value; RaisePropertyChanged(); } }
+        public UserClass User { get { return user; } set { user = value; RaisePropertyChanged(); } }
+        public ObservableCollection<MenuBar> MenuBars { get { return menuBars; } set { menuBars = value; } }
         // 命令部分
         public DelegateCommand<MenuBar> NavigationCommand { get; private set; } // 从UI层传递MenuBars到这个导航命令
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
         public DelegateCommand GoHomeCommand { get; private set; } // 返回主页命令
+        public DelegateCommand LogoutCommand { get; private set; } // 退出登录命令
+        #endregion
 
+        #region 初始化
         /// <summary>
-        /// MainWindow VM 的构造函数：
-        /// <para>完成菜单栏、导航命令、后退命令、返回主页命令的初始化</para>
+        /// MainWindow VM 的构造函数，登陆前调用：
+        /// 完成服务、命令接口、全局上下文（人形数据）的初始化
+        /// <para>注：一部分数据要等登陆后调用ConfigureForUser才加载</para>
         /// </summary>
         /// <param name="regionManager"> 区域管理器 </param>
-        public MainWindowViewModel(IRegionManager regionManager,ITextPlanService textPlanService, IImagePlanService imagePlanService,  ITDollService tDollService)
+        public MainWindowViewModel(IContainerProvider containerProvider, IRegionManager regionManager, ITextPlanService textPlanService, IImagePlanService imagePlanService, ITDollService tDollService)
         {
-            MenuBars = new ObservableCollection<MenuBar>();
+            this.containerProvider = containerProvider;
             this.regionManager = regionManager;
+            TextService = textPlanService;
+            ImageService = imagePlanService;
+            TDollService = tDollService;
             // 命令接口实现
             NavigationCommand = new DelegateCommand<MenuBar>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoIndex
-            // 创建全局静态上下文
-            _ = new LoginUserContext(1, imagePlanService, textPlanService, tDollService); // 创建用户上下文
+            LogoutCommand = new DelegateCommand(() => App.Logout(containerProvider));
+            // 创建全局静态上下文 - TDolls人形数据
             _ = new TDollsContext(tDollService); // 创建人形上下文
         }
 
+        /// <summary>
+        /// 主应用的默认配置，在登陆后才调用！
+        /// </summary>
+        public void ConfigureForUser(UserClass user)
+        {
+            MenuBars = new ObservableCollection<MenuBar>();
+            CreateMenuBars(); //创建菜单栏
+            _ = new LoginUserContext(user.UserID, ImageService, TextService, TDollService); // 创建用户上下文
+            User = user;
+            GoIndex();
+        }
+        #endregion
+
+        #region 方法
         /// <summary>
         /// 在进行上一页和返回主页操作后，用来更新NavagationBar（菜单栏导航卡）中所选择的导航项的index，从而更新所选择的项。
         /// 否则操作后导航项不会更新
@@ -87,7 +120,9 @@ namespace CourseDesign.ViewModels
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Title))
                 regionManager.Regions[PrismManager.MainViewRegionName].RequestNavigate(obj.NameSpace, back => { journal = back.Context.NavigationService.Journal; });
         }
+        #endregion
 
+        #region 内部方法
         /// <summary>
         /// 创建主菜单列表
         /// <para>注意：Add的顺序需要与主菜单列表的一致！否则在上一页、返回主页时，NavigationBar的更新会混乱</para>
@@ -99,14 +134,6 @@ namespace CourseDesign.ViewModels
             MenuBars.Add(new MenuBar("BadgeAccount", "图鉴", "ListView"));
             MenuBars.Add(new MenuBar("Cog", "设置", "SettingView"));
         }
-
-        /// <summary>
-        /// 主窗口的默认配置
-        /// </summary>
-        public void Configure()
-        {
-            CreateMenuBars(); //创建菜单栏【注：由于Congigure在构造函数之后，构造函数里完成了对SelectionChanged的事件触发器构建，
-                              //此时再创建菜单栏会触发该触发器，导致换到默认的SelectedIndex=0的页面，即第一个MenuBar首页。
-        }
+        #endregion
     }
 }

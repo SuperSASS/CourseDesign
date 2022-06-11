@@ -178,10 +178,17 @@
                                         </Grid.RowDefinitions>
                                         <!--  人形名称  -->
                                         <Grid Grid.Row="0">
-                                            <Border Background="{DynamicResource PrimaryHueMidBrush}" Opacity="0.7" />
+                                            <Image
+                                                Width="250"
+                                                Height="30"
+                                                Opacity="0.9"
+                                                Source="{Binding NameBackgroundPath}"
+                                                Stretch="Fill" />
                                             <TextBlock
-                                                Margin="15,5"
+                                                Margin="15,0"
                                                 HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Foreground="Black"
                                                 Style="{StaticResource MaterialDesignHeadline6TextBlock}"
                                                 Text="{Binding TDoll.Name}" />
                                         </Grid>
@@ -249,17 +256,12 @@
                                             </ListBox>
                                         </Grid>
                                         <!--  枪械类型  -->
-                                        <Border
+                                        <Image
                                             Width="60"
                                             Height="30"
                                             HorizontalAlignment="Left"
                                             VerticalAlignment="Top"
-                                            Background="{DynamicResource PrimaryHueMidBrush}">
-                                            <Image
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Center"
-                                                Source="{Binding TypeIconPath}" />
-                                        </Border>
+                                            Source="{Binding TypeIconPath}" />
                                     </Grid>
                                 </Grid>
                             </DataTemplate>
