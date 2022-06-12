@@ -65,7 +65,7 @@ namespace CourseDesign.ViewModels
         }
 
         /// <summary>
-        /// 主应用的默认配置，在登陆后才调用！
+        /// 主应用的默认配置，在登陆后才调用！用于加载当前登陆用户的上下文
         /// </summary>
         public void ConfigureForUser(UserClass user)
         {

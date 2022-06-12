@@ -27,8 +27,8 @@ namespace CourseDesign.Views
                 snack_bar_main.MessageQueue.Enqueue(arg.Message); // 将传来的MessageModel的Message压入消息队列
             }, "Main");
 
-            btn_min.Click += (s, e) => { this.WindowState = WindowState.Minimized; }; // 菜单栏 - 窗口最小化按钮
-            btn_max.Click += (s, e) => // 菜单栏 - 窗口最大化按钮
+            btn_min.Click += (s, e) => { this.WindowState = WindowState.Minimized; }; // 标题栏 - 窗口最小化按钮
+            btn_max.Click += (s, e) => // 标题栏 - 窗口最大化按钮
             {
                 if (this.WindowState == WindowState.Normal)
                     this.WindowState = WindowState.Maximized;
@@ -40,14 +40,14 @@ namespace CourseDesign.Views
                 var dialogResult = await dialogHostService.ShowQueryDialog("退出系统", "确认要退出系统吗？");
                 if (dialogResult.Result != Prism.Services.Dialogs.ButtonResult.Yes) return;
                 this.Close();
-            }; // 菜单栏 - 窗口关闭按钮
+            }; // 标题栏 - 窗口关闭按钮
 
-            titleBar.MouseLeftButtonDown += (s, e) => // 菜单栏 - 窗口拖动
+            titleBar.MouseLeftButtonDown += (s, e) => // 标题栏 - 窗口拖动
             {
                 if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
                     this.DragMove();
             };
-            titleBar.MouseDoubleClick += (s, e) => // 菜单栏 - 窗口双击最大化
+            titleBar.MouseDoubleClick += (s, e) => // 标题栏 - 窗口双击最大化
             {
                 if (this.WindowState == WindowState.Normal)
                     this.WindowState = WindowState.Maximized;

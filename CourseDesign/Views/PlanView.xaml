@@ -62,7 +62,6 @@
                     </Grid>
                 </Grid>
 
-
                 <!--  页面内容  -->
                 <Grid
                     x:Name="main_content"
@@ -196,7 +195,6 @@
                                 <!--  图片类卡片  -->
                                 <DataTemplate x:Key="imageCard">
                                     <!--  TODO：存在问题：卡片内部的颜色不会随着主题改变【注：这是主题自带的bug，无法修复  -->
-                                    <!--  TODO: 3 - 动画有点丑陋，建议改为一起淡出  -->
                                     <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
                                         <materialDesign:Flipper
                                             Grid.Row="15"
@@ -205,7 +203,7 @@
                                             Margin="15"
                                             materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                             Style="{StaticResource MaterialDesignCardFlipper}">
-                                            <!--  卡片前方 - 图片(16:9)x计划目标  -->
+                                            <!--  卡片前方 - 图片(16:9)x名称  -->
                                             <materialDesign:Flipper.FrontContent>
                                                 <Grid x:Name="flipper_front" Width="300">
                                                     <Grid.RowDefinitions>
@@ -263,7 +261,7 @@
                                                     </Button>
                                                 </Grid>
                                             </materialDesign:Flipper.FrontContent>
-                                            <!--  卡片后方 - 详细信息x打捞地点  -->
+                                            <!--  卡片后方 - 详细信息  -->
                                             <materialDesign:Flipper.BackContent>
                                                 <Grid x:Name="flipper_back" Width="300">
                                                     <Grid.RowDefinitions>

@@ -252,7 +252,7 @@ namespace CourseDesign.ViewModels
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status != APIStatusCode.Success)
                     throw new Exception("内部错误(API) - 删除出错啦，肯定不是服务器的问题qwq！……");
-                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); UserPlansComplete--; } // 删除的时候完成计划也要--
+                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); if (deletePlan.Status) UserPlansComplete--; } // 删除的时候完成计划也要--
             }
             catch (Exception ex)
             {
@@ -353,7 +353,7 @@ namespace CourseDesign.ViewModels
                 }
             }
             catch (Exception ex)
-            { ShowMessageDialog(ex.Message,"Main"); }
+            { ShowMessageDialog(ex.Message, "Main"); }
             finally { }
         }
         #endregion
@@ -365,7 +365,7 @@ namespace CourseDesign.ViewModels
         static readonly Func<PlanBase, bool> trueFunc = (x) => true;
 
         /// <summary>
-        /// 查询该用户包含条件的计划，目前只支持文字类计划的标题包含搜索
+        /// 查询该用户包含条件的计划，目前只支持完成状态，和文字类计划的标题、内容包含搜索
         /// </summary>
         private void SearchPlan()
         {
@@ -408,12 +408,14 @@ namespace CourseDesign.ViewModels
                     if (string.IsNullOrWhiteSpace(textPlan.Title) || string.IsNullOrWhiteSpace(textPlan.Content)) // 计划的标题或内容为空
                         throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
                     ShowLoadingDialog(true);
-                    APIResponse<TextPlanDTO> updateResponse = isAddOrModify ? await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID)) : await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUserID));
+                    APIResponse<TextPlanDTO> updateResponse = isAddOrModify
+                        ? await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID))
+                        : await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUserID));
                     if (updateResponse.Status != APIStatusCode.Success)
                         throw new Exception("内部错误(API) - " + updateResponse.Message);
 
                     if (isAddOrModify) // 代表新增
-                    { UserPlans.Add(textPlan); PlansShow.Insert(0, textPlan); }
+                    { textPlan.ID = updateResponse.Result.ID; UserPlans.Add(textPlan); PlansShow.Insert(0, textPlan); }
                     else
                     {
                         // 由于ObservableCollection没有FindIndex方法，所以只能手动模拟了……
@@ -456,7 +458,7 @@ namespace CourseDesign.ViewModels
                 IsRightTextEditorOpen = false;
                 IsRightImageEditorOpen = false; // 关闭编辑页
             }
-        }   
+        }
 
         /// <summary>
         /// 根据状态和字段的筛选，生成用于展示的计划

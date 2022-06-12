@@ -119,7 +119,7 @@ namespace CourseDesign.ViewModels
         static readonly Func<TDollClass, bool> trueFunc = (x) => true;
 
         /// <summary>
-        /// 查询该用户包含条件的计划，目前只支持文字类计划的标题包含搜索
+        /// 按用户筛选条件，生成表达式，供CreateShowPlans使用
         /// </summary>
         private void SearchPlan()
         {
@@ -145,7 +145,7 @@ namespace CourseDesign.ViewModels
         }
 
         /// <summary>
-        /// 根据状态和字段的筛选，生成用于展示的计划
+        /// 根据筛选条件形成的表达式，生成用于展示的人形数据
         /// </summary>
         private void CreateShowPlans(Func<TDollClass, bool> exp_Name, Func<TDollClass, bool> exp_Rarity, Func<TDollClass, bool> exp_Type)
         {

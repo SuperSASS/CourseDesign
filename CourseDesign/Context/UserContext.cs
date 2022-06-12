@@ -150,9 +150,7 @@ namespace CourseDesign.Context
                     if (textItem.Status) UserPlansComplete++;
                 }
             }
-            catch (Exception ex)
-            {
-            }
+            // TODO: 2 - 这里没做异常处理
             finally
             {
             }

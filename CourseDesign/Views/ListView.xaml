@@ -61,7 +61,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!--  上方操作栏  -->
+                <!--  上方筛选栏  -->
                 <DockPanel Grid.Row="0" LastChildFill="False">
                     <!--  人形名称筛选栏  -->
                     <TextBox

@@ -8,7 +8,7 @@
     xmlns:prism="http://prismlibrary.com/"
     xmlns:user="clr-namespace:CourseDesign.Context"
     x:Name="window"
-    Title="课程设计"
+    Title="少女前线工具盒"
     Width="1350"
     Height="900"
     Background="{DynamicResource MaterialDesignPaper}"
@@ -34,6 +34,7 @@
         DialogTheme="Inherit"
         Identifier="RootDialog">
 
+        <!--  呈现左侧弹出菜单栏的区域  -->
         <materialDesign:DrawerHost x:Name="menu_bars" IsLeftDrawerOpen="{Binding ElementName=MenuToggleButton, Path=IsChecked}">
 
             <!--  Darwer: 弹出菜单栏  -->

@@ -39,6 +39,7 @@
             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
             Text="主题" />
 
+        <!-- 浅色、深色主题切换-->
         <StackPanel
             Grid.Row="1"
             Margin="0,10"
@@ -48,6 +49,7 @@
             <TextBlock Text="深色" />
         </StackPanel>
 
+        <!--主题色选择（来源于MaterialDesign）-->
         <ItemsControl Grid.Row="2" ItemsSource="{Binding Swatches}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="{x:Type materialDesignColors:ISwatch}">

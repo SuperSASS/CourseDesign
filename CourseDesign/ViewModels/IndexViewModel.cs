@@ -201,13 +201,15 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 生成展示在首页的的信息块列表
         /// </summary>
+        /// TODO: 1 - 存在Bug，可能重复调用而InfoBlocks未清零，造成显示4各。
+        /// 复现方法：一个用户里增加一条文字计划，然后立刻登录到另一个用户。
         private async void CreateInfoBlocks()
         {
-            InfoBlocks.Clear();
             foreach (var waitTask in WaitTasks)
                 await waitTask;
             // 人形收集情况
             double TDolls_All = TDollsContext.AllTDolls.Count;
+            InfoBlocks.Clear();
             double TDolls_User = UserTDolls.Count;
             InfoBlocks.Add(new InfoBlock("PercentCircleOutline", "人形收集情况", TDolls_User, TDolls_All, "跳转到图鉴页面","ListView"));
             // 计划完成情况
