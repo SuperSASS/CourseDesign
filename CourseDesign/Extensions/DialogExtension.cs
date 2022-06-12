@@ -66,7 +66,6 @@ namespace CourseDesign.Extensions
         /// <summary>
         /// 发布消息，展开底部浮动提示消息弹窗
         /// </summary>
-        /// </summary>
         /// <param name="aggregator">事件聚合器（若继承了DialogNavigationViewModel，则不用给这个）</param>
         /// <param name="message">发送的消息</param>
         /// <param name="filterName">过滤器（发送到哪去，主界面的为Main；登陆界面的为Login）</param>

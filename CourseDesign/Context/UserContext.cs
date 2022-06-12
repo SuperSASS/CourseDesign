@@ -81,10 +81,11 @@ namespace CourseDesign.Context
             ImageService = imagePlanService;
             TextService = textPlanService;
             TDollService = tDollService;
-            // 用户上下文初始化
+            // 用户上下文初始化（复位）
             UserPlans = new();
             UserTDolls = new();
             WaitTasks = new();
+            userPlansComplete = 0;
             InitializeWaitTasks();
         }
 

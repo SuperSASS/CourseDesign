@@ -6,6 +6,7 @@
     xmlns:local="clr-namespace:CourseDesign.Views"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:presentation="clr-namespace:CourseDesign.Views.Presentations"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
@@ -70,7 +71,14 @@
                         VerticalAlignment="Center"
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         FontSize="16"
-                        Style="{StaticResource MaterialDesignFloatingHintTextBox}">
+                        Style="{StaticResource MaterialDesignFloatingHintTextBox}"
+                        Text="{Binding SearchNameText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.InputBindings>
+                            <KeyBinding
+                                Key="Enter"
+                                Command="{Binding ExecCommand}"
+                                CommandParameter="查询" />
+                        </TextBox.InputBindings>
                         <materialDesign:HintAssist.Hint>
                             <StackPanel Margin="0" Orientation="Horizontal">
                                 <materialDesign:PackIcon VerticalAlignment="Center" Kind="Magnify" />
@@ -86,6 +94,7 @@
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
                         FontSize="16"
+                        SelectedIndex="{Binding SearchRarityIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                         <ComboBoxItem Content="★★" />
                         <ComboBoxItem Content="★★★" />
@@ -106,6 +115,7 @@
                         materialDesign:TextFieldAssist.HasClearButton="True"
                         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource SecondaryHueMidBrush}"
                         FontSize="16"
+                        SelectedIndex="{Binding SearchTypeIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         Style="{StaticResource MaterialDesignFloatingHintComboBox}">
                         <ComboBoxItem Content="HG - 手枪" />
                         <ComboBoxItem Content="SMG - 冲锋枪" />
@@ -122,6 +132,8 @@
                     </ComboBox>
                 </DockPanel>
 
+                <presentation:NoResult Grid.Row="1" Visibility="{Binding IsNoResult, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
                 <!--  滚动条支持  -->
                 <ScrollViewer
                     x:Name="tdoll_list"
@@ -131,7 +143,7 @@
                     Style="{StaticResource for_scrollviewer}">
 
                     <!--  人形卡片展示区  -->
-                    <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=tdoll_list}" ItemsSource="{Binding TDollList}">
+                    <ItemsControl MaxHeight="{Binding ActualHeight, ElementName=tdoll_list}" ItemsSource="{Binding TDollsShow}">
 
                         <!--  展示容器  -->
                         <ItemsControl.ItemsPanel>

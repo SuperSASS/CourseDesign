@@ -49,6 +49,11 @@ namespace CourseDesign.ViewModels.Bases
             });
         }
 
+        /// <summary>
+        /// 发布消息，展开底部浮动提示消息弹窗
+        /// </summary>
+        /// <param name="message">发送的消息</param>
+        /// <param name="filterName">过滤器（发送到哪去，主界面的为Main；登陆界面的为Login）</param>
         public void ShowMessageDialog(string msg, string filterName)
         {
             aggregator.ShowMessageDialog(msg, filterName);

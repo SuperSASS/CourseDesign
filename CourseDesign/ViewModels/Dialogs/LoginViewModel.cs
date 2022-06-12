@@ -159,19 +159,17 @@ namespace CourseDesign.ViewModels.Dialogs
                 });
                 if (loginResponse.Status != APIStatusCode.Success)
                     throw new Exception(loginResponse.Message);
-                ShowMessageDialog("注册成功！直接登录吧……", "Main");
+                ShowMessageDialog("注册成功！直接登录吧……", "Login");
                 SelectIndex = 0; // 返回登陆界面
             }
             catch (Exception ex)
             {
-                ShowMessageDialog(ex.Message, "Main");
+                ShowMessageDialog(ex.Message, "Login");
             }
             finally
             {
                 ShowLoadingDialog(false);
             }
-
-            // 提示登陆失败的信息
         }
 
     }

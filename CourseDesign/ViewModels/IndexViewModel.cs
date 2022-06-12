@@ -189,6 +189,7 @@ namespace CourseDesign.ViewModels
         /// 用于驱动页面的切换的实现方法
         /// </summary>
         /// <param name="obj">当注册的导航MenuBar响应后，自动调用该方法，并作为参数obj</param>
+        /// TODO: 1 - 因为这里没有像MainVM里有个UpdateSelectIndex()，故Navigate后菜单栏的选项不会切换。考虑方法，把菜单栏也作为一个全局上下文Context
         private void Navigate(InfoBlock obj)
         {
             if (obj != null && !string.IsNullOrWhiteSpace(obj.Target))

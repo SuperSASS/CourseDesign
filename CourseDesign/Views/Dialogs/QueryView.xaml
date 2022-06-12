@@ -17,6 +17,7 @@
         </Grid.RowDefinitions>
 
         <TextBlock
+            Margin="5"
             Padding="5"
             d:Text="标题……"
             FontSize="14"
@@ -25,6 +26,7 @@
         <TextBlock
             Grid.Row="1"
             Padding="15,0"
+            Margin="10,0"
             VerticalAlignment="Center"
             d:Text="内容……"
             FontSize="14"

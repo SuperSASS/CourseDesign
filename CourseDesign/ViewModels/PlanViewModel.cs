@@ -137,11 +137,6 @@ namespace CourseDesign.ViewModels
         #endregion
 
         /// <summary>
-        /// 恒为真的<see cref="Func{PlanBase, bool}"/>类型的函数式，简化表达式用
-        /// </summary>
-        static readonly Func<PlanBase, bool> trueFunc = (x) => true;
-
-        /// <summary>
         /// Init - 构造函数，只执行一次
         /// </summary>
         /// <param name="imageService">图片类计划的服务</param>
@@ -172,7 +167,6 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 重写导航加载到该页面的方法，每次来到该页面都会执行一次
         /// </summary>
-        /// <param name="navigationContext"></param>
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
@@ -358,8 +352,17 @@ namespace CourseDesign.ViewModels
                     default: throw new Exception("内部错误 - 有命令的参数写错啦！快叫程序员来修……");
                 }
             }
+            catch (Exception ex)
+            { ShowMessageDialog(ex.Message,"Main"); }
             finally { }
         }
+        #endregion
+
+        #region 内部方法
+        /// <summary>
+        /// 恒为真的<see cref="Func{PlanBase, bool}"/>类型的函数式，简化表达式用
+        /// </summary>
+        static readonly Func<PlanBase, bool> trueFunc = (x) => true;
 
         /// <summary>
         /// 查询该用户包含条件的计划，目前只支持文字类计划的标题包含搜索
@@ -453,10 +456,8 @@ namespace CourseDesign.ViewModels
                 IsRightTextEditorOpen = false;
                 IsRightImageEditorOpen = false; // 关闭编辑页
             }
-        }
-        #endregion
+        }   
 
-        #region 内部方法
         /// <summary>
         /// 根据状态和字段的筛选，生成用于展示的计划
         /// </summary>
@@ -469,7 +470,7 @@ namespace CourseDesign.ViewModels
         }
 
         /// <summary>
-        /// 更新是否无计划或全部完成的状态
+        /// 更新是否无计划或全部完成等Presentation提示页的状态
         /// </summary>
         private void CheckPresentation()
         {

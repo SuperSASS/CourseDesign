@@ -79,20 +79,6 @@ namespace CourseDesign.ViewModels
 
         #region 方法
         /// <summary>
-        /// 在进行上一页和返回主页操作后，用来更新NavagationBar（菜单栏导航卡）中所选择的导航项的index，从而更新所选择的项。
-        /// 否则操作后导航项不会更新
-        /// </summary>
-        private void UpdateSelectIndex()
-        {
-            int index = 0;
-            foreach (MenuBar nowMenuBar in MenuBars)
-                if (nowMenuBar.NameSpace == journal.CurrentEntry.Uri.ToString()) // journal中这个代表当前页面的uri（前面导航传进来的那个），因此可以遍历然后找到index
-                    SelectIndex = index;
-                else
-                    index++;
-        }
-
-        /// <summary>
         /// 返回上一页的实现方法
         /// </summary>
         private void GoBack()
@@ -124,10 +110,24 @@ namespace CourseDesign.ViewModels
 
         #region 内部方法
         /// <summary>
+        /// 在进行上一页和返回主页操作后，用来更新NavagationBar（菜单栏导航卡）中所选择的导航项的index，从而更新所选择的项。
+        /// 否则操作后导航项不会更新
+        /// </summary>
+        private void UpdateSelectIndex()
+        {
+            int index = 0;
+            foreach (MenuBar nowMenuBar in MenuBars)
+                if (nowMenuBar.NameSpace == journal.CurrentEntry.Uri.ToString()) // journal中这个代表当前页面的uri（前面导航传进来的那个），因此可以遍历然后找到index
+                    SelectIndex = index;
+                else
+                    index++;
+        }
+
+        /// <summary>
         /// 创建主菜单列表
         /// <para>注意：Add的顺序需要与主菜单列表的一致！否则在上一页、返回主页时，NavigationBar的更新会混乱</para>
         /// </summary>
-        void CreateMenuBars()
+        public void CreateMenuBars()
         {
             MenuBars.Add(new MenuBar("Home", "首页", "IndexView"));
             MenuBars.Add(new MenuBar("CheckboxMultipleMarkedCircleOutline", "计划列表", "PlanView"));
