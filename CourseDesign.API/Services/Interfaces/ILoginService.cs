@@ -44,5 +44,17 @@ namespace CourseDesign.API.Services.Interfaces
         /// </list>
         /// </returns>
         Task<APIResponseInner> ChangeUserInfoAsync(UserDTO user);
+
+        /// <summary>
+        /// 验证用户密码是否正确
+        /// </summary>
+        /// <param name="user">所需验证的用户，只用传送<c>ID</c>和<c>Password</c></param>
+        /// <returns>API返回消息<see cref="APIResponseInner"/>
+        /// <list type="bullet">
+        /// <item>成功：只返回状态码为Success</item>
+        /// <item>失败：返回相应错误代码和信息</item>
+        /// </list>
+        /// </returns>
+        Task<APIResponseInner> CheckPassword(UserDTO user);
     }
 }

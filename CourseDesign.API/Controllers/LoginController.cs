@@ -35,9 +35,17 @@ namespace CourseDesign.API.Controllers
         /// <summary>
         /// 更改用户信息
         /// </summary>
-        /// <param name="dtoEntity">所更改的实体：账号、用户名、密码</param>
+        /// <param name="dtoEntity">所更改的实体：ID、用户名或密码</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpPost]
         public async Task<APIResponseInner> ChangeUserInfo([FromBody] UserDTO dtoEntity) => await Service.ChangeUserInfoAsync(dtoEntity);
+
+        /// <summary>
+        /// 验证用户密码
+        /// </summary>
+        /// <param name="dtoEntity">所需验证的实体：ID、密码</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        [HttpPost]
+        public async Task<APIResponseInner> CheckPassword([FromBody] UserDTO dtoEntity) => await Service.CheckPassword(dtoEntity);
     }
 }

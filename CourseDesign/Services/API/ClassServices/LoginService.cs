@@ -55,5 +55,17 @@ namespace CourseDesign.Services.API.ClassServices
             };
             return await Client.ExecuteAsync<UserDTO>(request);
         }
+
+        // 验证用户密码
+        public async Task<APIResponse> CheckPassword(UserDTO entity)
+        {
+            BaseRequest request = new()
+            {
+                Method = RestSharp.Method.POST,
+                Route = $"api/{ServiceName}/CheckPassword",
+                Parameter = entity
+            };
+            return await Client.ExecuteAsync(request);
+        }
     }
 }

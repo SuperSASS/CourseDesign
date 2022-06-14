@@ -50,5 +50,18 @@ namespace CourseDesign.Services.API.Interfaces
         /// </list>
         /// </returns>
         public Task<APIResponse<UserDTO>> ChangeUserInfo(UserDTO entity);
+
+        /// <summary>
+        /// [POST]验证用户密码
+        /// </summary>
+        /// <param name="entity"><see cref="UserDTO"/>类型，代表所修改的用户信息。（ID必须要有为UserID/再给出MD5处理后的密码）</param>
+        /// <returns>
+        /// <see cref="APIResponse"/>类型消息
+        /// <list type="bullet">
+        /// <item>Status: 约定的<see cref="APIStatusCode"/>类型状态码</item>
+        /// <item>Message: API返回的消息</item>
+        /// </list>
+        /// </returns>
+        public Task<APIResponse> CheckPassword(UserDTO entity);
     }
 }

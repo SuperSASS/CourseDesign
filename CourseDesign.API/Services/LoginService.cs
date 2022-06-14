@@ -59,5 +59,17 @@ namespace CourseDesign.API.Services
             dbEntity.Password ??= getUserResult.Password;
             return await userDB.UpdateAsync(dbEntity);
         }
+
+        // 验证用户密码
+        public async Task<APIResponseInner> CheckPassword(UserDTO dtoEntity)
+        {
+            var dbEntity = mapper.Map<User>(dtoEntity);
+            var getUser = await userDB.GetIDAsync(dbEntity.ID);
+            if (getUser.Result == null)
+               return new APIResponseInner(APIStatusCode.Unknown_Error, "API神必错误 - 找不要用户");
+            if (((User)getUser.Result).Password != dtoEntity.Password)
+                return new APIResponseInner(APIStatusCode.Get_Wrong_Account_or_Password, "之前的密码错啦！检查一下呢……");
+            return new APIResponseInner(); // 成功，返回添加的用户实体
+        }
     }
 }

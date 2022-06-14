@@ -479,7 +479,7 @@ namespace CourseDesign.ViewModels
             PlansShow.Clear();
             foreach (PlanBase item in UserPlans)
                 if (exp_Status(item) && exp_Field(item))
-                    PlansShow.Add(item);
+                  PlansShow.Add(item);
         }
 
         /// <summary>

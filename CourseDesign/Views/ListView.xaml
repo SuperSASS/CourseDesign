@@ -158,124 +158,126 @@
                         <!--  展示模板  -->
                         <ItemsControl.ItemTemplate>
                             <DataTemplate x:Name="card">
-                                <!--  人形展示卡 250x300  -->
-                                <Grid
-                                    Width="250"
-                                    Height="300"
-                                    Margin="15">
-                                    <!--  人形图片  -->
-                                    <Grid>
-                                        <materialDesign:ColorZone
-                                            Width="250"
-                                            Height="300"
-                                            Mode="Dark" />
-                                        <Image
-                                            Width="250"
-                                            Height="300"
-                                            Margin="70,0,0,0"
-                                            Source="{Binding RarityBackgroundPath}" />
-                                        <Image
-                                            Width="250"
-                                            RenderOptions.BitmapScalingMode="HighQuality"
-                                            SnapsToDevicePixels="True"
-                                            Source="{Binding TDoll.ArtworkPath}"
-                                            Stretch="UniformToFill"
-                                            UseLayoutRounding="True" />
-                                    </Grid>
-                                    <!--  底部信息栏  -->
-                                    <Grid Height="auto" VerticalAlignment="Bottom">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="auto" />
-                                            <RowDefinition Height="auto" />
-                                        </Grid.RowDefinitions>
-                                        <!--  人形名称  -->
-                                        <Grid Grid.Row="0">
+                                <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect Kind=ExpandIn}">
+                                    <!--  人形展示卡 250x300  -->
+                                    <Grid
+                                        Width="250"
+                                        Height="300"
+                                        Margin="15">
+                                        <!--  人形图片  -->
+                                        <Grid>
+                                            <materialDesign:ColorZone
+                                                Width="250"
+                                                Height="300"
+                                                Mode="Dark" />
                                             <Image
                                                 Width="250"
-                                                Height="30"
-                                                Opacity="0.9"
-                                                Source="{Binding NameBackgroundPath}"
-                                                Stretch="Fill" />
-                                            <TextBlock
-                                                Margin="15,0"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center"
-                                                Foreground="Black"
-                                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
-                                                Text="{Binding TDoll.Name}" />
+                                                Height="300"
+                                                Margin="70,0,0,0"
+                                                Source="{Binding RarityBackgroundPath}" />
+                                            <Image
+                                                Width="250"
+                                                RenderOptions.BitmapScalingMode="HighQuality"
+                                                SnapsToDevicePixels="True"
+                                                Source="{Binding TDoll.ArtworkPath}"
+                                                Stretch="UniformToFill"
+                                                UseLayoutRounding="True" />
                                         </Grid>
-                                        <!--  人形种类、编号  -->
-                                        <Grid Grid.Row="1" Opacity="0.8">
-                                            <Border Background="{DynamicResource MaterialDesignBackground}" />
-                                            <DockPanel LastChildFill="False">
+                                        <!--  底部信息栏  -->
+                                        <Grid Height="auto" VerticalAlignment="Bottom">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto" />
+                                                <RowDefinition Height="auto" />
+                                            </Grid.RowDefinitions>
+                                            <!--  人形名称  -->
+                                            <Grid Grid.Row="0">
+                                                <Image
+                                                    Width="250"
+                                                    Height="30"
+                                                    Opacity="0.9"
+                                                    Source="{Binding NameBackgroundPath}"
+                                                    Stretch="Fill" />
                                                 <TextBlock
-                                                    Margin="10,5"
+                                                    Margin="15,0"
                                                     HorizontalAlignment="Left"
-                                                    DockPanel.Dock="Left"
-                                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                                    Text="{Binding TDoll.Type}" />
-                                                <TextBlock
-                                                    Margin="5,0,10,1"
                                                     VerticalAlignment="Center"
-                                                    DockPanel.Dock="Right"
-                                                    Style="{StaticResource MaterialDesignBody2TextBlock}"
-                                                    Text="{Binding TDoll.ID}" />
-                                                <TextBlock
-                                                    Margin="0,1,1,4"
-                                                    VerticalAlignment="Bottom"
-                                                    DockPanel.Dock="Right"
-                                                    FontSize="10"
-                                                    Style="{StaticResource MaterialDesignCaptionTextBlock}"
-                                                    Text="编号" />
-                                            </DockPanel>
+                                                    Foreground="Black"
+                                                    Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                                    Text="{Binding TDoll.Name}" />
+                                            </Grid>
+                                            <!--  人形种类、编号  -->
+                                            <Grid Grid.Row="1" Opacity="0.8">
+                                                <Border Background="{DynamicResource MaterialDesignBackground}" />
+                                                <DockPanel LastChildFill="False">
+                                                    <TextBlock
+                                                        Margin="10,5"
+                                                        HorizontalAlignment="Left"
+                                                        DockPanel.Dock="Left"
+                                                        Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                        Text="{Binding TDoll.Type}" />
+                                                    <TextBlock
+                                                        Margin="5,0,10,1"
+                                                        VerticalAlignment="Center"
+                                                        DockPanel.Dock="Right"
+                                                        Style="{StaticResource MaterialDesignBody2TextBlock}"
+                                                        Text="{Binding TDoll.ID}" />
+                                                    <TextBlock
+                                                        Margin="0,1,1,4"
+                                                        VerticalAlignment="Bottom"
+                                                        DockPanel.Dock="Right"
+                                                        FontSize="10"
+                                                        Style="{StaticResource MaterialDesignCaptionTextBlock}"
+                                                        Text="编号" />
+                                                </DockPanel>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
-                                    <!--  顶部信息栏  -->
-                                    <Grid Height="auto" VerticalAlignment="Top">
-                                        <Grid
-                                            Width="auto"
-                                            Height="20"
-                                            VerticalAlignment="Top">
-                                            <Border Background="Black" Opacity="0.6" />
-                                            <!--  稀有度  -->
-                                            <ListBox
+                                        <!--  顶部信息栏  -->
+                                        <Grid Height="auto" VerticalAlignment="Top">
+                                            <Grid
+                                                Width="auto"
                                                 Height="20"
-                                                Margin="0,0,5,0"
-                                                HorizontalAlignment="Right"
-                                                materialDesign:ListBoxItemAssist.ShowSelection="False"
-                                                ItemsSource="{Binding Stars}"
-                                                ScrollViewer.VerticalScrollBarVisibility="Hidden">
-                                                <ListBox.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel
-                                                            Height="20"
-                                                            VerticalAlignment="Center"
-                                                            Orientation="Horizontal" />
-                                                    </ItemsPanelTemplate>
-                                                </ListBox.ItemsPanel>
-                                                <!--  这里不懂为什么每个子元素不是垂直居中的，只能用Margin强制调了orz  -->
-                                                <ListBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <materialDesign:PackIcon
-                                                            Width="16"
-                                                            Height="16"
-                                                            Margin="-6,-6,-6,0"
-                                                            VerticalAlignment="Top"
-                                                            Foreground="Goldenrod"
-                                                            Kind="Star" />
-                                                    </DataTemplate>
-                                                </ListBox.ItemTemplate>
-                                            </ListBox>
+                                                VerticalAlignment="Top">
+                                                <Border Background="Black" Opacity="0.6" />
+                                                <!--  稀有度  -->
+                                                <ListBox
+                                                    Height="20"
+                                                    Margin="0,0,5,0"
+                                                    HorizontalAlignment="Right"
+                                                    materialDesign:ListBoxItemAssist.ShowSelection="False"
+                                                    ItemsSource="{Binding Stars}"
+                                                    ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                                                    <ListBox.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel
+                                                                Height="20"
+                                                                VerticalAlignment="Center"
+                                                                Orientation="Horizontal" />
+                                                        </ItemsPanelTemplate>
+                                                    </ListBox.ItemsPanel>
+                                                    <!--  这里不懂为什么每个子元素不是垂直居中的，只能用Margin强制调了orz  -->
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <materialDesign:PackIcon
+                                                                Width="16"
+                                                                Height="16"
+                                                                Margin="-6,-6,-6,0"
+                                                                VerticalAlignment="Top"
+                                                                Foreground="Goldenrod"
+                                                                Kind="Star" />
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                            </Grid>
+                                            <!--  枪械类型  -->
+                                            <Image
+                                                Width="60"
+                                                Height="30"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Top"
+                                                Source="{Binding TypeIconPath}" />
                                         </Grid>
-                                        <!--  枪械类型  -->
-                                        <Image
-                                            Width="60"
-                                            Height="30"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top"
-                                            Source="{Binding TypeIconPath}" />
                                     </Grid>
-                                </Grid>
+                                </materialDesign:TransitioningContent>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>

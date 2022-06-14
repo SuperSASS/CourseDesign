@@ -107,8 +107,8 @@
                                 BadgeColorZoneMode="SecondaryMid">
                                 <Button
                                     materialDesign:ButtonAssist.CornerRadius="5"
-                                    Command="{Binding EditOfAddPlanCommand}"
-                                    CommandParameter="Image"
+                                    Command="{Binding ExecCommand}"
+                                    CommandParameter="修改密码"
                                     Content="确认更改"
                                     Style="{StaticResource MaterialDesignRaisedLightButton}"
                                     ToolTip="更改当前登录用户的密码" />
