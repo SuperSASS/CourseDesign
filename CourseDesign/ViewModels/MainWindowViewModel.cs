@@ -13,10 +13,9 @@ using Prism.Ioc;
 
 namespace CourseDesign.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, ILoginedConfigureService
+    public class MainWindowViewModel : BindableBase, IMainWindowConfigureService
     {
         #region 字段
-        private readonly IContainerProvider containerProvider; // 主容器
         private readonly IRegionManager regionManager; // 区域控制器
         private IRegionNavigationJournal journal; // 区域导航日志
         // API服务
@@ -24,16 +23,15 @@ namespace CourseDesign.ViewModels
         private readonly ITextPlanService TextService;
         private readonly ITDollService TDollService;
         // 属性字段
-        private UserClass user;
-        private int selectIndex;                        // 所选择的主菜单哪一项
-        // 导航栏部分
         private ObservableCollection<MenuBar> menuBars; // 主菜单列表
+        private int selectIndex;                        // 所选择的主菜单哪一项
+        private UserClass user;                  // 当前登陆的用户信息
         #endregion
 
         #region 属性
+        public ObservableCollection<MenuBar> MenuBars { get { return menuBars; } set { menuBars = value; } }
         public int SelectIndex { get { return selectIndex; } set { selectIndex = value; RaisePropertyChanged(); } }
         public UserClass User { get { return user; } set { user = value; RaisePropertyChanged(); } }
-        public ObservableCollection<MenuBar> MenuBars { get { return menuBars; } set { menuBars = value; } }
         // 命令部分
         public DelegateCommand<MenuBar> NavigationCommand { get; private set; } // 从UI层传递MenuBars到这个导航命令
         public DelegateCommand GoBackCommand { get; private set; } // 后退命令
@@ -43,25 +41,30 @@ namespace CourseDesign.ViewModels
 
         #region 初始化
         /// <summary>
-        /// MainWindow VM 的构造函数，登陆前调用：
+        /// MainWindow VM 的构造函数，登陆前调用，只调用1次：
         /// 完成服务、命令接口、全局上下文（人形数据）的初始化
         /// <para>注：一部分数据要等登陆后调用ConfigureForUser才加载</para>
         /// </summary>
         /// <param name="regionManager"> 区域管理器 </param>
-        public MainWindowViewModel(IContainerProvider containerProvider, IRegionManager regionManager, ITextPlanService textPlanService, IImagePlanService imagePlanService, ITDollService tDollService)
+        public MainWindowViewModel(IContainerProvider containerProvider)
         {
-            this.containerProvider = containerProvider;
-            this.regionManager = regionManager;
-            TextService = textPlanService;
-            ImageService = imagePlanService;
-            TDollService = tDollService;
+            // 从容器取出各种服务
+            regionManager = containerProvider.Resolve<IRegionManager>();
+            TextService = containerProvider.Resolve<ITextPlanService>();
+            ImageService = containerProvider.Resolve<IImagePlanService>();
+            TDollService = containerProvider.Resolve<ITDollService>();
             // 命令接口实现
             NavigationCommand = new DelegateCommand<MenuBar>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             GoHomeCommand = new DelegateCommand(GoIndex); // 主页定为Index页面，所以更名为GoIndex
             LogoutCommand = new DelegateCommand(() => App.Logout(containerProvider));
+            // 创建左侧菜单导航栏
+            MenuBars = new ObservableCollection<MenuBar>();
+            CreateMenuBars(); // 生成菜单栏导航选项
+            // 创建全局等待任务组
+            _ = new ContextWaitTasks();
             // 创建全局静态上下文 - TDolls人形数据
-            _ = new TDollsContext(tDollService); // 创建人形上下文
+            _ = new TDollsContext(TDollService); // 创建战术人形上下文
         }
 
         /// <summary>
@@ -69,12 +72,15 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public void ConfigureForUser(UserClass user)
         {
-            MenuBars = new ObservableCollection<MenuBar>();
-            CreateMenuBars(); //创建菜单栏
-            _ = new LoginUserContext(user.UserID, ImageService, TextService, TDollService); // 创建用户上下文
             User = user;
+            _ = new LoginUserContext(user, ImageService, TextService, TDollService); // 创建用户上下文
             GoIndex();
         }
+
+        /// <summary>
+        /// 更新用户数据，以进行通知更新（用于在用户设置里更改了用户名的时候）
+        /// </summary>
+        public void UpdateForUser(UserClass user) { User = user; }
         #endregion
 
         #region 方法

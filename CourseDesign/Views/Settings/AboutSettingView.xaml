@@ -2,16 +2,154 @@
     x:Class="CourseDesign.Views.Settings.AboutSettingView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:color="clr-namespace:MaterialDesignColors.Recommended;assembly=MaterialDesignColors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:gif="http://wpfanimatedgif.codeplex.com"
     xmlns:local="clr-namespace:CourseDesign.Views.Settings"
+    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     d:DesignHeight="450"
     d:DesignWidth="800"
     mc:Ignorable="d">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
         <TextBlock
+            Grid.Row="0"
             Margin="0,10"
             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
             Text="关于" />
+
+        <StackPanel
+            Grid.Row="1"
+            Margin="10,10"
+            VerticalAlignment="Top">
+            <materialDesign:Card Width="250" HorizontalAlignment="Left">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="140" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Border Background="{DynamicResource SecondaryHueMidBrush}">
+                        <Grid>
+                            <Image
+                                Width="120"
+                                Height="120"
+                                RenderOptions.BitmapScalingMode="HighQuality"
+                                SnapsToDevicePixels="True"
+                                Source="/Assets/Images/avatar.jpg"
+                                UseLayoutRounding="True">
+                                <Image.Clip>
+                                    <EllipseGeometry
+                                        Center="60, 60"
+                                        RadiusX="60"
+                                        RadiusY="60" />
+                                </Image.Clip>
+                            </Image>
+                            <Button
+                                Grid.Row="0"
+                                Width="40"
+                                Height="40"
+                                Margin="100,80,0,0"
+                                IsEnabled="False"
+                                Opacity="1"
+                                Style="{StaticResource MaterialDesignFloatingActionButton}">
+                                <materialDesign:PackIcon Kind="GateNot" />
+                            </Button>
+                        </Grid>
+                    </Border>
+                    <StackPanel Grid.Row="1" Margin="20,24,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="0,5"
+                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                Text="作者：" />
+                            <TextBlock
+                                Margin="0,5"
+                                VerticalAlignment="Bottom"
+                                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                                Text="淺真" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="0,5"
+                                Style="{StaticResource MaterialDesignHeadline6TextBlock}"
+                                Text="QQ：" />
+                            <TextBlock
+                                Margin="0,5"
+                                VerticalAlignment="Bottom"
+                                Style="{StaticResource MaterialDesignSubtitle2TextBlock}"
+                                Text="1021889213" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel
+                        Grid.Row="2"
+                        Margin="8,20,8,10"
+                        HorizontalAlignment="Right"
+                        Orientation="Horizontal">
+                        <Button
+                            Margin="5,0"
+                            Padding="0"
+                            materialDesign:HintAssist.Hint="项目Github仓库"
+                            materialDesign:RippleAssist.IsCentered="True"
+                            Style="{StaticResource MaterialDesignToolButton}">
+                            <Hyperlink
+                                Click="Hyperlink_Click"
+                                NavigateUri="https://github.com/SuperSASS/CourseDesign"
+                                TextDecorations="None">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="Github" />
+                            </Hyperlink>
+                        </Button>
+                        <Button
+                            Margin="5,0"
+                            Padding="0"
+                            materialDesign:HintAssist.Hint="个人主页"
+                            materialDesign:RippleAssist.IsCentered="True"
+                            Style="{StaticResource MaterialDesignToolButton}">
+                            <Hyperlink
+                                Click="Hyperlink_Click"
+                                NavigateUri="https://blog.supersassw.com/"
+                                TextDecorations="None">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="Home" />
+                            </Hyperlink>
+                        </Button>
+                        <Button
+                            Margin="5,0"
+                            Padding="0"
+                            materialDesign:HintAssist.Hint="Steam链接"
+                            materialDesign:RippleAssist.IsCentered="True"
+                            Style="{StaticResource MaterialDesignToolButton}">
+                            <Hyperlink
+                                Click="Hyperlink_Click"
+                                NavigateUri="https://steamcommunity.com/id/mrniconiconi/"
+                                TextDecorations="None">
+                                <materialDesign:PackIcon
+                                    Width="30"
+                                    Height="30"
+                                    Kind="Steam" />
+                            </Hyperlink>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </materialDesign:Card>
+        </StackPanel>
+
+        <Image
+            Grid.Row="1"
+            Width="300"
+            Height="300"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            gif:ImageBehavior.AnimatedSource="\Assets\Gifs\AllComplete.gif" />
     </Grid>
 </UserControl>

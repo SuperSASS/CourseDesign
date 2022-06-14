@@ -88,10 +88,12 @@ namespace CourseDesign.ViewModels
         public override void OnNavigatedTo(NavigationContext navigationContext)
         {
             base.OnNavigatedTo(navigationContext);
-            // 加载页面数据 - InfoBlocks和PlansLists
             ShowLoadingDialog(true);
-            CreateInfoBlocks();
-            CreatePlanLists();
+            // 利用异步的方法，等待UserContext里的所有数据加载完成（即便不成功）再加载之后的数据
+            // TODO: 3 - 不成功（虽然这个小系统不可能啦）的处理、以及验证是否如设想那样的是等都运行完、并且这里可以只等用户上下文加载完，TDoll的可以慢慢加载
+            Task.WaitAll(ContextWaitTasks.WaitTasks.ToArray());
+            CreateInfoBlocks(); // 加载页面数据 - InfoBlocks
+            CreatePlanLists(); // 加载页面数据 - PlansLists
             ShowLoadingDialog(false);
         }
 
@@ -100,7 +102,7 @@ namespace CourseDesign.ViewModels
             switch (cmd)
             {
                 case "新增常规计划": AddTextPlan(); break;
-                default: break;
+                default: ShowMessageDialog("内部错误 - 调用了不存在的命令，快让程序员来修！……", "Main"); break;
             }
         }
 
@@ -117,7 +119,7 @@ namespace CourseDesign.ViewModels
                 if (string.IsNullOrWhiteSpace(textPlan.Title) || string.IsNullOrWhiteSpace(textPlan.Content)) // 计划的标题或内容为空
                     throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
                 ShowLoadingDialog(true);
-                var updateResponse = await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID));
+                var updateResponse = await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUser.UserID));
                 if (updateResponse.Status == APIStatusCode.Success)
                 {
                     textPlan.ID = updateResponse.Result.ID; // 别忘了记录数据库ID！
@@ -151,13 +153,13 @@ namespace CourseDesign.ViewModels
                 if (plan is TextPlanClass text)
                 {
                     text.Status = true;
-                    APIResponseStatus = (await TextService.Update(text.ConvertDTO(text, LoginUserID))).Status;
+                    APIResponseStatus = (await TextService.Update(text.ConvertDTO(text, LoginUser.UserID))).Status;
                 }
                 else
                 {
                     var image = plan as ImagePlanClass;
                     image.Status = true;
-                    APIResponseStatus = (await ImageService.Update(image.ConvertDTO(image, LoginUserID))).Status;
+                    APIResponseStatus = (await ImageService.Update(image.ConvertDTO(image, LoginUser.UserID))).Status;
                 }
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("诶，好像改不了这个任务的状态，待会再试试呢【……");
@@ -166,7 +168,7 @@ namespace CourseDesign.ViewModels
                 UserPlansComplete++; // 用户完成计划数++
                 if (plan is ImagePlanClass imagePlan) // 如果是图片类计划，还要额外获得人形
                 {
-                    APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUserID, TDollID = imagePlan.TDoll_ID })).Status;
+                    APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUser.UserID, TDollID = imagePlan.TDoll_ID })).Status;
                     if (APIResponseStatus != APIStatusCode.Success)
                         throw new Exception("内部错误(API) - 服务器那里添加不了获取的人形……");
                     UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文，添加到本地用户所拥有的人形列表
@@ -203,13 +205,11 @@ namespace CourseDesign.ViewModels
         /// </summary>
         /// TODO: 1 - 存在Bug，可能重复调用而InfoBlocks未清零，造成显示4各。
         /// 复现方法：一个用户里增加一条文字计划，然后立刻登录到另一个用户。
-        private async void CreateInfoBlocks()
+        private void CreateInfoBlocks()
         {
-            foreach (var waitTask in WaitTasks)
-                await waitTask;
+            InfoBlocks.Clear();
             // 人形收集情况
             double TDolls_All = TDollsContext.AllTDolls.Count;
-            InfoBlocks.Clear();
             double TDolls_User = UserTDolls.Count;
             InfoBlocks.Add(new InfoBlock("PercentCircleOutline", "人形收集情况", TDolls_User, TDolls_All, "跳转到图鉴页面","ListView"));
             // 计划完成情况
@@ -221,12 +221,9 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 生成展示在首页的计划列表
         /// </summary>
-        private async void CreatePlanLists()
+        private void CreatePlanLists()
         {
             PlanLists.Clear();
-            // 利用异步的方法，等待UserContext里的所有数据加载完成（即便不成功）再加载之后的数据
-            foreach (var waitTask in WaitTasks)
-                await waitTask;
             foreach (var item in UserPlans)
                 if (item.Status == false) // 添加未完成的TextPlan到主页展示
                     PlanLists.Add(item);

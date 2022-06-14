@@ -59,7 +59,7 @@
                             </Image.Clip>
                         </Image>
                         <TextBlock
-                            Margin="0,10"
+                            Margin="10,10"
                             HorizontalAlignment="Center"
                             Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                             Text="{Binding User.UserName}" />
@@ -75,7 +75,7 @@
                         <!--  行为触发器：当导航被选中时触发，用于切换页面  -->
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="SelectionChanged">
-                                <!--  注：这里的CommandParameter只能通过找父级来设置  -->
+                                <!--  注：这里的CommandParameter只能通过找父级来设置，否则上下文是MenuBar里的  -->
                                 <i:InvokeCommandAction Command="{Binding NavigationCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}}" />
                             </i:EventTrigger>
                         </i:Interaction.Triggers>

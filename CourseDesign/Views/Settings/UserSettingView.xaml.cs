@@ -3,11 +3,11 @@
 namespace CourseDesign.Views.Settings
 {
     /// <summary>
-    /// OtherSettingView.xaml 的交互逻辑
+    /// UserSettingView.xaml 的交互逻辑
     /// </summary>
-    public partial class OtherSettingView : UserControl
+    public partial class UserSettingView : UserControl
     {
-        public OtherSettingView()
+        public UserSettingView()
         {
             InitializeComponent();
         }

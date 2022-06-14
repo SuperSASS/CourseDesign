@@ -21,8 +21,9 @@ namespace CourseDesign.API.Services
         public LoginService(IUnitOfWork unitOfWork, IMapper mapper) { userDB = new BaseDBService<User>(unitOfWork); this.mapper = mapper; }
 
         // 登录
-        public async Task<APIResponseInner> LoginAsync(string account, string passwordMD5)
+        public async Task<APIResponseInner> LoginAsync(UserDTO dtoEntity)
         {
+            string account = dtoEntity.Account, passwordMD5 = dtoEntity.Password;
             Expression<Func<User, bool>> exp;
             exp = (x) => x.Account.Equals(account);
             var getUser = await userDB.GetExpressionSingalAsync(exp);
@@ -33,10 +34,10 @@ namespace CourseDesign.API.Services
         }
 
         // 注册
-        public async Task<APIResponseInner> RegisterAsync(UserDTO entity)
+        public async Task<APIResponseInner> RegisterAsync(UserDTO dtoEntity)
         {
-            var dbEntity = mapper.Map<User>(entity);
-            Expression<Func<User, bool>> exp = (x) => x.Account.Equals(entity.Account);
+            var dbEntity = mapper.Map<User>(dtoEntity);
+            Expression<Func<User, bool>> exp = (x) => x.Account.Equals(dtoEntity.Account);
             // 检测账号是否存在
             var getUser = await userDB.GetExpressionSingalAsync(exp);
             if (getUser.Result != null) // 账号已存在，无法注册
@@ -45,6 +46,18 @@ namespace CourseDesign.API.Services
             dbEntity.CreateDate = DateTime.Now;
             dbEntity.Password = dbEntity.Password;
             return await userDB.AddAsync(dbEntity); // 这里数据库的Add，ID是自增类型
+        }
+
+        // 修改用户信息
+        public async Task<APIResponseInner> ChangeUserInfoAsync(UserDTO dtoEntity)
+        {
+            var dbEntity = mapper.Map<User>(dtoEntity);
+            User getUserResult = (User)(await userDB.GetIDAsync(dbEntity.ID)).Result;
+            // 对传过来的DTO的处理（只修改用户名密码是空的，只修改密码用户名是空的，账号一定是空的）
+            dbEntity.Account = getUserResult.Account; // Account一定传过来是空的，因为客户端那里没存Account信息
+            dbEntity.UserName ??= getUserResult.UserName;
+            dbEntity.Password ??= getUserResult.Password;
+            return await userDB.UpdateAsync(dbEntity);
         }
     }
 }

@@ -136,6 +136,7 @@ namespace CourseDesign.ViewModels
         public bool IsNoComplete { get { return isNoComplete; } set { isNoComplete = value; RaisePropertyChanged(); } }
         #endregion
 
+        #region 初始化
         /// <summary>
         /// Init - 构造函数，只执行一次
         /// </summary>
@@ -163,7 +164,6 @@ namespace CourseDesign.ViewModels
             UpdatePlanCommand = new DelegateCommand(UpdatePlan);
         }
 
-        #region 方法
         /// <summary>
         /// 重写导航加载到该页面的方法，每次来到该页面都会执行一次
         /// </summary>
@@ -178,7 +178,9 @@ namespace CourseDesign.ViewModels
             SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
             CheckPresentation();
         }
+        #endregion
 
+        #region 方法
         // 已验证√
         /// <summary>
         /// 增加计划
@@ -252,7 +254,10 @@ namespace CourseDesign.ViewModels
                 var deleteResponse = deletePlan.Type == PlanBase.PlanType.Text ? await TextService.Delete(deletePlan.ID) : await ImageService.Delete(deletePlan.ID);
                 if (deleteResponse.Status != APIStatusCode.Success)
                     throw new Exception("内部错误(API) - 删除出错啦，肯定不是服务器的问题qwq！……");
-                { UserPlans.Remove(deletePlan); PlansShow.Remove(deletePlan); if (deletePlan.Status) UserPlansComplete--; } // 删除的时候完成计划也要--
+                ShowMessageDialog("成功删除该计划！……", "Main");
+                UserPlans.Remove(deletePlan);
+                PlansShow.Remove(deletePlan);
+                if (deletePlan.Status) UserPlansComplete--;  // 删除的时候完成计划也要--
             }
             catch (Exception ex)
             {
@@ -278,9 +283,10 @@ namespace CourseDesign.ViewModels
                 ShowLoadingDialog(true);
                 TextPlanClass plan = textPlan;
                 plan.Status = textPlan.Status;
-                APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
+                APIResponseStatus = (await TextService.Update(plan.ConvertDTO(plan, LoginUser.UserID))).Status;
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("内部错误(API) - 诶，好像改不了这个任务的状态，待会再试试呢【……");
+                ShowMessageDialog("成功切换该计划完成状态！……", "Main");
                 GetPlan(textPlan.ID).Status = plan.Status; // 将本地的状态也更改
                 if (plan.Status == false) // 证明从完成改到未完成
                     UserPlansComplete--;
@@ -309,17 +315,20 @@ namespace CourseDesign.ViewModels
             {
                 ShowLoadingDialog(true);
                 ImagePlanClass plan = imagePlan;
+                if (plan.Status) // 已经完成过了
+                    throw new Exception("该计划已经完成过啦！……");
                 plan.Status = true; // 对于图片类计划，只能完成，所以要单独提出来orz……
-                APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, LoginUserID))).Status;
+                APIResponseStatus = (await ImageService.Update(plan.ConvertDTO(plan, LoginUser.UserID))).Status;
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("内部错误(API) - 诶，好像改不了这个任务的状态，待会再试试呢【……");
                 GetPlan(imagePlan.ID).Status = plan.Status; // 将本地的状态也更改
                 // 上传获得的人形
-                APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUserID, TDollID = (int)imagePlan.TDoll_ID })).Status;
+                APIResponseStatus = (await TDollService.AddUserObtain(new TDollObtainDTO() { UserID = LoginUser.UserID, TDollID = (int)imagePlan.TDoll_ID })).Status;
                 if (APIResponseStatus != APIStatusCode.Success)
                     throw new Exception("内部错误(API) - 用户那里添加不了获取的人形……");
-                UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文
+                ShowMessageDialog("成功获得该人形，离全图鉴又进一步了√……", "Main");
                 UserPlansComplete++; // 完成计划数++
+                UserTDolls.Add(imagePlan.TDoll_ID); // 注意：这里要修改本地上下文
                 SearchPlan(); // 重新生成显示内容
             }
             catch (Exception ex)
@@ -409,13 +418,13 @@ namespace CourseDesign.ViewModels
                         throw new Exception("计划要写好标题和内容啦_(:зゝ∠)_……"); // 返回错误提示
                     ShowLoadingDialog(true);
                     APIResponse<TextPlanDTO> updateResponse = isAddOrModify
-                        ? await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUserID))
-                        : await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUserID));
+                        ? await TextService.Add(textPlan.ConvertDTO(textPlan, LoginUser.UserID))
+                        : await TextService.Update(textPlan.ConvertDTO(textPlan, LoginUser.UserID));
                     if (updateResponse.Status != APIStatusCode.Success)
                         throw new Exception("内部错误(API) - " + updateResponse.Message);
 
                     if (isAddOrModify) // 代表新增
-                    { textPlan.ID = updateResponse.Result.ID; UserPlans.Add(textPlan); PlansShow.Insert(0, textPlan); }
+                    { textPlan.ID = updateResponse.Result.ID; UserPlans.Add(textPlan); PlansShow.Insert(0, textPlan); ShowMessageDialog("成功添加该计划！……", "Main"); }
                     else
                     {
                         // 由于ObservableCollection没有FindIndex方法，所以只能手动模拟了……
@@ -427,6 +436,7 @@ namespace CourseDesign.ViewModels
                             throw new Exception("内部错误 - 修改计划后，遍历的index无法找到对应的数据…");
                         UserPlans[indexUserPlans] = textPlan;
                         PlansShow[indexPlansShow] = textPlan;
+                        ShowMessageDialog("成功修改该计划！……", "Main");
                     }
                 }
                 else
@@ -438,12 +448,13 @@ namespace CourseDesign.ViewModels
                         if (item.IsChecked && item.IsDefaultEnabled) // 被选了，并且默认是启用可选的，代表是用户选的——上传添加
                         {
                             ImagePlanClass imagePlan = new ImagePlanClass(0, false, item.TDoll.ID);
-                            APIResponse<ImagePlanDTO> updateResponse = await ImageService.Add(imagePlan.ConvertDTO(imagePlan, LoginUserID)); // 图片类只能被添加
+                            APIResponse<ImagePlanDTO> updateResponse = await ImageService.Add(imagePlan.ConvertDTO(imagePlan, LoginUser.UserID)); // 图片类只能被添加
                             if (updateResponse.Status != APIStatusCode.Success) // 成功上传，添加到UserPlans和PlansShow
                                 throw new Exception("内部错误(API) - 无法上传新建计划到服务器……");
                             imagePlan.ID = updateResponse.Result.ID;
                             UserPlans.Add(imagePlan);
                             PlansShow.Insert(0, imagePlan);
+                            ShowMessageDialog("成功添加该计划！……", "Main");
                         }
                 }
             }

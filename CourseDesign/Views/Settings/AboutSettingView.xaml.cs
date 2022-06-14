@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Diagnostics;
+using System.Windows.Controls;
+using System.Windows.Documents;
 
 namespace CourseDesign.Views.Settings
 {
@@ -10,6 +12,15 @@ namespace CourseDesign.Views.Settings
         public AboutSettingView()
         {
             InitializeComponent();
+        }
+
+        public void Hyperlink_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = ((Hyperlink)sender).NavigateUri.ToString(),
+                UseShellExecute = true
+            }) ;
         }
     }
 }

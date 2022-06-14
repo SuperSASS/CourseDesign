@@ -32,7 +32,7 @@
 
   <ItemGroup>
     <None Update="CourseDesign.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

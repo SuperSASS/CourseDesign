@@ -22,7 +22,7 @@ namespace CourseDesign.API.Controllers
         /// <param name="password">密码</param>
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpPost]
-        public async Task<APIResponseInner> Login([FromBody] UserDTO dtoEntity) => await Service.LoginAsync(dtoEntity.Account, dtoEntity.Password);
+        public async Task<APIResponseInner> Login([FromBody] UserDTO dtoEntity) => await Service.LoginAsync(dtoEntity);
 
         /// <summary>
         /// 用户注册的实现
@@ -31,5 +31,13 @@ namespace CourseDesign.API.Controllers
         /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
         [HttpPost]
         public async Task<APIResponseInner> Register([FromBody] UserDTO dtoEntity) => await Service.RegisterAsync(dtoEntity);
+
+        /// <summary>
+        /// 更改用户信息
+        /// </summary>
+        /// <param name="dtoEntity">所更改的实体：账号、用户名、密码</param>
+        /// <returns>执行操作返回的消息 - <see cref="APIResponseInner"/></returns>
+        [HttpPost]
+        public async Task<APIResponseInner> ChangeUserInfo([FromBody] UserDTO dtoEntity) => await Service.ChangeUserInfoAsync(dtoEntity);
     }
 }

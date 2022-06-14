@@ -46,7 +46,7 @@ namespace CourseDesign
                     Current.Shutdown();
                     return;
                 }
-                var configureService = Current.MainWindow.DataContext as ILoginedConfigureService;
+                var configureService = Current.MainWindow.DataContext as IMainWindowConfigureService;
                 if (configureService != null)
                 {
                     IDialogParameters returnParam = callback.Parameters;
@@ -65,7 +65,7 @@ namespace CourseDesign
             containerRegistry.RegisterForNavigation<PlanView>();
             // 注册依赖 - 导航：设置页
             containerRegistry.RegisterForNavigation<SkinSettingView, SkinSettingViewModel>(); // 由于不在ViewModels目录中，所以要写上第二类型
-            containerRegistry.RegisterForNavigation<OtherSettingView, OtherSettingViewModel>();
+            containerRegistry.RegisterForNavigation<UserSettingView, UserSettingViewModel>();
             containerRegistry.RegisterForNavigation<AboutSettingView, AboutSettingViewModel>();
             // 注册依赖 - API相关
             containerRegistry.GetContainer().Register<HttpRestClient>(made: Parameters.Of.Type<string>(serviceKey: "webUrl")); // 先给构造函数设置一个默认名称
@@ -101,7 +101,7 @@ namespace CourseDesign
                     Current.Shutdown();
                     return;
                 }
-                var configureService = Current.MainWindow.DataContext as ILoginedConfigureService;
+                var configureService = Current.MainWindow.DataContext as IMainWindowConfigureService;
                 if (configureService != null)
                 {
                     IDialogParameters returnParam = callback.Parameters;
@@ -110,6 +110,12 @@ namespace CourseDesign
             });
 
             Current.MainWindow.Show(); // 重现主页面
+        }
+        
+        public static void UpdateUser(UserClass user)
+        {
+            var configureService = Current.MainWindow.DataContext as IMainWindowConfigureService;
+            configureService.UpdateForUser(user);
         }
         #endregion
     }

@@ -86,12 +86,12 @@ namespace CourseDesign.API.Services.Interfaces
         Task<APIResponseInner> GetExpressionAllPagedAsync(Expression<Func<DBEntity, bool>> exp, int index, int size, Func<IQueryable<DBEntity>, IOrderedQueryable<DBEntity>> orderBy = null); // 查 - 表达式 - 分页查询
 
         /// <summary>
-        /// 对<see cref="DBEntity"/>表进行“修改”操作。（就是个扩展接口，需要自己写表达式）
+        /// 对<see cref="DBEntity"/>表进行“修改”操作。
         /// </summary>
         /// <param name="dbUpdateEntity">需要修改的<see cref="DBEntity"/>类型元组</param>
         /// <returns>API返回消息<see cref="APIResponseInner"/>
         /// <list type="bullet">
-        /// <item>成功：状态码为Success，并在Result返回成修改添的元组</item>
+        /// <item>成功：状态码为Success，并在Result返回成功修改的元组</item>
         /// <item>失败：返回相应错误代码和信息</item>
         /// </list>
         /// </returns>

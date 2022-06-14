@@ -22,31 +22,43 @@ namespace CourseDesign.Context
         private readonly ITDollService TDollService;
         public static List<TDollClass> AllTDolls; // 所有的战术人形上下文
 
+        #region 初始化
         public TDollsContext(ITDollService tDollService)
         {
-            AllTDolls = new List<TDollClass>();
             TDollService = tDollService;
-            FirstLoadTDollsContext();
+            AllTDolls = new List<TDollClass>();
+            AddTDollsWaitTasks();
+        }
+
+        /// <summary>
+        /// 增加生成人形数据上下文所需的等待任务
+        /// </summary>
+        private void AddTDollsWaitTasks()
+        {
+            ContextWaitTasks.WaitTasks.Add(Task.Run(FirstLoadTDollsContext));
         }
 
         /// <summary>
         /// 第一次加载所有数据库中的人形数据到本地
         /// </summary>
-        async void FirstLoadTDollsContext()
+        private async Task FirstLoadTDollsContext()
         {
-            AllTDolls.Clear();
-
-            var tDollResult = await TDollService.GetUserAndParamContain(new GETParameter()); // 读取所有人形
-            if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
+            try
             {
-                foreach (var item in tDollResult.Result.Items)
-                {
-                    string[] methods = item.ObtainMethod.Split(new char[] { '/' }); // 处理ObtainMethod，按/分割
-                    AllTDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath, methods));
-                }
+                var tDollResult = await TDollService.GetUserAndParamContain(new GETParameter()); // 读取所有人形
+                if (tDollResult != null && tDollResult.Status == APIStatusCode.Success)
+                    foreach (var item in tDollResult.Result.Items)
+                    {
+                        string[] methods = item.ObtainMethod.Split(new char[] { '/' }); // 处理ObtainMethod，按/分割
+                        AllTDolls.Add(new TDollClass(item.ID, item.Name, item.Rarity, (TDollType)(item.Type), item.ArtworkPath, methods));
+                    }
             }
+            // 跟LoginUserContext一样的
+            finally { }
         }
+        #endregion
 
+        #region 方法
         /// <summary>
         /// 得到人形数据
         /// </summary>
@@ -59,5 +71,6 @@ namespace CourseDesign.Context
                     return item;
             return null;
         }
+        #endregion
     }
 }

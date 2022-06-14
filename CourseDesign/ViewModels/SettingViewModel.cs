@@ -47,7 +47,7 @@ namespace CourseDesign.ViewModels
         private void CreateSettingBars()
         {
             SettingBars.Add(new MenuBar("Palette", "主题", "SkinSettingView"));
-            SettingBars.Add(new MenuBar("WrenchOutline", "其他设置", "OtherSettingView"));
+            SettingBars.Add(new MenuBar("WrenchOutline", "用户设置", "UserSettingView"));
             SettingBars.Add(new MenuBar("MessageReplyTextOutline", "关于", "AboutSettingView"));
         }
     }

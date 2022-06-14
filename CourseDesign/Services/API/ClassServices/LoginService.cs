@@ -43,5 +43,17 @@ namespace CourseDesign.Services.API.ClassServices
             };
             return await Client.ExecuteAsync(request);
         }
+
+        // 更改用户信息
+        public async Task<APIResponse<UserDTO>> ChangeUserInfo(UserDTO entity)
+        {
+            BaseRequest request = new()
+            {
+                Method = RestSharp.Method.POST,
+                Route = $"api/{ServiceName}/ChangeUserInfo",
+                Parameter = entity
+            };
+            return await Client.ExecuteAsync<UserDTO>(request);
+        }
     }
 }

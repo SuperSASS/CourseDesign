@@ -22,7 +22,7 @@ namespace CourseDesign.ViewModels.Dialogs
 {
     internal class LoginViewModel : DialogNavigationViewModel, IDialogAware
     {
-        #region Dialog部分
+        #region Dialog配置部分
         public string Title { get; set; } = "登录";
 
         public event Action<IDialogResult> RequestClose;
@@ -54,7 +54,6 @@ namespace CourseDesign.ViewModels.Dialogs
         #endregion
 
         #region 属性
-
         /// <summary>
         /// 输入的账号
         /// </summary>
@@ -88,6 +87,8 @@ namespace CourseDesign.ViewModels.Dialogs
             ExecCommand = new DelegateCommand<string>(Exec);
         }
 
+        #region 方法
+
         void Exec(string cmd)
         {
             switch (cmd)
@@ -96,9 +97,12 @@ namespace CourseDesign.ViewModels.Dialogs
                 case "注册": Register(); break;
                 case "转到注册页面": SelectIndex = 1; break;
                 case "返回登陆页面": SelectIndex = 0; break;
+                default: ShowMessageDialog("该功能目前还不支持啦orz……","Login"); break;
             }
         }
+        #endregion
 
+        #region 内部方法
         /// <summary>
         /// 登录用的方法。成功登录后callback会返回一个参数parameter，里面有Key="UserID"的值，代表用户ID
         /// </summary>
@@ -139,6 +143,7 @@ namespace CourseDesign.ViewModels.Dialogs
         {
             RequestClose?.Invoke(new DialogResult(ButtonResult.Abort)); // 返回OK状态给callback（可见App.xaml.cs）里所用
         }
+
         /// <summary>
         /// 注册方法
         /// </summary>
@@ -171,6 +176,6 @@ namespace CourseDesign.ViewModels.Dialogs
                 ShowLoadingDialog(false);
             }
         }
-
+        #endregion
     }
 }
