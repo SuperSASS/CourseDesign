@@ -22,6 +22,8 @@ using CourseDesign.Extensions;
 using CourseDesign.Common.Classes.Bases;
 using CourseDesign.ViewModels.Bases;
 using CourseDesign.Common.Modules;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace CourseDesign.ViewModels
 {
@@ -49,8 +51,12 @@ namespace CourseDesign.ViewModels
         private bool isAllComplete; // 是否已完成所有计划（不包含未添加计划情况）
         private bool isNoResult; // 该搜索条件下是否没有数据
         private bool isNoComplete; // 是否没有完成的计划
-        // 本地字段
+        // 内部字段
         private bool isAddOrModify; // 0 为 Add, 1 为 Modify
+        private bool isNavigate_SFT; // 加这个字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清除后再添加
+        private bool isNavigate_SS;
+        private bool isFirstCreateImagePlanSource;
+        CancellationTokenSource cancelTokenSource; // 用于取消上一次的Create
         #endregion
 
         #region 属性
@@ -95,24 +101,21 @@ namespace CourseDesign.ViewModels
         /// </summary>
         public string SearchContentText { get { return searchContentText; } set { searchContentText = value; RaisePropertyChanged(); } }
 
-        private bool isFirstCreate_SFT = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
-        private bool isFirstCreate_SS = true; // 加这个临时字段，防止第一次加载时，计划数据被重复读取（会调用SearchFiledText、SearchStatus和初始化各一次，又因为异步可能不会等全部清楚后再添加
-
         /// <summary>
-        /// 搜索字段，单项绑定到源
+        /// 搜索字段，单项绑定到源（注意：会自动进行搜索）
         /// </summary>
         public int SearchFieldIndex
         {
             get { return searchFieldIndex; }
-            set { searchFieldIndex = value; RaisePropertyChanged(); if (isFirstCreate_SFT) isFirstCreate_SFT = false; else SearchPlan(); }
+            set { searchFieldIndex = value; RaisePropertyChanged(); if (isNavigate_SFT) isNavigate_SFT = false; else SearchPlan(); }
         }
         /// <summary>
-        /// 筛选的状态，单向绑定到源
+        /// 筛选的状态，单向绑定到源（注意：会自动进行搜索）
         /// </summary>
         public int SearchStatusIndex
         {
             get { return searchStatusIndex; }
-            set { searchStatusIndex = value; RaisePropertyChanged(); if (isFirstCreate_SS) isFirstCreate_SS = false; else SearchPlan(); }
+            set { searchStatusIndex = value; RaisePropertyChanged(); if (isNavigate_SS) isNavigate_SS = false; else SearchPlan(); }
         }
         /// <summary>
         /// 所选择的将要进行修改的计划，双向绑定，展示到文本栏同步更改
@@ -143,12 +146,12 @@ namespace CourseDesign.ViewModels
         /// <param name="imageService">图片类计划的服务</param>
         /// <param name="textService">文本类计划的服务</param>
         /// <param name="containerProvider">该页面容器</param>
-        public PlanViewModel(IImagePlanService imageService, ITextPlanService textService, ITDollService tDollService, IContainerProvider containerProvider) : base(containerProvider)
+        public PlanViewModel(IContainerProvider containerProvider) : base(containerProvider)
         {
             // 内部服务初始化
-            ImageService = imageService;
-            TextService = textService;
-            TDollService = tDollService;
+            ImageService = containerProvider.Resolve<IImagePlanService>();
+            TextService = containerProvider.Resolve<ITextPlanService>();
+            TDollService = containerProvider.Resolve<ITDollService>();
             DialogService = containerProvider.Resolve<IDialogHostService>();
             // 部分初始展示属性初始化
             plansShow = new ObservableCollection<PlanBase>();
@@ -162,6 +165,7 @@ namespace CourseDesign.ViewModels
             ExecCommand = new DelegateCommand<string>(Exec);
             SearchPlanCommand = new DelegateCommand(SearchPlan);
             UpdatePlanCommand = new DelegateCommand(UpdatePlan);
+            cancelTokenSource = new();
         }
 
         /// <summary>
@@ -172,11 +176,12 @@ namespace CourseDesign.ViewModels
             base.OnNavigatedTo(navigationContext);
             IsRightTextEditorOpen = false;
             IsRightImageEditorOpen = false;
+            isNavigate_SFT = isNavigate_SS = true; // 重置这两个，防止因这里set导致重复进行SearchPlan
+            isFirstCreateImagePlanSource = true; // 重置这个，让第一次打开添加人形计划时，有动画展现，而又避免重复展现（主要是避免短时间重复展现会重复添加的bug）
             SearchFieldIndex = -1;
             SearchStatusIndex = 1; // 每次来到页面：默认跳回选择“未完成”状态筛选
             SearchContentText = null;
             SearchPlan(); // 来到该页面时，默认重新读取用户所有的数据（用SearchPlan哦，因为默认读未完成计划
-            CheckPresentation();
         }
         #endregion
 
@@ -399,8 +404,10 @@ namespace CourseDesign.ViewModels
                     default: exp_Field = trueFunc; break;
                 }
             }
-            CreateShowPlans(exp_Status, exp_Field);
-            CheckPresentation();
+            cancelTokenSource.Cancel(); // 将上一个Token置为取消(true)
+            cancelTokenSource = new(); // 给这个任务产生新Token
+            CreateShowPlans(exp_Status, exp_Field, cancelTokenSource.Token);
+            CheckPresentation(); // 不能在这check，原因见List里
         }
 
         // 已验证√
@@ -474,12 +481,24 @@ namespace CourseDesign.ViewModels
         /// <summary>
         /// 根据状态和字段的筛选，生成用于展示的计划
         /// </summary>
-        private void CreateShowPlans(Func<PlanBase, bool> exp_Status, Func<PlanBase, bool> exp_Field)
+        private void CreateShowPlans(Func<PlanBase, bool> exp_Status, Func<PlanBase, bool> exp_Field, CancellationToken token)
         {
-            PlansShow.Clear();
-            foreach (PlanBase item in UserPlans)
-                if (exp_Status(item) && exp_Field(item))
-                  PlansShow.Add(item);
+            Application.Current.Dispatcher.Invoke(async () =>
+            {
+                PlansShow.Clear();
+                foreach (PlanBase item in UserPlans)
+                {
+                    if (!token.IsCancellationRequested && exp_Status(item) && exp_Field(item))
+                    {
+                        PlansShow.Add(item);
+                        CheckPresentation();
+                        await Task.Delay(50);
+                    }
+                    if (token.IsCancellationRequested)
+                        break;
+                }
+                CheckPresentation();
+            });
         }
 
         /// <summary>
@@ -498,22 +517,35 @@ namespace CourseDesign.ViewModels
         /// </summary>
         private void CreateImagePlanSource()
         {
+            if (!isFirstCreateImagePlanSource)
+                return;
             AddImagePlanSource.Clear();
+            // 先创建一个临时列表，生成好所有数据
+            List<AddImagePlanList> tmpAddImagePlanLists = new();
             foreach (TDollClass item in TDollsContext.AllTDolls)
-                AddImagePlanSource.Add(new AddImagePlanList(item, UserTDolls.Contains(item.ID))); // 先筛选一遍用户没有的（并全部加到数据源中）
+                tmpAddImagePlanLists.Add(new AddImagePlanList(item, UserTDolls.Contains(item.ID))); // 先筛选一遍用户没有的（并全部加到数据源中）
             foreach (PlanBase plan in UserPlans)
                 if (plan is ImagePlanClass && plan.Status == false) // 再筛用户未完成图片计划里的
                 {
                     int index = 0;
-                    foreach (var item in AddImagePlanSource)
+                    foreach (var item in tmpAddImagePlanLists)
                     {
                         if (item.TDoll.ID == (plan as ImagePlanClass).TDoll_ID)
                             break;
                         index++;
                     }
-                    AddImagePlanSource[index].IsChecked = true;
-                    AddImagePlanSource[index].IsDefaultEnabled = false;
+                    tmpAddImagePlanLists[index].IsChecked = true;
+                    tmpAddImagePlanLists[index].IsDefaultEnabled = false;
                 }
+            Application.Current.Dispatcher.InvokeAsync(async () =>
+            {
+                foreach (AddImagePlanList item in tmpAddImagePlanLists)
+                {
+                    AddImagePlanSource.Add(item);
+                    await Task.Delay(50);
+                };
+            });
+            isFirstCreateImagePlanSource = false;
         }
         #endregion
     }
