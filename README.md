@@ -158,10 +158,9 @@ private void GoBack()
 
 用JSON转换的时候，需要特别注意API返回过来的类型，与传过去的类型是一致的！  
 也就是说在用`JsonConvert.DeserializeObject<APIResponse<T>>`的时候，需要保证返回的是`APIResponse<T>`，  
-如果你传过去的是一个`PagedList<...>`，而返回过来的是`List<...>`，那就报错如下：  
-![报错](images/%E9%A1%B9%E7%9B%AE%E7%AC%94%E8%AE%B0--06-06_19-05-10.png)
+如果你传过去的是一个`PagedList<...>`，而返回过来的是`List<...>`，就会报错！
 
-在这个工程中，需要保证为`PagedList`
+在这个工程中，需要保证为`PagedList`。
 
 ### 3. 控件的上下文DataContext无法正常绑定
 
